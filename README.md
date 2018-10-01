@@ -16,11 +16,14 @@
 
 ## Sample ##
 
- ![Sample MP3](img/music.png) One image tells more that thousands words, so [download sample result file](sample/mp3voicestamp-demo.mp3)
- (MP3 file, 6 MiB size) and hear for yourself what this tool does in practice. For demo purposes time stamps are 
- announced at one minute interval, starting at first minute of the track.
+ ![Sample MP3](img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
+ Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
+ starting at first minute of the track.
 
-----
+ * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
+ * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
+
+ ----
 
  ![OceanPlanet Cover](img/oceanplanet.jpg)
  And if you are interested in music, sample is based on Olga Misty's DJ mix "Ocean Planet 086 Part 2" which can be found on 
@@ -63,13 +66,13 @@
  which would produce file named `music (voicestamped).mp3` with audio overlay added to it with track title
  and time stamps every 5 minute.  
  
- Sample MP3 downloadable from[Sample](#sample) section was created with following settings:
+ Sample MP3 downloadable from [Sample](#sample) section was created with following settings:
  
     ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -tick-volume-factor 2
 
- See all available options with `-h`:
+ See all available options with `-help` (or `-h`):
  
-    ./mp3voicestamp -h   
+    ./mp3voicestamp -help
  
 
 ## Requirements ##
