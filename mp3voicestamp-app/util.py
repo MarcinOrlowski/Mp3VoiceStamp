@@ -1,27 +1,24 @@
 # coding=utf8
 
+"""
+
+ MP3 Voice Tag
+
+ Athletes' companion: add synthetized voice overlay with various
+ info and on-going timer to your audio files
+
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+
+ https://github.com/MarcinOrlowski/mp3voicestamp
+
+"""
+
 from __future__ import print_function
 
 import os
 import sys
-
 from subprocess import Popen, PIPE
 
-
-# #################################################################
-#
-# MP3 Voice Tag
-#
-# Athletes' companion: add synthetized voice overlay with various
-# info and on-going timer to your audio files
-#
-# #################################################################
-#
-# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
-#
-# Project page: https://github.com/MarcinOrlowski/mp3voicestamp
-#
-# #################################################################
 
 class Util(object):
 

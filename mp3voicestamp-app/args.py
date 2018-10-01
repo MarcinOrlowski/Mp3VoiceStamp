@@ -1,26 +1,23 @@
 # coding=utf8
 
+"""
+
+ MP3 Voice Tag
+
+ Athletes' companion: add synthetized voice overlay with various
+ info and on-going timer to your audio files
+
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+
+ https://github.com/MarcinOrlowski/mp3voicestamp
+
+"""
+
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
 from util import Util
 from version import VERSION
-
-
-# #################################################################
-#
-# MP3 Voice Tag
-#
-# Athletes' companion: add synthetized voice overlay with various
-# info and on-going timer to your audio files
-#
-# #################################################################
-#
-# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
-#
-# Project page: https://github.com/MarcinOrlowski/mp3voicestamp
-#
-# #################################################################
 
 class Args(object):
     """Handles command line arguments"""
