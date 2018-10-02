@@ -90,15 +90,15 @@ class Util(object):
             print('=======')
             print(' '.join(cmd_list))
 
-            if len(stdout.splitlines()) > 0:
+            if stdout.splitlines():
                 print('Command output (stdout)')
                 print('=======================')
-                [print('%r' % line) for line in stdout.splitlines()]
+                _ = [print('%r' % line) for line in stdout.splitlines()]
 
-            if len(err.splitlines()) > 0:
+            if err.splitlines():
                 print('Command output (stderr)')
                 print('=======================')
-                [print('%r' % line) for line in err.splitlines()]
+                _ = [print('%r' % line) for line in err.splitlines()]
 
         # if rc != 0:
         #     print('Command output (stderr)')
