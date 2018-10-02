@@ -48,7 +48,8 @@ class Args(object):
             '-o', '--out',
             metavar="DIR/MP3_FILE", action='store', dest="file_out", nargs=1,
             required=False,
-            help='Optional output file name or target directory. If not specified, file name will be generated.'
+            help='Optional output file name or target directory if "-in" option used with multiple files. ' +
+                 'If not specified, file name will be generated.'
         )
 
         group = parser.add_argument_group('Universal switches')
@@ -84,9 +85,11 @@ class Args(object):
             metavar='PATTERN', default=[Args.DEFAULT_TICK_PATTERN], required=False,
             help='Pattern for spoken ticks with "{}" replaced with minute tick value')
         group.add_argument(
-            '-tvf', '--tick-volume-factor', action='store', dest='tick_volume_factor', nargs=1,
+            '-tvf', '--tick-volume', action='store', dest='tick_volume_factor', nargs=1,
             metavar='FLOAT', default=[1], required=False,
-            help='Speech volume adjustment factor')
+            help='Speech volume adjustment multiplier, relative to calculated value. ' +
+                 'I.e. "0.5" would lower the volume 50%, while "2" boost it up to make it twice as loud ' +
+                 'as it would be by default.')
 
         group = parser.add_argument_group('Developer tools')
         group.add_argument(

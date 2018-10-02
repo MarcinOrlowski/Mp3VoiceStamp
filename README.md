@@ -85,14 +85,17 @@
  
     ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
 
-
  You can change certain parameters, incl. frequency of tick announcer, or i.e. boost (or decrease) volume of voice
  overlay (relative to auto calculated volume level), change template for spoken track title or time announcements. 
   
  Sample MP3 downloadable from [Sample](#sample) section was created with following settings:
  
-    ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -tick-volume-factor 2
+    ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -tick-volume 2
 
+ or in short notation
+ 
+     ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -tv 2
+ 
  See all available options with `-help` (or `-h`).
  
 
