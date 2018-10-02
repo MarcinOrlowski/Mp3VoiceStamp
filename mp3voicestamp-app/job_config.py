@@ -13,9 +13,6 @@
 
 """
 
-import os
-from util import Util
-
 
 class JobConfig(object):
     DEFAULT_TITLE_PATTERN = '{title}'
@@ -87,9 +84,11 @@ class JobConfig(object):
         self.files_in = files_in
 
     def set_file_out(self, file_out):
+        import os
+
         if len(self.files_in) > 1 and file_out is not None:
             file_out = file_out[0]
             if not os.path.isdir(file_out):
-                Util.abort('For multiple inputs, target must point to a directory, not to a file')
+                raise ValueError('For multiple inputs, target must point to a directory, not to a file')
 
         self.file_out = file_out
