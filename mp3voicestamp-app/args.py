@@ -102,11 +102,6 @@ class Args(object):
             help='Speech speed in words per minute, {} to {}, default is {}'.format(
                 Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX, Args.DEFAULT_SPEECH_SPEED))
 
-        group = parser.add_argument_group('Developer tools')
-        group.add_argument(
-            '-d', '--debug', action='store_true', dest='debug',
-            help='Enables additional debug output')
-
         group = parser.add_argument_group('Misc')
         group.add_argument(
             '--version', action='version',
