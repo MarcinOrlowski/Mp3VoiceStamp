@@ -92,9 +92,6 @@ class Args(object):
         group.add_argument(
             '-d', '--debug', action='store_true', dest='debug',
             help='Enables additional debug output')
-        group.add_argument(
-            '-nc', '--no-cleanup', action='store_true', dest='no_cleanup',
-            help='If set, does not delete temporary work folder on exit')
 
         group = parser.add_argument_group('Misc')
         group.add_argument(

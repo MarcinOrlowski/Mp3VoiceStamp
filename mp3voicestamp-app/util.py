@@ -95,7 +95,7 @@ class Util(object):
                 print('=======================')
                 [print('%r' % line) for line in stdout.splitlines()]
 
-            if len(err.splitlines() > 1):
+            if len(err.splitlines()) > 0:
                 print('Command output (stderr)')
                 print('=======================')
                 [print('%r' % line) for line in err.splitlines()]

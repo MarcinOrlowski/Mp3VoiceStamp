@@ -14,6 +14,8 @@
 """
 
 import os
+import shutil
+import tempfile
 
 
 class Job(object):
@@ -32,17 +34,29 @@ class Job(object):
 
         self.force = args.force
 
-        out_base_name = file_in
+        out_base_name = os.path.basename(file_in)
         if out_base_name[-4:] == '.mp3':
-            out_base_name = file_in[:-4]
+            out_base_name = out_base_name[:-4]
         out_file_name = '{} (voicestamped).mp3'.format(out_base_name)
+        self.file_out = out_file_name
 
         if args.file_out is None:
-            self.file_out = out_file_name
+            self.file_out = os.path.join(os.path.dirname(file_in), out_file_name)
         else:
-            self.file_out = args.file_out
             if os.path.isfile(args.file_out):
-                pass
+                self.file_out = args.file_out
             else:
                 if os.path.isdir(args.file_out):
                     self.file_out = os.path.join(args.file_out, out_file_name)
+
+        self.tmp_dir = None
+
+    def init(self):
+        self.make_temp_dir()
+
+    def make_temp_dir(self):
+        self.tmp_dir = tempfile.mkdtemp()
+
+    def cleanup(self):
+        if self.tmp_dir is not None:
+            shutil.rmtree(self.tmp_dir)
