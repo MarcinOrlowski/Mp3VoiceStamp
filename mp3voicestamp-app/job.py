@@ -2,12 +2,12 @@
 
 """
 
- MP3 Voice Tag
+ MP3 Voice Stamp
 
  Athletes' companion: add synthetized voice overlay with various
  info and on-going timer to your audio files
 
- Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
 
  https://github.com/MarcinOrlowski/mp3voicestamp
 
@@ -176,7 +176,6 @@ class Job(object):
             self.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together
-
             self.mix_tracks(self.get_out_file_name(music_track), music_track.get_encoding_quality_for_lame_encoder(),
                             music_wav_full_path, speech_wav_full)
 

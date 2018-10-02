@@ -2,12 +2,12 @@
 
 """
 
- MP3 Voice Tag
+ MP3 Voice Stamp
 
  Athletes' companion: add synthetized voice overlay with various
  info and on-going timer to your audio files
 
- Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
 
  https://github.com/MarcinOrlowski/mp3voicestamp
 
@@ -25,8 +25,8 @@ class Util(object):
     quiet = True
 
     @classmethod
-    def init(cls, args):
-        cls.quiet = args.quiet
+    def init(cls, quiet):
+        cls.quiet = quiet
 
     @staticmethod
     def print_no_lf(message, quiet=None):

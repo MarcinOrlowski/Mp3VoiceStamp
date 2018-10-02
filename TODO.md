@@ -4,7 +4,6 @@ TODO
  * Use ffmpeg-python instead of ffmpeg directly?
  * Add (optional) x secs padding to TITLE voice announcement
  * Added interactive mode
- * Make app less verbose by default
- * Replace "-" with "," (in title) which improves "espeak" output better (i.e. "Olga Misty - Ocean Planet" vs "Olga Misty, Ocean Plante")
+ * Replace "-" with "," (in title) which improves "espeak" output better (i.e. "Olga Misty - Ocean Planet" vs "Olga Misty, Ocean Planet")
  * Config save/load + config profiles support
 

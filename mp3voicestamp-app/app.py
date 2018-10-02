@@ -2,12 +2,12 @@
 
 """
 
- MP3 Voice Tag
+ MP3 Voice Stamp
 
  Athletes' companion: add synthetized voice overlay with various
  info and on-going timer to your audio files
 
- Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
 
  https://github.com/MarcinOrlowski/mp3voicestamp
 
@@ -19,23 +19,26 @@ from args import Args
 from util import Util
 from job_config import JobConfig
 from job import Job
-from mutagen.mp3 import MP3, MutagenError
+from mutagen.mp3 import MutagenError
 
 
 class App(object):
 
+    @staticmethod
     def main(self):
         # parse common line arguments
         args = Args.parse_args()
-        Util.init(args)
+
+        # init helper
+        Util.init(args.quiet)
 
         # check runtime environment
         Util.check_env()
 
         job_config = JobConfig(args)
-        for file_in in args.files_in:
+        for file_name in args.files_in:
             try:
-                Job(job_config).voice_stamp(file_in)
+                Job(job_config).voice_stamp(file_name)
             except MutagenError as ex:
                 Util.print('*** ' + str(ex))
                 continue
@@ -47,5 +50,4 @@ class App(object):
 # ---------------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    app = App()
-    app.main()
+    App.main()

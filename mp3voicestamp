@@ -1,4 +1,18 @@
 #!/bin/sh
 
+########################################################################
+#
+# MP3 Voice Stamp
+#
+# Athletes' companion: add synthetized voice overlay with various
+# info and on-going timer to your audio files
+#
+# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
+#
+# https://github.com/MarcinOrlowski/mp3voicestamp
+#
+########################################################################
+
+
 MY_DIR=$( dirname $0 )
 PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=${PYTHONPATH}:"${MY_DIR}" /usr/bin/env python -B "${MY_DIR}/mp3voicestamp-app/app.py" "$@"
