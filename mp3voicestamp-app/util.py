@@ -85,19 +85,24 @@ class Util(object):
         stdout, err = p.communicate(None)
         rc = p.returncode
 
+        if rc != 0:
+            print('Command')
+            print('=======')
+            print(' '.join(cmd_list))
+
+            if len(stdout.splitlines()) > 0:
+                print('Command output (stdout)')
+                print('=======================')
+                [print('%r' % line) for line in stdout.splitlines()]
+
+            if len(err.splitlines() > 1):
+                print('Command output (stderr)')
+                print('=======================')
+                [print('%r' % line) for line in err.splitlines()]
+
         # if rc != 0:
-        #     print('Command')
-        #     print(' '.join(cmd_list))
-        #
-        #     print('Command output (stdout)')
-        #     [print('%r' % line) for line in stdout.splitlines()]
-        #
         #     print('Command output (stderr)')
         #     [print('%r' % line) for line in err.splitlines()]
-
-        if rc != 0:
-            print('Command output (stderr)')
-            [print('%r' % line) for line in err.splitlines()]
 
         if working_dir:
             # noinspection PyUnboundLocalVariable

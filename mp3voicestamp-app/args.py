@@ -13,11 +13,13 @@
 
 """
 
+import os
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
 from util import Util
 from version import VERSION
+
 
 class Args(object):
     """Handles command line arguments"""
@@ -39,20 +41,24 @@ class Args(object):
         group = parser.add_argument_group('In/Out files')
         group.add_argument(
             '-i', '--in',
-            metavar="MP3_FILE_NAME", action='store', dest="file_in", nargs=1, required=True,
-            help="Source MP3 file"
+            metavar="MP3_FILE", action='store', dest="files_in", nargs='+', required=True,
+            help="On or more source MP3 files"
         )
         group.add_argument(
             '-o', '--out',
-            metavar="MP3_FILE_NAME", action='store', dest="file_out", nargs=1,
+            metavar="DIR/MP3_FILE", action='store', dest="file_out", nargs=1,
             required=False,
-            help='Optional output MP3 file name. If not specified, will be generated automatically'
+            help='Optional output file name or target directory. If not specified, file name will be generated.'
         )
 
         group = parser.add_argument_group('Universal switches')
         group.add_argument(
             '-f', '--force', action='store_true', dest='force',
             help='Forces overwrite of existing output file'
+        )
+        group.add_argument(
+            '-v', '--verbose', action='store_true', dest='verbose',
+            help='Makes app more verbose'
         )
         group.add_argument(
             '-q', '--quiet', action='store_true', dest='quiet',
@@ -98,15 +104,10 @@ class Args(object):
         args = parser.parse_args()
 
         # some post processing
-        args.file_in = args.file_in[0]
-
-        if args.file_out is None:
-            base_name = args.file_in
-            if args.file_in[-4:] == '.mp3':
-                base_name = base_name[:-4]
-            args.file_out = '{} (voicestamped).mp3'.format(base_name)
-        else:
+        if len(args.files_in) > 1 and args.file_out is not None:
             args.file_out = args.file_out[0]
+            if not os.path.isdir(args.file_out):
+                Util.abort('For multiple inputs, target must point to directory, not a file')
 
         args.tick_volume_factor = float(args.tick_volume_factor[0])
         if args.tick_volume_factor <= 0:
