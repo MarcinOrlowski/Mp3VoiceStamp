@@ -48,7 +48,6 @@
  * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
 
  ----
-=======
  
  ![OceanPlanet Cover](img/oceanplanet.jpg)
  And if you are interested in music, sample is based on Olga Misty's DJ mix "Ocean Planet 086 Part 2" which can be found on 
