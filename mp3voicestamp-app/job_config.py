@@ -21,9 +21,12 @@ class JobConfig(object):
 
         self.force_overwrite = args.force
 
+        self.speech_speed = args.speech_speed
+
+        self.title_pattern = args.title_pattern
+
         self.tick_pattern = args.tick_pattern
         self.tick_offset = args.tick_offset
         self.tick_interval = args.tick_interval
         self.tick_volume_factor = args.tick_volume_factor
 
-        self.title_pattern = args.title_pattern

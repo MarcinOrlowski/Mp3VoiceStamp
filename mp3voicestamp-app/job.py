@@ -64,8 +64,9 @@ class Job(object):
             shutil.rmtree(self.tmp_dir)
             self.tmp_dir = None
 
-    def speak_to_wav(self, text, out_file_name):
-        rc = Util.execute_rc(['espeak', '-s', '150', '-z', '-w', out_file_name, str(text)])
+    def speak_to_wav(self, text, out_file_name, speed):
+        rc = Util.execute_rc(
+            ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
 
     def calculate_rms_amplitude(self, wav_file):

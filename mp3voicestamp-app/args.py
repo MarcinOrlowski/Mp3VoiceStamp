@@ -24,7 +24,11 @@ from version import VERSION
 class Args(object):
     """Handles command line arguments"""
 
+    SPEECH_SPEED_MIN = 80
+    SPEECH_SPEED_MAX = 450
+
     DEFAULT_TICK_PATTERN = '{} minutes'
+    DEFAULT_SPEECH_SPEED = 150
 
     @staticmethod
     def parse_args():
@@ -85,11 +89,16 @@ class Args(object):
             metavar='PATTERN', default=[Args.DEFAULT_TICK_PATTERN], required=False,
             help='Pattern for spoken ticks with "{}" replaced with minute tick value')
         group.add_argument(
-            '-tvf', '--tick-volume', action='store', dest='tick_volume_factor', nargs=1,
+            '-tv', '--tick-volume', action='store', dest='tick_volume_factor', nargs=1,
             metavar='FLOAT', default=[1], required=False,
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
                  'I.e. "0.5" would lower the volume 50%, while "2" boost it up to make it twice as loud ' +
                  'as it would be by default.')
+        group.add_argument(
+            '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1,
+            metavar='INTEGER', default=[150], required=False,
+            help='Speech speed in words per minute, {} to {}, default is {}'.format(
+                Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX, Args.DEFAULT_SPEECH_SPEED))
 
         group = parser.add_argument_group('Developer tools')
         group.add_argument(
@@ -107,7 +116,7 @@ class Args(object):
         if len(args.files_in) > 1 and args.file_out is not None:
             args.file_out = args.file_out[0]
             if not os.path.isdir(args.file_out):
-                Util.abort('For multiple inputs, target must point to directory, not a file')
+                Util.abort('For multiple inputs, target must point to a directory, not to a file')
 
         # noinspection PyUnresolvedReferences
         args.tick_volume_factor = float(args.tick_volume_factor[0])
@@ -119,6 +128,12 @@ class Args(object):
         args.tick_offset = args.tick_offset[0]
         if args.tick_offset < 1:
             Util.abort('Tick Offset value cannot be shorter than 1 minute')
+
+        args.speech_speed = int(args.speech_speed[0])
+        if args.speech_speed < Args.SPEECH_SPEED_MIN or args.speech_speed > Args.SPEECH_SPEED_MAX:
+            Util.abort(
+                'Speech speed must be between {} and {}'.format(Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX))
+
         args.tick_pattern = args.tick_pattern[0].strip()
         if args.tick_pattern == '':
             args.tick_pattern = Args.DEFAULT_TICK_PATTERN
