@@ -42,7 +42,7 @@
 
  ![Sample MP3](img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
  Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
- starting at first minute of the track.
+ starting at first minute of the track. Voice volume factor is x2.
 
  * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
  * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
