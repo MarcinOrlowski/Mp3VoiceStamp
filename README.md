@@ -16,16 +16,18 @@
 
 ## Introduction ##
  
- Whenever you any physical activities, there's high chance you bring your music with you. So do I, but I do swim 
- a lot and in my case, my audio player UI is pretty non existent. I have just 5 control buttons and that's it.
- I cannot even tell what track I am currently listen to, unless I can recognize it. But as I swim, I personally
- prefer to run with so-called DJ mixes - 1 hour long (or more) mixed tracks of various artists. And as my swimming
- audio player offers no UI I faced two problems:
+ Whenever you do any physical activities, there's high chance you bring your music with you. So do I, but I do swim 
+ a lot and in my case, my audio player UI is pretty non existent. It has just 5 control buttons and that's it.
+ You cannot even tell what track you selected, unless you recognize it. I personally prefer to swim with 
+ so-called DJ mixes - 1 hour long (or more) mixed tracks of various artists just to keep music go without gaps
+ between tracks. Having no UI in audio player brings at least two problems:
  
- * I sometimes had no clue what the mix I am starting to listen to
- * I often had problems telling how long I am swimming already
+ * it is sometimes hard to tell what mix you just started to listen to (they often need some time to spin up or 
+ feature the same opening intro jingle)
+ * as there's no display to peek, you cannot easily tell how much time passed so you cannot tell how long you are 
+ swimming already
  
- So I wrote a tool to address these issues. The idea behind is quite simple: you take MP3 track of your choice
+ The aim of this tool is to address these issues. The idea behind is quite simple: you take MP3 track of your choice
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
  and then keeps speaking time passed at given intervals (each 5 minutes by default).
 
