@@ -72,15 +72,28 @@
     ./mp3voicestamp -i music.mp3
 
  which would produce file named `music (voicestamped).mp3` with audio overlay added to it with track title
- and time stamps every 5 minute.  
+ and time stamps every 5 minute. You can also provide own name for result file using `-o`:
  
+    ./mp3voicestamp =i music.mp3 -o music_with_voice.mp3
+
+ You can also process more than one file at once:
+ 
+    ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3
+
+ When using multiple input files you can still use `-o` but in such case it must point to target folder
+ (so you loose ability to manually specify target file name):
+ 
+    ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
+
+
+ You can change certain parameters, incl. frequency of tick announcer, or i.e. boost (or decrease) volume of voice
+ overlay (relative to auto calculated volume level), change template for spoken track title or time announcements. 
+  
  Sample MP3 downloadable from [Sample](#sample) section was created with following settings:
  
     ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -tick-volume-factor 2
 
- See all available options with `-help` (or `-h`):
- 
-    ./mp3voicestamp -help
+ See all available options with `-help` (or `-h`).
  
 
 ## Requirements ##
