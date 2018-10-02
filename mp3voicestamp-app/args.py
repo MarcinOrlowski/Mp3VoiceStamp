@@ -13,12 +13,10 @@
 
 """
 
-import os
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
 from job_config import JobConfig
-from util import Util
 from version import VERSION
 
 

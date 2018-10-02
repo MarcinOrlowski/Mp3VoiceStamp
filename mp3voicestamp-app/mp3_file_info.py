@@ -44,7 +44,8 @@ class Mp3FileInfo(object):
         return default if tag not in self.mp3 else self.mp3[tag]
 
     def format_title(self, title_pattern):
-        # prepare some placeholders to be later use for speaking track title.
+        """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
+        """
         return title_pattern.format(
             title=self.title,
             artist=self.artist,
@@ -56,19 +57,25 @@ class Mp3FileInfo(object):
         )
 
     def to_wav(self, output_file_name):
-        # convert source mp3 to wav. this is required for many reasons:
-        # * we need to adjust voice overlay amplitude to match MP3 file level and to do that we use "sox" too
-        #   which cannot deal with MP3 directly.
-        # * there are some odd issues with "ffmpeg" failing during mixing phase when source is mp3 file.
-        #   blind guess for now is that it's due to some structure mismatch between MP3 file (i.e. having cover
-        #   image) and speech segments being just plain WAV. Most likely this can be solved better way but we
-        #   need WAV anyway so no point wasting time at the moment for further research.
+        """ Converts source audio track to WAV format
+
+        convert source mp3 to wav. this is required for many reasons:
+        * we need to adjust voice overlay amplitude to match MP3 file level and to do that we use "sox" too
+          which cannot deal with MP3 directly.
+        * there are some odd issues with "ffmpeg" failing during mixing phase when source is mp3 file.
+          blind guess for now is that it's due to some structure mismatch between MP3 file (i.e. having cover
+          image) and speech segments being just plain WAV. Most likely this can be solved better way but we
+          need WAV anyway so no point wasting time at the moment for further research.
+        """
         wav_cmd = ['ffmpeg', '-i', self.file_name, output_file_name]
         if Util.execute_rc(wav_cmd) != 0:
             raise RuntimeError('Failed to convert to WAV file')
 
     def get_encoding_quality_for_lame_encoder(self):
-        # based on https://trac.ffmpeg.org/wiki/Encode/MP3
+        """Selects LAME quality switch based on source file bitrate
+
+           Based on https://trac.ffmpeg.org/wiki/Encode/MP3
+        """
         quality = 0
         for avg in [245, 225, 190, 175, 165, 130, 115, 100, 85, 65]:
             if self.bitrate >= avg * 1000:

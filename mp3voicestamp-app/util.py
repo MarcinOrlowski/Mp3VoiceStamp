@@ -21,7 +21,6 @@ from subprocess import Popen, PIPE
 
 
 class Util(object):
-
     quiet = True
 
     @classmethod
@@ -142,6 +141,8 @@ class Util(object):
 
     @staticmethod
     def check_env():
+        """Checks if all external tools we need are already available and in $PATH
+        """
         tools = ['ffmpeg', 'normalize-audio', 'espeak', 'sox']
         for tool in tools:
             if Util.which(tool) is None:
