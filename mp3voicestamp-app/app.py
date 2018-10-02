@@ -25,7 +25,7 @@ from mutagen.mp3 import MutagenError
 class App(object):
 
     @staticmethod
-    def main(self):
+    def main():
         # parse common line arguments
         args = Args.parse_args()
 
