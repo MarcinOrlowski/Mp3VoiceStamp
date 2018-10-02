@@ -23,9 +23,9 @@
  between tracks. Having no UI in audio player brings at least two problems:
  
  * it is sometimes hard to tell what mix you just started to listen to (they often need some time to spin up or 
- feature the same opening intro jingle)
+ feature the same opening intro jingle),
  * as there's no display to peek, you cannot easily tell how much time passed so you cannot tell how long you are 
- swimming already
+ swimming already.
  
  The aim of this tool is to address these issues. The idea behind is quite simple: you take MP3 track of your choice
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
