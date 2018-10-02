@@ -38,11 +38,11 @@ class App(object):
         self.args = None
 
     def get_mp3_info(self, mp3_file_name):
-        from mutagen.mp3 import MP3
+        from mutagen.mp3 import MP3, MutagenError
 
         try:
             mp3 = MP3(mp3_file_name)
-        except:
+        except MutagenError:
             return None
 
         # get track title either from tag, or from filename
