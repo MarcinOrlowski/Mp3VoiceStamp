@@ -142,7 +142,7 @@ class Job(object):
         try:
             Util.print('Processing "{}"'.format(mp3_file_name))
 
-            music_track = Mp3FileInfo(mp3_file_name);
+            music_track = Mp3FileInfo(mp3_file_name)
 
             # some sanity checks first
             min_track_length = 1 + self.job_config.tick_offset
