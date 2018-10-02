@@ -189,7 +189,7 @@ class Job(object):
             # calculate RMS amplitude of music track as reference to gain voice to match
             rms_amplitude = self.calculate_rms_amplitude(music_wav_full_path)
 
-            target_speech_rms_amplitude = rms_amplitude * self.job_config.tick_volume_factor
+            target_speech_rms_amplitude = rms_amplitude * self.job_config.speech_volume_factor
             self.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together

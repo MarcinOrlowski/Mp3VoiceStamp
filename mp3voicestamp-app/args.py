@@ -38,7 +38,7 @@ class Args(object):
         """
         parser = argparse.ArgumentParser(
             description='Adds spoken overlay to MP3 with title, time stamps and more.\n'
-                        'Written by Marcin Orlowski <mail@marcinorlowski.com>\n'
+                        'Written by Marcin Orlowski <mail@marcinOrlowski.com>\n'
                         'WWW: https://github.com/MarcinOrlowski/mp3voicestamp',
             formatter_class=RawDescriptionHelpFormatter)
 
@@ -88,14 +88,16 @@ class Args(object):
             '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1,
             metavar='PATTERN', default=[Args.DEFAULT_TICK_PATTERN], required=False,
             help='Pattern for spoken ticks with "{}" replaced with minute tick value')
+
+        group = parser.add_argument_group('Voice synthetizer')
         group.add_argument(
-            '-tv', '--tick-volume', action='store', dest='tick_volume_factor', nargs=1,
+            '-sv', '--speech-volume', action='store', dest='speech_volume_factor', nargs=1,
             metavar='FLOAT', default=[1], required=False,
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
-                 'I.e. "0.5" would lower the volume 50%, while "2" boost it up to make it twice as loud ' +
+                 'I.e. "0.5" would lower the volume 50%%, while "2" boost it up to make it twice as loud ' +
                  'as it would be by default.')
         group.add_argument(
-            '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1,
+            '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int,
             metavar='INTEGER', default=[150], required=False,
             help='Speech speed in words per minute, {} to {}, default is {}'.format(
                 Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX, Args.DEFAULT_SPEECH_SPEED))
@@ -118,10 +120,6 @@ class Args(object):
             if not os.path.isdir(args.file_out):
                 Util.abort('For multiple inputs, target must point to a directory, not to a file')
 
-        # noinspection PyUnresolvedReferences
-        args.tick_volume_factor = float(args.tick_volume_factor[0])
-        if args.tick_volume_factor <= 0:
-            Util.abort('Tick Volume Factor must be non zero positive value')
         args.tick_interval = args.tick_interval[0]
         if args.tick_interval < 1:
             Util.abort('Tick Interval value cannot be shorter than 1 minute')
@@ -129,7 +127,12 @@ class Args(object):
         if args.tick_offset < 1:
             Util.abort('Tick Offset value cannot be shorter than 1 minute')
 
-        args.speech_speed = int(args.speech_speed[0])
+        # noinspection PyUnresolvedReferences
+        args.speech_volume_factor = float(args.speech_volume_factor[0])
+        if args.speech_volume_factor <= 0:
+            Util.abort('Volume Factor must be non zero positive value')
+
+        args.speech_speed = args.speech_speed[0]
         if args.speech_speed < Args.SPEECH_SPEED_MIN or args.speech_speed > Args.SPEECH_SPEED_MAX:
             Util.abort(
                 'Speech speed must be between {} and {}'.format(Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX))

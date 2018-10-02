@@ -90,11 +90,11 @@
   
  Sample MP3 downloadable from [Sample](#sample) section was created with following settings:
  
-    ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -tick-volume 2
+    ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -speech-volume 2
 
  or in short notation
  
-     ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -tv 2
+     ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
  
  See all available options with `-help` (or `-h`).
  
