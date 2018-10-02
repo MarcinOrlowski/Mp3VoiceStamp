@@ -17,6 +17,7 @@ import os
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
+from job_config import JobConfig
 from util import Util
 from version import VERSION
 
@@ -24,14 +25,8 @@ from version import VERSION
 class Args(object):
     """Handles command line arguments"""
 
-    SPEECH_SPEED_MIN = 80
-    SPEECH_SPEED_MAX = 450
-
-    DEFAULT_TICK_PATTERN = '{} minutes'
-    DEFAULT_SPEECH_SPEED = 150
-
     @staticmethod
-    def parse_args():
+    def parse_args(job_config):
         """Parses command line arguments
 
         :returns argsparse
@@ -72,35 +67,36 @@ class Args(object):
         group = parser.add_argument_group('Track title speech')
         group.add_argument(
             '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1,
-            metavar='PATTERN', default="{title}", required=False,
-            help='Pattern for track title voice overlay. See --title-help for more info')
+            metavar='PATTERN', default=[JobConfig.DEFAULT_TITLE_PATTERN], required=False,
+            help='Pattern for track title voice overlay. Default is "{}". See docs for available placeholders'.format(
+                JobConfig.DEFAULT_TITLE_PATTERN))
 
         group = parser.add_argument_group('Spoken timer')
         group.add_argument(
             '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1,
-            metavar='MINUTES', default=[5], required=False,
-            help='Interval (in minutes) between spoken ticks')
+            metavar='MINUTES', default=[JobConfig.DEFAULT_TICK_INTERVAL], required=False,
+            help='Interval (in minutes) between spoken ticks. Default is {}'.format(JobConfig.DEFAULT_TICK_INTERVAL))
         group.add_argument(
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1,
-            metavar='MINUTES', default=[5], required=False,
-            help='Offset (in minutes) for first spoken tick')
+            metavar='MINUTES', default=[JobConfig.DEFAULT_TICK_OFFSET], required=False,
+            help='Offset (in minutes) for first spoken tick. Default is'.format(JobConfig.DEFAULT_TICK_OFFSET))
         group.add_argument(
             '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1,
-            metavar='PATTERN', default=[Args.DEFAULT_TICK_PATTERN], required=False,
+            metavar='PATTERN', default=[JobConfig.DEFAULT_TICK_PATTERN], required=False,
             help='Pattern for spoken ticks with "{}" replaced with minute tick value')
 
-        group = parser.add_argument_group('Voice synthetizer')
+        group = parser.add_argument_group('Voice synthesizer')
         group.add_argument(
             '-sv', '--speech-volume', action='store', dest='speech_volume_factor', nargs=1,
-            metavar='FLOAT', default=[1], required=False,
+            metavar='FLOAT', default=[JobConfig.DEFAULT_SPEECH_VOLUME_FACTOR], required=False,
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
                  'I.e. "0.5" would lower the volume 50%%, while "2" boost it up to make it twice as loud ' +
-                 'as it would be by default.')
+                 'as it would be by default. Default is {}'.format(JobConfig.DEFAULT_SPEECH_VOLUME_FACTOR))
         group.add_argument(
             '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int,
-            metavar='INTEGER', default=[150], required=False,
+            metavar='INTEGER', default=[JobConfig.DEFAULT_SPEECH_SPEED], required=False,
             help='Speech speed in words per minute, {} to {}, default is {}'.format(
-                Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX, Args.DEFAULT_SPEECH_SPEED))
+                JobConfig.SPEECH_SPEED_MIN, JobConfig.SPEECH_SPEED_MAX, JobConfig.DEFAULT_SPEECH_SPEED))
 
         group = parser.add_argument_group('Misc')
         group.add_argument(
@@ -109,31 +105,22 @@ class Args(object):
 
         args = parser.parse_args()
 
-        # some post processing
-        if len(args.files_in) > 1 and args.file_out is not None:
-            args.file_out = args.file_out[0]
-            if not os.path.isdir(args.file_out):
-                Util.abort('For multiple inputs, target must point to a directory, not to a file')
-
-        args.tick_interval = args.tick_interval[0]
-        if args.tick_interval < 1:
-            Util.abort('Tick Interval value cannot be shorter than 1 minute')
-        args.tick_offset = args.tick_offset[0]
-        if args.tick_offset < 1:
-            Util.abort('Tick Offset value cannot be shorter than 1 minute')
-
         # noinspection PyUnresolvedReferences
-        args.speech_volume_factor = float(args.speech_volume_factor[0])
-        if args.speech_volume_factor <= 0:
-            Util.abort('Volume Factor must be non zero positive value')
+        job_config.set_speech_volume_factor(float(args.speech_volume_factor[0]))
+        job_config.set_speech_speed(args.speech_speed[0])
 
-        args.speech_speed = args.speech_speed[0]
-        if args.speech_speed < Args.SPEECH_SPEED_MIN or args.speech_speed > Args.SPEECH_SPEED_MAX:
-            Util.abort(
-                'Speech speed must be between {} and {}'.format(Args.SPEECH_SPEED_MIN, Args.SPEECH_SPEED_MAX))
+        job_config.set_tick_interval(args.tick_interval[0])
+        job_config.set_tick_offset(args.tick_offset[0])
+        job_config.set_tick_pattern(args.tick_pattern[0])
 
-        args.tick_pattern = args.tick_pattern[0].strip()
-        if args.tick_pattern == '':
-            args.tick_pattern = Args.DEFAULT_TICK_PATTERN
+        job_config.set_title_pattern(args.title_pattern[0])
+
+        # other settings
+        job_config.quiet = args.quiet
+
+        job_config.set_files_in(args.files_in)
+        job_config.set_file_out(args.file_out)
+
+        job_config.set_force_overwrite(args.force)
 
         return args

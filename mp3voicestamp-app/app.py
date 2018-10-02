@@ -26,8 +26,10 @@ class App(object):
 
     @staticmethod
     def main():
+        job_config = JobConfig()
+
         # parse common line arguments
-        args = Args.parse_args()
+        args = Args.parse_args(job_config)
 
         # init helper
         Util.init(args.quiet)
@@ -35,8 +37,7 @@ class App(object):
         # check runtime environment
         Util.check_env()
 
-        job_config = JobConfig(args)
-        for file_name in args.files_in:
+        for file_name in job_config.files_in:
             try:
                 Job(job_config).voice_stamp(file_name)
             except MutagenError as ex:

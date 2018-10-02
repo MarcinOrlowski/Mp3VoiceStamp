@@ -35,22 +35,20 @@ class Job(object):
 
     def get_out_file_name(self, music_track):
 
-        args = self.job_config.args
-
         out_base_name = os.path.basename(music_track.file_name)
         if out_base_name[-4:] == '.mp3':
             out_base_name = out_base_name[:-4]
         out_file_name = '{} (voicestamped).mp3'.format(out_base_name)
         file_out = out_file_name
 
-        if args.file_out is None:
+        if self.job_config.file_out is None:
             file_out = os.path.join(os.path.dirname(music_track.file_name), out_file_name)
         else:
-            if os.path.isfile(args.file_out):
-                file_out = args.file_out
+            if os.path.isfile(self.job_config.file_out):
+                file_out = self.job_config.file_out
             else:
-                if os.path.isdir(args.file_out):
-                    file_out = os.path.join(args.file_out, out_file_name)
+                if os.path.isdir(self.job_config.file_out):
+                    file_out = os.path.join(self.job_config.file_out, out_file_name)
 
         return file_out
 
@@ -64,7 +62,7 @@ class Job(object):
             shutil.rmtree(self.tmp_dir)
             self.tmp_dir = None
 
-    def speak_to_wav(self, text, out_file_name, speed):
+    def speak_to_wav(self, text, out_file_name):
         rc = Util.execute_rc(
             ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
@@ -162,7 +160,8 @@ class Job(object):
 
             # some sanity checks first
             min_track_length = 1 + self.job_config.tick_offset
-            assert music_track.duration >= min_track_length, 'Track too short (min. {})'.format(min_track_length)
+            assert music_track.duration >= min_track_length, 'Track too short (min. {}, current len {})'.format(
+                min_track_length, music_track.duration)
 
             # check if we can create output file too
             if os.path.exists(self.get_out_file_name(music_track)) and not self.job_config.force_overwrite:
