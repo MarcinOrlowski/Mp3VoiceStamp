@@ -15,6 +15,7 @@
 
 from __future__ import print_function
 
+import re
 import os
 import shutil
 
@@ -75,7 +76,6 @@ class Job(object):
             raise RuntimeError('Failed to calculate RMS amplitude of "{}"'.format(wav_file))
 
         # let's check what "sox" figured out
-        import re
         src_sox_results = {re.sub(' +', '_', err[i].split(':')[0].strip().lower()): err[i].split(':')[1].strip() for i
                            in range(0, len(err))}
         return float(src_sox_results['rms_amplitude'])
@@ -84,6 +84,21 @@ class Job(object):
         voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
+
+    def prepare_for_speak(self, text):
+        """ Tries to process provided text for more natural sound when spoken, i.e.
+            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
+            We also replace '-' by coma, to enforce small pause in spoken text
+        """
+        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
+        parts_out = []
+        for part in parts_in:
+            match = re.match('[0-9]{2,}', part)
+            if match is not None:
+                part = str(int(part))
+            parts_out.append(part)
+
+        return ' '.join(parts_out)
 
     def create_voice_wav(self, segments, speech_wav_file_name):
         for idx, segment_text in enumerate(segments):
@@ -159,8 +174,9 @@ class Job(object):
             # First goes track title, then time stamps
             ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
 
-            segments = [music_track.format_title(self.job_config.title_pattern)]
-            _ = [segments.append(self.job_config.tick_pattern.format(time_marker)) for time_marker in ticks]
+            segments = [self.prepare_for_speak(music_track.format_title(self.job_config.title_pattern))]
+            _ = [segments.append(self.prepare_for_speak(self.job_config.tick_pattern.format(time_marker))) for
+                 time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
             self.create_voice_wav(segments, speech_wav_full)
