@@ -1,26 +1,25 @@
 # coding=utf8
 
+"""
+
+ MP3 Voice Tag
+
+ Athletes' companion: add synthetized voice overlay with various
+ info and on-going timer to your audio files
+
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+
+ https://github.com/MarcinOrlowski/mp3voicestamp
+
+"""
+
+import os
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
 from util import Util
 from version import VERSION
 
-
-# #################################################################
-#
-# MP3 Voice Tag
-#
-# Athletes' companion: add synthetized voice overlay with various
-# info and on-going timer to your audio files
-#
-# #################################################################
-#
-# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
-#
-# Project page: https://github.com/MarcinOrlowski/mp3voicestamp
-#
-# #################################################################
 
 class Args(object):
     """Handles command line arguments"""
@@ -42,20 +41,24 @@ class Args(object):
         group = parser.add_argument_group('In/Out files')
         group.add_argument(
             '-i', '--in',
-            metavar="MP3_FILE_NAME", action='store', dest="file_in", nargs=1, required=True,
-            help="Source MP3 file"
+            metavar="MP3_FILE", action='store', dest="files_in", nargs='+', required=True,
+            help="On or more source MP3 files"
         )
         group.add_argument(
             '-o', '--out',
-            metavar="MP3_FILE_NAME", action='store', dest="file_out", nargs=1,
+            metavar="DIR/MP3_FILE", action='store', dest="file_out", nargs=1,
             required=False,
-            help='Optional output MP3 file name. If not specified, will be generated automatically'
+            help='Optional output file name or target directory. If not specified, file name will be generated.'
         )
 
         group = parser.add_argument_group('Universal switches')
         group.add_argument(
             '-f', '--force', action='store_true', dest='force',
             help='Forces overwrite of existing output file'
+        )
+        group.add_argument(
+            '-v', '--verbose', action='store_true', dest='verbose',
+            help='Makes app more verbose'
         )
         group.add_argument(
             '-q', '--quiet', action='store_true', dest='quiet',
@@ -89,9 +92,6 @@ class Args(object):
         group.add_argument(
             '-d', '--debug', action='store_true', dest='debug',
             help='Enables additional debug output')
-        group.add_argument(
-            '-nc', '--no-cleanup', action='store_true', dest='no_cleanup',
-            help='If set, does not delete temporary work folder on exit')
 
         group = parser.add_argument_group('Misc')
         group.add_argument(
@@ -101,15 +101,10 @@ class Args(object):
         args = parser.parse_args()
 
         # some post processing
-        args.file_in = args.file_in[0]
-
-        if args.file_out is None:
-            base_name = args.file_in
-            if args.file_in[-4:] == '.mp3':
-                base_name = base_name[:-4]
-            args.file_out = '{} (voicestamped).mp3'.format(base_name)
-        else:
+        if len(args.files_in) > 1 and args.file_out is not None:
             args.file_out = args.file_out[0]
+            if not os.path.isdir(args.file_out):
+                Util.abort('For multiple inputs, target must point to directory, not a file')
 
         args.tick_volume_factor = float(args.tick_volume_factor[0])
         if args.tick_volume_factor <= 0:

@@ -1,27 +1,24 @@
 # coding=utf8
 
+"""
+
+ MP3 Voice Tag
+
+ Athletes' companion: add synthetized voice overlay with various
+ info and on-going timer to your audio files
+
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
+
+ https://github.com/MarcinOrlowski/mp3voicestamp
+
+"""
+
 from __future__ import print_function
 
 import os
 import sys
-
 from subprocess import Popen, PIPE
 
-
-# #################################################################
-#
-# MP3 Voice Tag
-#
-# Athletes' companion: add synthetized voice overlay with various
-# info and on-going timer to your audio files
-#
-# #################################################################
-#
-# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
-#
-# Project page: https://github.com/MarcinOrlowski/mp3voicestamp
-#
-# #################################################################
 
 class Util(object):
 
@@ -88,19 +85,24 @@ class Util(object):
         stdout, err = p.communicate(None)
         rc = p.returncode
 
+        if rc != 0:
+            print('Command')
+            print('=======')
+            print(' '.join(cmd_list))
+
+            if len(stdout.splitlines()) > 0:
+                print('Command output (stdout)')
+                print('=======================')
+                [print('%r' % line) for line in stdout.splitlines()]
+
+            if len(err.splitlines()) > 0:
+                print('Command output (stderr)')
+                print('=======================')
+                [print('%r' % line) for line in err.splitlines()]
+
         # if rc != 0:
-        #     print('Command')
-        #     print(' '.join(cmd_list))
-        #
-        #     print('Command output (stdout)')
-        #     [print('%r' % line) for line in stdout.splitlines()]
-        #
         #     print('Command output (stderr)')
         #     [print('%r' % line) for line in err.splitlines()]
-
-        if rc != 0:
-            print('Command output (stderr)')
-            [print('%r' % line) for line in err.splitlines()]
 
         if working_dir:
             # noinspection PyUnboundLocalVariable
