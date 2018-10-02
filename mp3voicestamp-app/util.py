@@ -22,15 +22,11 @@ from subprocess import Popen, PIPE
 
 class Util(object):
 
+    quiet = True
+
     @classmethod
     def init(cls, args):
-        cls.debug_mode = args.debug
         cls.quiet = args.quiet
-
-    @staticmethod
-    def debug(message):
-        if Util.debug_mode:
-            print('[D] {}'.format(message))
 
     @staticmethod
     def print_no_lf(message, quiet=None):
@@ -143,3 +139,10 @@ class Util(object):
                     return exe_file
 
         return None
+
+    @staticmethod
+    def check_env():
+        tools = ['ffmpeg', 'normalize-audio', 'espeak', 'sox']
+        for tool in tools:
+            if Util.which(tool) is None:
+                Util.abort('"{}" not found. See README.md for details.'.format(tool))

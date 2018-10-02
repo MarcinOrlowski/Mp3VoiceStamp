@@ -106,6 +106,7 @@ class Args(object):
             if not os.path.isdir(args.file_out):
                 Util.abort('For multiple inputs, target must point to directory, not a file')
 
+        # noinspection PyUnresolvedReferences
         args.tick_volume_factor = float(args.tick_volume_factor[0])
         if args.tick_volume_factor <= 0:
             Util.abort('Tick Volume Factor must be non zero positive value')
