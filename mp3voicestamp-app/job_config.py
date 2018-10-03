@@ -204,9 +204,7 @@ class JobConfig(object):
 
         if isinstance(val, (str, unicode)):
             result = '"{}"'.format(val)
-        if isinstance(val, int):
-            result = '{}'.format(val)
-        if isinstance(val, float):
+        if isinstance(val, (int, float)):
             result = '{}'.format(val)
 
         if result is None:
