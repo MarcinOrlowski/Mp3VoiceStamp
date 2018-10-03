@@ -26,12 +26,16 @@ from mp3_file_info import Mp3FileInfo
 class Job(object):
 
     def __init__(self, job_config):
-        self.job_config = job_config
+        self.__job_config = job_config
+        self.__tmp_dir = None
 
-        self.in_file_info = None
-        self.out_file_info = None
+    @property
+    def job_config(self):
+        return self.__job_config
 
-        self.tmp_dir = None
+    @property
+    def tmp_dir(self):
+        return self.__tmp_dir
 
     def get_out_file_name(self, music_track):
         """Build out file name based on provided template and music_track data
@@ -55,12 +59,12 @@ class Job(object):
     def make_temp_dir(self):
         import tempfile
 
-        self.tmp_dir = tempfile.mkdtemp()
+        self.__tmp_dir = tempfile.mkdtemp()
 
     def cleanup(self):
         if self.tmp_dir is not None:
             shutil.rmtree(self.tmp_dir)
-            self.tmp_dir = None
+            self.__tmp_dir = None
 
     def speak_to_wav(self, text, out_file_name):
         rc = Util.execute_rc(
