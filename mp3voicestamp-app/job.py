@@ -153,8 +153,9 @@ class Job(object):
 
             # some sanity checks first
             min_track_length = 1 + self.job_config.tick_offset
-            assert music_track.duration >= min_track_length, 'Track too short (min. {}, current len {})'.format(
-                min_track_length, music_track.duration)
+            if music_track.duration < min_track_length:
+                raise ValueError(
+                    'Track too short (min. {}, current len {})'.format(min_track_length, music_track.duration))
 
             # check if we can create output file too
             if os.path.exists(self.get_out_file_name(music_track)) and not self.job_config.force_overwrite:
@@ -191,7 +192,7 @@ class Job(object):
             self.mix_tracks(self.get_out_file_name(music_track), music_track.get_encoding_quality_for_lame_encoder(),
                             music_wav_full_path, speech_wav_full)
 
-        except (RuntimeError, AssertionError) as ex:
+        except RuntimeError as ex:
             Util.print('*** ' + str(ex))
             result = False
 

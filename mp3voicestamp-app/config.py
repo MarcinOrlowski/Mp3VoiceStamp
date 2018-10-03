@@ -74,7 +74,8 @@ class Config(object):
     def __get_as_int(self, value):
         if value is not None:
             if isinstance(value, list):
-                assert value
+                if not value:
+                    raise ValueError('List cannot be empty')
                 value = value[0]
 
             if not isinstance(value, int):
@@ -86,7 +87,8 @@ class Config(object):
     def __get_as_float(self, value):
         if value is not None:
             if isinstance(value, list):
-                assert value
+                if not value:
+                    raise ValueError('List cannot be empty')
                 value = value[0]
 
             if not isinstance(value, float):
@@ -98,7 +100,8 @@ class Config(object):
     def __get_as_string(self, value, strip=True):
         if value is not None:
             if isinstance(value, list):
-                assert value
+                if not value:
+                    raise ValueError('List cannot be empty')
                 value = value[0]
 
             if not isinstance(value, basestring):
