@@ -15,6 +15,7 @@
 
 from __future__ import print_function
 
+import sys
 from args import Args
 from util import Util
 from job_config import JobConfig
@@ -26,26 +27,38 @@ class App(object):
 
     @staticmethod
     def main():
-        job_config = JobConfig()
+        rc = 0
 
-        # parse common line arguments
-        args = Args.parse_args(job_config)
+        try:
+            job_config = JobConfig()
 
-        # init helper
-        Util.init(args.quiet)
+            # parse common line arguments
+            args = Args.parse_args(job_config)
 
-        # check runtime environment
-        Util.check_env()
+            # init helper
+            Util.init(args.quiet)
 
-        for file_name in job_config.files_in:
-            try:
-                Job(job_config).voice_stamp(file_name)
-            except MutagenError as ex:
-                Util.print('*** ' + str(ex))
-                continue
-            except OSError as ex:
-                Util.print('*** ' + str(ex))
-                continue
+            # check runtime environment
+            Util.check_env()
+
+            if args.config_save_name is not None:
+                job_config.save(args.config_save_name)
+
+            else:
+                for file_name in job_config.files_in:
+                    try:
+                        Job(job_config).voice_stamp(file_name)
+                    except MutagenError as ex:
+                        Util.print('*** ' + str(ex))
+                        continue
+                    except OSError as ex:
+                        Util.print('*** ' + str(ex))
+                        continue
+        except (ValueError, IOError) as ex:
+            print('*** ' + str(ex))
+            rc = 1
+
+        sys.exit(rc)
 
 
 # ---------------------------------------------------------------------------------

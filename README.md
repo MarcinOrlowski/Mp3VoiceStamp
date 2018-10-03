@@ -7,10 +7,11 @@
  * [Introduction](#introduction)
  * [Sample MP3 file](#sample)
  * [Features](#features)
- * [Usage examples](#examples)
+ * [Usage examples](#usage-examples)
+ * [Configuration files](#configuration-files)
  * [Requirements](#requirements)
  * [Bugs reports and pull requests](#contributing)
- * [Credits and license](#legal)
+ * [Credits and license](#credits-and-license)
  * [Changelog](CHANGES.md)
 
 
@@ -31,8 +32,8 @@
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
  and then keeps speaking time passed at given intervals (each 5 minutes by default).
 
- ![Tip!](img/tip.png)
- _One of unexpected outcome of using this tool while swimming is that while title announcement 
+ > ![Tip!](img/tip.png)
+ > _One of unexpected outcome of using this tool while swimming is that while title announcement 
  feature is just "useful one" and nothing more, then the "time ticks" works more like your personal trainer 
  and for me it adds some motivational bits to my swimming which was completely unexpected. It seems like it 
  puts kind of subtle pressure so I actually swim more, trying to hear next time "milestone" announced. 
@@ -65,22 +66,22 @@
  * Free
 
 
-## Examples ##
+## Usage examples ##
  
  The simplest use case is like this:
 
     ./mp3voicestamp -i music.mp3
 
  which would produce file named `music (voicestamped).mp3` with audio overlay added to it with track title
- and time stamps every 5 minute. You can also provide own name for result file using `-o`:
+ and time stamps every 5 minute. You can also provide own name for result file using `--out`:
  
-    ./mp3voicestamp =i music.mp3 -o music_with_voice.mp3
+    ./mp3voicestamp -i music.mp3 -o music_with_voice.mp3
 
  You can also process more than one file at once:
  
     ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3
 
- When using multiple input files you can still use `-o` but in such case it must point to target folder
+ When using multiple input files you can still use `--out` but in such case it must point to target folder
  (so you loose ability to manually specify target file name):
  
     ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
@@ -90,13 +91,74 @@
   
  Sample MP3 downloadable from [Sample](#sample) section was created with following settings:
  
-    ./mp3voicestamp -i music.mp3 -tick-offset 1 -tick-interval 1 -speech-volume 2
+    ./mp3voicestamp --in music.mp3 --tick-offset 1 --tick-interval 1 --speech-volume 2
 
  or in short notation
  
      ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
  
- See all available options with `-help` (or `-h`).
+ See all available options with `--help` (or `-h`).
+ 
+
+## Configuration files ##
+
+ `Mp3VoiceStamp` supports configuration files, so you can easily create one with settings of your choice and
+ then use your file instead of passing all custom values via command line switches. It can also save current
+ configuration to a file so you can easily preserve your settings with no hassle.
+ 
+ Configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
+ 
+    [mp3voicestamp]
+    file_out_pattern = "{name} (voicestamped).{ext}"
+
+    speech_speed = 150
+    speech_volume_factor = 1.0
+
+    title_pattern = "{title}"
+
+    tick_pattern = "{} minutes"
+    tick_offset = 5
+    tick_interval = 5
+
+ All keys are optional, so you can put just these you want to be custom. All other values will then fall back
+ to defaults:
+
+    [mp3voicestamp]
+    tick_pattern = "{} long minutes passed"
+
+ To use config file specify path to the file with `--config` (or `-c`):
+ 
+    ./mp3voicestamp -i music.mp3 -c my-settings.ini
+
+ Additionally, command line arguments overshadow config file parameters. For example if you save the following 
+ config file as your `config.ini`:
+ 
+    [mp3voicestamp]
+    tick_pattern = "{} minutes"
+    tick_offset = 5
+    tick_interval = 5
+
+ and then invoke tool like this:
+ 
+    ./mp3voicestamp -i music.mp3 -c config.ini --tick-offset 10
+
+ then `tick offset` will be set to `10`, shadowing config file entry.
+ 
+ Finally `[mp3voicestamp]` is a section header and must always be present in the file. You also add comments
+ with use of `#` at beginning of comment line. See [example config file](example-config.ini).
+ 
+ #### Saving confguration files ####
+ 
+ You can use `--config-save` (`-cs`) option to dump current configuration state to a file for further reuse:
+ 
+    ./mp3voicestamp -cs new-config.ini
+ 
+ More over you can combine saving with config loading and manual tweaks as well:
+ 
+    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-template "{} passed" -cs new-config.ini
+
+ Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
+ and save it all to `new-config.ini` file.
  
 
 ## Requirements ##
@@ -135,7 +197,7 @@
  * glory.
  
 
-## Legal ##
+## Credits and license ##
 
  * Written and copyrighted &copy;2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * MP3AudioStamp is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

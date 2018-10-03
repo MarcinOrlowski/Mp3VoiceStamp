@@ -165,7 +165,7 @@ class Job(object):
 
             # check if we can create output file too
             if os.path.exists(self.get_out_file_name(music_track)) and not self.job_config.force_overwrite:
-                raise OSError('Target "{}" already exists'.format(self.get_out_file_name(music_track)))
+                raise OSError('Target "{}" already exists. Use -f to force overwrite'.format(self.get_out_file_name(music_track)))
 
             # create temporary folder
             self.make_temp_dir()
