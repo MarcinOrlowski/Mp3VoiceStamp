@@ -33,15 +33,15 @@ class Mp3FileInfo(object):
         self.bitrate = self.mp3.info.bitrate
 
         # get track title either from tag, or from filename
-        self.title = self.get_tag('TIT2', str(file_name[:-4].replace('_', ' ')))
-        self.artist = self.get_tag('TPE1')
-        self.album_artist = self.get_tag('TPE2')
-        self.album_title = self.get_tag('TALB')
-        self.composer = self.get_tag('TCOM')
-        self.performer = self.get_tag('TOPE')
-        self.comment = self.get_tag('COMM::XXX:')
+        self.title = self.__get_tag('TIT2', str(file_name[:-4].replace('_', ' ')))
+        self.artist = self.__get_tag('TPE1')
+        self.album_artist = self.__get_tag('TPE2')
+        self.album_title = self.__get_tag('TALB')
+        self.composer = self.__get_tag('TCOM')
+        self.performer = self.__get_tag('TOPE')
+        self.comment = self.__get_tag('COMM::XXX:')
 
-    def get_tag(self, tag, default=''):
+    def __get_tag(self, tag, default=''):
         return default if tag not in self.mp3 else self.mp3[tag]
 
     def format_title(self, title_pattern):
@@ -54,7 +54,7 @@ class Mp3FileInfo(object):
             album_title=self.album_title,
             composer=self.composer,
             performer=self.performer,
-            comment=self.comment
+            comment=self.comment,
         )
 
     def to_wav(self, output_file_name):

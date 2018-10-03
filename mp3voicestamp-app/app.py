@@ -20,7 +20,7 @@ from args import Args
 from util import Util
 from job_config import JobConfig
 from job import Job
-from mutagen.mp3 import MutagenError
+from mutagen import MutagenError
 
 
 class App(object):

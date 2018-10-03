@@ -26,12 +26,16 @@ from mp3_file_info import Mp3FileInfo
 class Job(object):
 
     def __init__(self, job_config):
-        self.job_config = job_config
+        self.__job_config = job_config
+        self.__tmp_dir = None
 
-        self.in_file_info = None
-        self.out_file_info = None
+    @property
+    def job_config(self):
+        return self.__job_config
 
-        self.tmp_dir = None
+    @property
+    def tmp_dir(self):
+        return self.__tmp_dir
 
     def get_out_file_name(self, music_track):
         """Build out file name based on provided template and music_track data
@@ -52,21 +56,22 @@ class Job(object):
 
         return out_file_name
 
-    def make_temp_dir(self):
+    def __make_temp_dir(self):
         import tempfile
 
-        self.tmp_dir = tempfile.mkdtemp()
+        self.__tmp_dir = tempfile.mkdtemp()
 
-    def cleanup(self):
+    def __cleanup(self):
         if self.tmp_dir is not None:
             shutil.rmtree(self.tmp_dir)
-            self.tmp_dir = None
+            self.__tmp_dir = None
 
     def speak_to_wav(self, text, out_file_name):
         rc = Util.execute_rc(
             ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
 
+    # noinspection PyMethodMayBeStatic
     def calculate_rms_amplitude(self, wav_file):
         # now let's get the RMS amplitude of our track
         src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
@@ -79,11 +84,13 @@ class Job(object):
                            in range(0, len(err))}
         return float(src_sox_results['rms_amplitude'])
 
+    # noinspection PyMethodMayBeStatic
     def adjust_wav_amplitude(self, wav_file, rms_amplitude):
         voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 
+    # noinspection PyMethodMayBeStatic
     def prepare_for_speak(self, text):
         """ Tries to process provided text for more natural sound when spoken, i.e.
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
@@ -99,7 +106,7 @@ class Job(object):
 
         return ' '.join(parts_out)
 
-    def create_voice_wav(self, segments, speech_wav_file_name):
+    def __create_voice_wav(self, segments, speech_wav_file_name):
         for idx, segment_text in enumerate(segments):
             segment_file_name = os.path.join(self.tmp_dir, '{}.wav'.format(idx))
             if not self.speak_to_wav(segment_text, segment_file_name):
@@ -140,7 +147,7 @@ class Job(object):
             raise RuntimeError('Failed to merge voice segments')
 
     def mix_tracks(self, file_out, encoding_quality, music_wav, speech_wav):
-        Util.print('Creating "{}" file'.format(file_out))
+        Util.print_no_lf('Creating "{}" file'.format(file_out))
         merge_cmd = ['ffmpeg', '-y',
                      '-i', os.path.join(self.tmp_dir, music_wav),
                      '-i', speech_wav,
@@ -149,6 +156,8 @@ class Job(object):
                      file_out]
         if Util.execute_rc(merge_cmd) != 0:
             raise RuntimeError('Failed to create final MP3 file')
+
+        Util.print('OK')
 
     def voice_stamp(self, mp3_file_name):
         result = True
@@ -169,10 +178,10 @@ class Job(object):
                     self.get_out_file_name(music_track)))
 
             # create temporary folder
-            self.make_temp_dir()
+            self.__make_temp_dir()
 
             # let's now create WAVs with our spoken parts.
-            # First goes track title, then time stamps
+            # First goes track title, then time ticks
             ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
 
             segments = [self.prepare_for_speak(music_track.format_title(self.job_config.title_pattern))]
@@ -180,7 +189,7 @@ class Job(object):
                  time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
-            self.create_voice_wav(segments, speech_wav_full)
+            self.__create_voice_wav(segments, speech_wav_full)
 
             # convert source music track to WAV
             music_wav_full_path = os.path.join(self.tmp_dir, os.path.basename(music_track.file_name) + '.wav')
@@ -201,6 +210,6 @@ class Job(object):
             result = False
 
         finally:
-            self.cleanup()
+            self.__cleanup()
 
         return result
