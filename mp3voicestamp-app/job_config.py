@@ -13,6 +13,8 @@
 
 """
 
+import types
+
 
 class JobConfig(object):
     DEFAULT_TITLE_PATTERN = '{title}'
@@ -23,6 +25,8 @@ class JobConfig(object):
     DEFAULT_TICK_PATTERN = '{} minutes'
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
+
+    DEFAULT_FILE_OUT_PATTERN = '{name} (voicestamped).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -41,6 +45,8 @@ class JobConfig(object):
 
         self.files_in = []
         self.file_out = None
+
+        self.file_out_pattern = JobConfig.DEFAULT_FILE_OUT_PATTERN
 
     def set_tick_pattern(self, tick_pattern):
         tick_pattern = tick_pattern.strip()
@@ -69,11 +75,11 @@ class JobConfig(object):
                 'Speech speed must be between {} and {}'.format(JobConfig.SPEECH_SPEED_MIN, JobConfig.SPEECH_SPEED_MAX))
         self.speech_speed = speech_speed
 
-    def set_title_pattern(self, title_pattern):
-        title_pattern = title_pattern.strip()
-        if title_pattern == '':
+    def set_title_pattern(self, pattern):
+        pattern = pattern.strip()
+        if pattern == '':
             raise ValueError('Invalid title pattern')
-        self.title_pattern = title_pattern
+        self.title_pattern = pattern
 
     def set_force_overwrite(self, val):
         self.force_overwrite = val
@@ -84,11 +90,19 @@ class JobConfig(object):
         self.files_in = files_in
 
     def set_file_out(self, file_out):
-        import os
 
+        import os
         if len(self.files_in) > 1 and file_out is not None:
             file_out = file_out[0]
             if not os.path.isdir(file_out):
                 raise ValueError('For multiple inputs, target must point to a directory, not to a file')
 
         self.file_out = file_out
+
+    def set_file_out_pattern(self, pattern):
+        if type(pattern) is not types.StringType:
+            raise ValueError('Pattern must be a string. {} received.'.format(type(pattern)))
+        pattern = pattern.strip()
+        if pattern == '':
+            raise ValueError('Invalid out file name pattern')
+        self.file_out_pattern = pattern

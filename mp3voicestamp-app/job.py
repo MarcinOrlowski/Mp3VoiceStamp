@@ -34,23 +34,23 @@ class Job(object):
         self.tmp_dir = None
 
     def get_out_file_name(self, music_track):
+        """Build out file name based on provided template and music_track data
+        """
+        out_base_name, out_base_ext = os.path.splitext(os.path.basename(music_track.file_name))
+        out_base_ext = out_base_ext[1:] if out_base_ext[0:1] == '.' else out_base_ext
+        formatted_file_name = self.job_config.file_out_pattern.format(name=out_base_name, ext=out_base_ext)
 
-        out_base_name = os.path.basename(music_track.file_name)
-        if out_base_name[-4:] == '.mp3':
-            out_base_name = out_base_name[:-4]
-        out_file_name = '{} (voicestamped).mp3'.format(out_base_name)
-        file_out = out_file_name
-
+        out_file_name = os.path.basename(music_track.file_name)
         if self.job_config.file_out is None:
-            file_out = os.path.join(os.path.dirname(music_track.file_name), out_file_name)
+            out_file_name = os.path.join(os.path.dirname(music_track.file_name), formatted_file_name)
         else:
             if os.path.isfile(self.job_config.file_out):
-                file_out = self.job_config.file_out
+                out_file_name = self.job_config.file_out
             else:
                 if os.path.isdir(self.job_config.file_out):
-                    file_out = os.path.join(self.job_config.file_out, out_file_name)
+                    out_file_name = os.path.join(self.job_config.file_out, formatted_file_name)
 
-        return file_out
+        return out_file_name
 
     def make_temp_dir(self):
         import tempfile
@@ -192,6 +192,7 @@ class Job(object):
             self.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together
+            print('out ' + self.get_out_file_name(music_track))
             self.mix_tracks(self.get_out_file_name(music_track), music_track.get_encoding_quality_for_lame_encoder(),
                             music_wav_full_path, speech_wav_full)
 

@@ -48,6 +48,11 @@ class Args(object):
             help='Optional output file name or target directory if "-in" option used with multiple files. ' +
                  'If not specified, file name will be generated.'
         )
+        group.add_argument(
+            '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1,
+            metavar='PATTERN', default=[JobConfig.DEFAULT_FILE_OUT_PATTERN], required=False,
+            help='Pattern used to generate name of output. Default is "{}". See docs for available placeholders.'.format(
+                JobConfig.DEFAULT_FILE_OUT_PATTERN))
 
         group = parser.add_argument_group('Universal switches')
         group.add_argument(
@@ -66,7 +71,7 @@ class Args(object):
         group.add_argument(
             '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1,
             metavar='PATTERN', default=[JobConfig.DEFAULT_TITLE_PATTERN], required=False,
-            help='Pattern for track title voice overlay. Default is "{}". See docs for available placeholders'.format(
+            help='Pattern for track title voice overlay. Default is "{}". See docs for available placeholders.'.format(
                 JobConfig.DEFAULT_TITLE_PATTERN))
 
         group = parser.add_argument_group('Spoken timer')
@@ -117,7 +122,8 @@ class Args(object):
         job_config.quiet = args.quiet
 
         job_config.set_files_in(args.files_in)
-        job_config.set_file_out(args.file_out)
+        job_config.set_file_out(args.file_out[0])
+        job_config.set_file_out_pattern(args.file_out_pattern[0])
 
         job_config.set_force_overwrite(args.force)
 
