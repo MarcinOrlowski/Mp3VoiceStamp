@@ -2,6 +2,9 @@
 
  Athletes' companion: add synthetized voice overlay with various info and on-going timer to your audio files
 
+ ![CodeFactor Code Rating](https://www.codefactor.io/repository/github/MarcinOrlowski/Mp3VoiceStamp/badge?style=flat-square)
+ [![Codacy Badge](https://api.codacy.com/project/badge/Grade/438ca557fec747df965d81bc5958fe7a)](https://www.codacy.com/app/MarcinOrlowski/Mp3VoiceStamp?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MarcinOrlowski/Mp3VoiceStamp&amp;utm_campaign=Badge_Grade)
+
 ## Table of contents ##
 
  * [Introduction](#introduction)
