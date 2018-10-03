@@ -42,20 +42,31 @@ class Mp3FileInfo(object):
         self.comment = self.__get_tag('COMM::XXX:')
 
     def __get_tag(self, tag, default=''):
-        return default if tag not in self.mp3 else self.mp3[tag]
+        return default if tag not in self.mp3 else str(self.mp3[tag])
 
-    def format_title(self, title_pattern):
+    def format_title(self, title_pattern, extra_placeholders={}):
         """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
         """
-        return title_pattern.format(
-            title=self.title,
-            artist=self.artist,
-            album_artist=self.album_artist,
-            album_title=self.album_title,
-            composer=self.composer,
-            performer=self.performer,
-            comment=self.comment,
-        )
+
+        assert isinstance(extra_placeholders, dict)
+
+        placeholders = extra_placeholders.copy()
+        track_placeholders = {
+            'title': self.title,
+            'artist': self.artist,
+            'album_artist': self.album_artist,
+            'album_title': self.album_title,
+            'composer': self.composer,
+            'performer': self.performer,
+            'comment': self.comment,
+        }
+        placeholders.update(track_placeholders)
+
+        for key, val in placeholders.items():
+            title_pattern = title_pattern.replace('{' + key + '}', val)
+        os.exit(1)
+
+        return title_pattern
 
     def to_wav(self, output_file_name):
         """ Converts source audio track to WAV format

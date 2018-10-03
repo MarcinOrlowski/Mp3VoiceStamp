@@ -168,8 +168,12 @@ class Job(object):
             # First goes track title, then time ticks
             ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
 
-            segments = [self.prepare_for_speak(music_track.format_title(self.job_config.title_pattern))]
-            _ = [segments.append(self.prepare_for_speak(self.job_config.tick_pattern.format(time_marker))) for
+            extra_placeholders = {
+                'config_name': self.job_config.name,
+            }
+            segments = [
+                Util.prepare_for_speak(music_track.format_title(self.job_config.title_pattern, extra_placeholders))]
+            _ = [segments.append(Util.prepare_for_speak(self.job_config.tick_pattern.format(time_marker))) for
                  time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
