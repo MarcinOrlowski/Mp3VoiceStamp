@@ -16,7 +16,7 @@
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
-from job_config import JobConfig
+from config import Config
 from version import VERSION
 
 
@@ -50,21 +50,21 @@ class Args(object):
         group.add_argument(
             '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1, metavar='PATTERN',
             help='Pattern used to generate name of output. Default is "{}". ' +
-                 'See docs for available placeholders.'.format(JobConfig.DEFAULT_FILE_OUT_PATTERN))
+                 'See docs for available placeholders.'.format(Config.DEFAULT_FILE_OUT_PATTERN))
 
         group = parser.add_argument_group('Track title speech')
         group.add_argument(
             '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1, metavar='PATTERN',
             help='Pattern for track title voice overlay. Default is "{}". ' +
-                 'See docs for available placeholders.'.format(JobConfig.DEFAULT_TITLE_PATTERN))
+                 'See docs for available placeholders.'.format(Config.DEFAULT_TITLE_PATTERN))
 
         group = parser.add_argument_group('Spoken timer')
         group.add_argument(
             '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1, metavar='MINUTES',
-            help='Interval (in minutes) between spoken ticks. Default is {}.'.format(JobConfig.DEFAULT_TICK_INTERVAL))
+            help='Interval (in minutes) between spoken ticks. Default is {}.'.format(Config.DEFAULT_TICK_INTERVAL))
         group.add_argument(
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
-            help='Offset (in minutes) for first spoken tick. Default is {}.'.format(JobConfig.DEFAULT_TICK_OFFSET))
+            help='Offset (in minutes) for first spoken tick. Default is {}.'.format(Config.DEFAULT_TICK_OFFSET))
         group.add_argument(
             '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1, metavar='PATTERN',
             help='Pattern for spoken ticks with "{}" replaced with minute tick value.')
@@ -74,11 +74,11 @@ class Args(object):
             '-sv', '--speech-volume', action='store', dest='speech_volume_factor', nargs=1, metavar='FLOAT',
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
                  'I.e. "0.5" would lower the volume 50%%, while "2" boost it up to make it twice as loud ' +
-                 'as it would be by default. Default is {}.'.format(JobConfig.DEFAULT_SPEECH_VOLUME_FACTOR))
+                 'as it would be by default. Default is {}.'.format(Config.DEFAULT_SPEECH_VOLUME_FACTOR))
         group.add_argument(
             '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int, metavar='INTEGER',
             help='Speech speed in words per minute, in range from {} to {}. Default is {}.'.format(
-                JobConfig.SPEECH_SPEED_MIN, JobConfig.SPEECH_SPEED_MAX, JobConfig.DEFAULT_SPEECH_SPEED))
+                Config.SPEECH_SPEED_MIN, Config.SPEECH_SPEED_MAX, Config.DEFAULT_SPEECH_SPEED))
 
         group = parser.add_argument_group('Configuration')
         group.add_argument(

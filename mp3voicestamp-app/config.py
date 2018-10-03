@@ -17,7 +17,7 @@ import os
 import ConfigParser
 
 
-class JobConfig(object):
+class Config(object):
     INI_SECTION_NAME = 'mp3voicestamp'
 
     DEFAULT_TITLE_PATTERN = '{title}'
@@ -41,19 +41,19 @@ class JobConfig(object):
     def __init__(self):
         self.force_overwrite = False
 
-        self.speech_speed = JobConfig.DEFAULT_SPEECH_SPEED
-        self.speech_volume_factor = JobConfig.DEFAULT_SPEECH_VOLUME_FACTOR
+        self.speech_speed = Config.DEFAULT_SPEECH_SPEED
+        self.speech_volume_factor = Config.DEFAULT_SPEECH_VOLUME_FACTOR
 
-        self.tick_pattern = JobConfig.DEFAULT_TICK_PATTERN
-        self.tick_interval = JobConfig.DEFAULT_TICK_INTERVAL
-        self.tick_offset = JobConfig.DEFAULT_TICK_OFFSET
+        self.tick_pattern = Config.DEFAULT_TICK_PATTERN
+        self.tick_interval = Config.DEFAULT_TICK_INTERVAL
+        self.tick_offset = Config.DEFAULT_TICK_OFFSET
 
-        self.title_pattern = JobConfig.DEFAULT_TITLE_PATTERN
+        self.title_pattern = Config.DEFAULT_TITLE_PATTERN
 
         self.files_in = []
         self.file_out = None
 
-        self.file_out_pattern = JobConfig.DEFAULT_FILE_OUT_PATTERN
+        self.file_out_pattern = Config.DEFAULT_FILE_OUT_PATTERN
 
     # *****************************************************************************************************************
 
@@ -160,9 +160,9 @@ class JobConfig(object):
     def speech_speed(self, value):
         value = self.__get_as_int(value)
         if value is not None:
-            if value < JobConfig.SPEECH_SPEED_MIN or value > JobConfig.SPEECH_SPEED_MAX:
-                raise ValueError('Speech speed must be between {} and {}'.format(JobConfig.SPEECH_SPEED_MIN,
-                                                                                 JobConfig.SPEECH_SPEED_MAX))
+            if value < Config.SPEECH_SPEED_MIN or value > Config.SPEECH_SPEED_MAX:
+                raise ValueError('Speech speed must be between {} and {}'.format(Config.SPEECH_SPEED_MIN,
+                                                                                 Config.SPEECH_SPEED_MAX))
             self.__speech_speed = value
 
     # *****************************************************************************************************************

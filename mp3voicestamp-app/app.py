@@ -18,7 +18,7 @@ from __future__ import print_function
 import sys
 from args import Args
 from util import Util
-from job_config import JobConfig
+from config import Config
 from job import Job
 from mutagen import MutagenError
 
@@ -30,7 +30,7 @@ class App(object):
         rc = 0
 
         try:
-            job_config = JobConfig()
+            job_config = Config()
 
             # parse common line arguments
             args = Args.parse_args(job_config)
