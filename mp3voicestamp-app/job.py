@@ -56,12 +56,12 @@ class Job(object):
 
         return out_file_name
 
-    def make_temp_dir(self):
+    def __make_temp_dir(self):
         import tempfile
 
         self.__tmp_dir = tempfile.mkdtemp()
 
-    def cleanup(self):
+    def __cleanup(self):
         if self.tmp_dir is not None:
             shutil.rmtree(self.tmp_dir)
             self.__tmp_dir = None
@@ -106,7 +106,7 @@ class Job(object):
 
         return ' '.join(parts_out)
 
-    def create_voice_wav(self, segments, speech_wav_file_name):
+    def __create_voice_wav(self, segments, speech_wav_file_name):
         for idx, segment_text in enumerate(segments):
             segment_file_name = os.path.join(self.tmp_dir, '{}.wav'.format(idx))
             if not self.speak_to_wav(segment_text, segment_file_name):
@@ -178,7 +178,7 @@ class Job(object):
                     self.get_out_file_name(music_track)))
 
             # create temporary folder
-            self.make_temp_dir()
+            self.__make_temp_dir()
 
             # let's now create WAVs with our spoken parts.
             # First goes track title, then time ticks
@@ -189,7 +189,7 @@ class Job(object):
                  time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
-            self.create_voice_wav(segments, speech_wav_full)
+            self.__create_voice_wav(segments, speech_wav_full)
 
             # convert source music track to WAV
             music_wav_full_path = os.path.join(self.tmp_dir, os.path.basename(music_track.file_name) + '.wav')
@@ -210,6 +210,6 @@ class Job(object):
             result = False
 
         finally:
-            self.cleanup()
+            self.__cleanup()
 
         return result
