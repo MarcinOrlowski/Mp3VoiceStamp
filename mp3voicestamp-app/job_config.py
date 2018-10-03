@@ -118,7 +118,7 @@ class JobConfig(object):
 
     # *****************************************************************************************************************
 
-    def _sanitize_string(self, string):
+    def __sanitize_string(self, string):
         if string[0:1] == '"':
             string = string[1:]
         if string[-1:] == '"':
@@ -148,7 +148,7 @@ class JobConfig(object):
 
             section = self.INI_SECTION_NAME
             if config.has_option(section, 'file_out_pattern'):
-                self.set_file_out_pattern(self._sanitize_string(config.get(section, 'file_out_pattern')))
+                self.set_file_out_pattern(self.__sanitize_string(config.get(section, 'file_out_pattern')))
 
             if config.has_option(section, 'speech_speed'):
                 self.set_speech_speed(config.getint(section, 'speech_speed'))
@@ -156,10 +156,10 @@ class JobConfig(object):
                 self.set_speech_volume_factor(float(config.get(section, 'speech_volume_factor').replace(',', '.')))
 
             if config.has_option(section, 'title_pattern'):
-                self.set_title_pattern(self._sanitize_string(config.get(section, 'title_pattern')))
+                self.set_title_pattern(self.__sanitize_string(config.get(section, 'title_pattern')))
 
             if config.has_option(section, 'tick_pattern'):
-                self.set_tick_pattern(self._sanitize_string(config.get(section, 'tick_pattern')))
+                self.set_tick_pattern(self.__sanitize_string(config.get(section, 'tick_pattern')))
             if config.has_option(section, 'tick_offset'):
                 self.set_tick_offset(config.getint(section, 'tick_offset'))
             if config.has_option(section, 'tick_offset'):
@@ -184,22 +184,22 @@ class JobConfig(object):
             '# https://github.com/MarcinOrlowski/mp3voicestamp',
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
-            self._prepare_config_entry('file_out_pattern', self.file_out_pattern),
+            self.__prepare_config_entry('file_out_pattern', self.file_out_pattern),
             '',
-            self._prepare_config_entry('speech_speed', self.speech_speed),
-            self._prepare_config_entry('speech_volume_factor', self.speech_volume_factor),
+            self.__prepare_config_entry('speech_speed', self.speech_speed),
+            self.__prepare_config_entry('speech_volume_factor', self.speech_volume_factor),
             '',
-            self._prepare_config_entry('title_pattern', self.title_pattern),
+            self.__prepare_config_entry('title_pattern', self.title_pattern),
             '',
-            self._prepare_config_entry('tick_pattern', self.tick_pattern),
-            self._prepare_config_entry('tick_offset', self.tick_offset),
-            self._prepare_config_entry('tick_interval', self.tick_interval),
+            self.__prepare_config_entry('tick_pattern', self.tick_pattern),
+            self.__prepare_config_entry('tick_offset', self.tick_offset),
+            self.__prepare_config_entry('tick_interval', self.tick_interval),
         ]
 
         with open(file_name_full, "w+") as fh:
             fh.writelines('\n'.join(out_buffer))
 
-    def _prepare_config_entry(self, ini_key, val):
+    def __prepare_config_entry(self, ini_key, val):
         result = None
 
         if isinstance(val, (str, unicode)):
