@@ -67,6 +67,7 @@ class Job(object):
             ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
 
+    # noinspection PyMethodMayBeStatic
     def calculate_rms_amplitude(self, wav_file):
         # now let's get the RMS amplitude of our track
         src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
@@ -79,11 +80,13 @@ class Job(object):
                            in range(0, len(err))}
         return float(src_sox_results['rms_amplitude'])
 
+    # noinspection PyMethodMayBeStatic
     def adjust_wav_amplitude(self, wav_file, rms_amplitude):
         voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 
+    # noinspection PyMethodMayBeStatic
     def prepare_for_speak(self, text):
         """ Tries to process provided text for more natural sound when spoken, i.e.
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
@@ -140,7 +143,7 @@ class Job(object):
             raise RuntimeError('Failed to merge voice segments')
 
     def mix_tracks(self, file_out, encoding_quality, music_wav, speech_wav):
-        Util.print('Creating "{}" file'.format(file_out))
+        Util.print_no_lf('Creating "{}" file'.format(file_out))
         merge_cmd = ['ffmpeg', '-y',
                      '-i', os.path.join(self.tmp_dir, music_wav),
                      '-i', speech_wav,
@@ -149,6 +152,8 @@ class Job(object):
                      file_out]
         if Util.execute_rc(merge_cmd) != 0:
             raise RuntimeError('Failed to create final MP3 file')
+
+        Util.print('OK')
 
     def voice_stamp(self, mp3_file_name):
         result = True
@@ -172,7 +177,7 @@ class Job(object):
             self.make_temp_dir()
 
             # let's now create WAVs with our spoken parts.
-            # First goes track title, then time stamps
+            # First goes track title, then time ticks
             ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
 
             segments = [self.prepare_for_speak(music_track.format_title(self.job_config.title_pattern))]

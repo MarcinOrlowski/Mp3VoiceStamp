@@ -32,7 +32,7 @@ class Args(object):
         parser = argparse.ArgumentParser(
             description='Adds spoken overlay to MP3 with title, time stamps and more.\n'
                         'Written by Marcin Orlowski <mail@marcinOrlowski.com>\n'
-                        'WWW: https://github.com/MarcinOrlowski/mp3voicestamp',
+                        'WWW: https://github.com/MarcinOrlowski/Mp3VoiceStamp',
             formatter_class=RawDescriptionHelpFormatter)
 
         group = parser.add_argument_group('In/Out files')
@@ -44,47 +44,39 @@ class Args(object):
         group.add_argument(
             '-o', '--out',
             metavar="DIR/MP3_FILE", action='store', dest="file_out", nargs=1,
-            required=False,
             help='Optional output file name or target directory if "-in" option used with multiple files. ' +
                  'If not specified, file name will be generated.'
         )
         group.add_argument(
-            '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1,
-            metavar='PATTERN', required=False,
+            '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1, metavar='PATTERN',
             help='Pattern used to generate name of output. Default is "{}". ' +
                  'See docs for available placeholders.'.format(JobConfig.DEFAULT_FILE_OUT_PATTERN))
 
         group = parser.add_argument_group('Track title speech')
         group.add_argument(
-            '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1,
-            metavar='PATTERN', required=False,
+            '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1, metavar='PATTERN',
             help='Pattern for track title voice overlay. Default is "{}". ' +
                  'See docs for available placeholders.'.format(JobConfig.DEFAULT_TITLE_PATTERN))
 
         group = parser.add_argument_group('Spoken timer')
         group.add_argument(
-            '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1,
-            metavar='MINUTES', required=False,
+            '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1, metavar='MINUTES',
             help='Interval (in minutes) between spoken ticks. Default is {}.'.format(JobConfig.DEFAULT_TICK_INTERVAL))
         group.add_argument(
-            '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1,
-            metavar='MINUTES', required=False,
+            '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
             help='Offset (in minutes) for first spoken tick. Default is {}.'.format(JobConfig.DEFAULT_TICK_OFFSET))
         group.add_argument(
-            '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1,
-            metavar='PATTERN', required=False,
+            '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1, metavar='PATTERN',
             help='Pattern for spoken ticks with "{}" replaced with minute tick value.')
 
         group = parser.add_argument_group('Voice synthesizer')
         group.add_argument(
-            '-sv', '--speech-volume', action='store', dest='speech_volume_factor', nargs=1,
-            metavar='FLOAT', required=False,
+            '-sv', '--speech-volume', action='store', dest='speech_volume_factor', nargs=1, metavar='FLOAT',
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
                  'I.e. "0.5" would lower the volume 50%%, while "2" boost it up to make it twice as loud ' +
                  'as it would be by default. Default is {}.'.format(JobConfig.DEFAULT_SPEECH_VOLUME_FACTOR))
         group.add_argument(
-            '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int,
-            metavar='INTEGER', required=False,
+            '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int, metavar='INTEGER',
             help='Speech speed in words per minute, in range from {} to {}. Default is {}.'.format(
                 JobConfig.SPEECH_SPEED_MIN, JobConfig.SPEECH_SPEED_MAX, JobConfig.DEFAULT_SPEECH_SPEED))
 
@@ -122,35 +114,25 @@ class Args(object):
         if args.files_in is None and args.config_save_name is None:
             raise ValueError('You must provide at least one audio file using --in argument.')
 
-        if args.config_name is not None:
-            job_config.load(args.config_name)
+        job_config.load(args.config_name)
 
-        if args.speech_volume_factor is not None:
-            job_config.set_speech_volume_factor(float(args.speech_volume_factor[0]))
-        if args.speech_speed is not None:
-            job_config.set_speech_speed(args.speech_speed[0])
+        job_config.force_overwrite = args.force
 
-        if args.tick_interval is not None:
-            job_config.set_tick_interval(args.tick_interval[0])
-        if args.tick_offset is not None:
-            job_config.set_tick_offset(args.tick_offset[0])
-        if args.tick_pattern is not None:
-            job_config.set_tick_pattern(args.tick_pattern[0])
+        job_config.speech_volume_factor = args.speech_volume_factor
+        job_config.speech_speed = args.speech_speed
 
-        if args.title_pattern is not None:
-            job_config.set_title_pattern(args.title_pattern[0])
+        job_config.tick_interval = args.tick_interval
+        job_config.tick_offset = args.tick_offset
+        job_config.tick_pattern = args.tick_pattern
+
+        job_config.title_pattern = args.title_pattern
 
         # other settings
         job_config.quiet = args.quiet
 
-        job_config.set_files_in(args.files_in)
+        job_config.files_in = args.files_in
 
-        if args.file_out is not None:
-            job_config.set_file_out(args.file_out[0])
-
-        if args.file_out_pattern is not None:
-            job_config.set_file_out_pattern(args.file_out_pattern[0])
-
-        job_config.set_force_overwrite(args.force)
+        job_config.file_out = args.file_out
+        job_config.file_out_pattern = args.file_out_pattern
 
         return args

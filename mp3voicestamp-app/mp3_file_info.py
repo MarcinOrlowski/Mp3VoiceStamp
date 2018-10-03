@@ -54,7 +54,7 @@ class Mp3FileInfo(object):
             album_title=self.album_title,
             composer=self.composer,
             performer=self.performer,
-            comment=self.comment
+            comment=self.comment,
         )
 
     def to_wav(self, output_file_name):

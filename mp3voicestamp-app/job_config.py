@@ -57,84 +57,194 @@ class JobConfig(object):
 
     # *****************************************************************************************************************
 
-    def set_tick_pattern(self, tick_pattern):
-        tick_pattern = tick_pattern.strip()
-        if tick_pattern == '':
-            raise ValueError('Invalid tick pattern')
-        self.tick_pattern = tick_pattern
+    # noinspection PyMethodMayBeStatic
+    def __get_as_int(self, value):
+        if value is not None:
+            if isinstance(value, list):
+                assert len(value) > 0
+                value = value[0]
 
-    def set_tick_interval(self, tick_interval):
-        if tick_interval < 1:
-            raise ValueError('Tick Interval value cannot be shorter than 1 minute')
-        self.tick_interval = tick_interval
+            if not isinstance(value, int):
+                value = int(value)
 
-    def set_tick_offset(self, tick_offset):
-        if tick_offset < 1:
-            raise ValueError('Tick Offset value cannot be shorter than 1 minute')
-        self.tick_offset = tick_offset
+        return value
 
-    def set_speech_volume_factor(self, speech_volume_factor):
-        if speech_volume_factor <= 0:
-            raise ValueError('Volume Factor must be non zero positive value')
-        self.speech_volume_factor = speech_volume_factor
+    # noinspection PyMethodMayBeStatic
+    def __get_as_float(self, value):
+        if value is not None:
+            if isinstance(value, list):
+                assert len(value) > 0
+                value = value[0]
 
-    def set_speech_speed(self, speech_speed):
-        if speech_speed < JobConfig.SPEECH_SPEED_MIN or speech_speed > JobConfig.SPEECH_SPEED_MAX:
-            raise ValueError(
-                'Speech speed must be between {} and {}'.format(JobConfig.SPEECH_SPEED_MIN, JobConfig.SPEECH_SPEED_MAX))
-        self.speech_speed = speech_speed
+            if not isinstance(value, float):
+                value = float(value)
 
-    def set_title_pattern(self, pattern):
-        pattern = pattern.strip()
-        if pattern == '':
-            raise ValueError('Invalid title pattern')
-        self.title_pattern = pattern
+        return value
 
-    def set_force_overwrite(self, val):
-        self.force_overwrite = val
+    # noinspection PyMethodMayBeStatic
+    def __get_as_string(self, value, strip=True):
+        if value is not None:
+            if isinstance(value, list):
+                assert len(value) > 0
+                value = value[0]
 
-    # *****************************************************************************************************************
+            if not isinstance(value, basestring):
+                value = str(value)
 
-    def set_files_in(self, files_in):
-        self.files_in = files_in
+            if strip:
+                value = value.strip()
 
-    def set_file_out(self, file_out):
-
-        import os
-        if len(self.files_in) > 1 and file_out is not None:
-            file_out = file_out
-            if not os.path.isdir(file_out):
-                raise ValueError('For multiple inputs, target must point to a directory, not to a file')
-
-        self.file_out = file_out
-
-    def set_file_out_pattern(self, pattern):
-        if not isinstance(pattern, basestring):
-            raise ValueError('Pattern must be a string. {} received.'.format(type(pattern)))
-        pattern = pattern.strip()
-        if pattern == '':
-            raise ValueError('Invalid out file name pattern')
-        self.file_out_pattern = pattern
+        return value
 
     # *****************************************************************************************************************
 
-    def __sanitize_string(self, string):
-        if string[0:1] == '"':
-            string = string[1:]
-        if string[-1:] == '"':
-            string = string[:-1]
-        return string.strip()
+    @property
+    def tick_pattern(self):
+        return self.__tick_pattern
+
+    @tick_pattern.setter
+    def tick_pattern(self, value):
+        value = self.__get_as_string(value)
+        if value is not None:
+            if value == '':
+                raise ValueError('Invalid tick pattern')
+
+            self.__tick_pattern = value
+
+    @property
+    def tick_offset(self):
+        return self.__tick_offset
+
+    @tick_offset.setter
+    def tick_offset(self, value):
+        value = self.__get_as_int(value)
+        if value is not None:
+            if value < 1:
+                raise ValueError('Tick Offset value cannot be shorter than 1 minute')
+
+            self.__tick_offset = value
+
+    @property
+    def tick_interval(self):
+        return self.__tick_interval
+
+    @tick_interval.setter
+    def tick_interval(self, value):
+        value = self.__get_as_int(value)
+        if value is not None:
+            if value < 1:
+                raise ValueError('Tick Interval value cannot be shorter than 1 minute')
+
+            self.__tick_interval = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def speech_volume_factor(self):
+        return self.__speech_volume_factor
+
+    @speech_volume_factor.setter
+    def speech_volume_factor(self, value):
+        value = self.__get_as_float(value)
+        if value is not None:
+            if value <= 0:
+                raise ValueError('Volume Factor must be non zero positive value')
+
+            self.__speech_volume_factor = value
+
+    @property
+    def speech_speed(self):
+        return self.__speech_speed
+
+    @speech_speed.setter
+    def speech_speed(self, value):
+        value = self.__get_as_int(value)
+        if value is not None:
+            if value < JobConfig.SPEECH_SPEED_MIN or value > JobConfig.SPEECH_SPEED_MAX:
+                raise ValueError('Speech speed must be between {} and {}'.format(JobConfig.SPEECH_SPEED_MIN,
+                                                                                 JobConfig.SPEECH_SPEED_MAX))
+            self.__speech_speed = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def title_pattern(self):
+        return self.__title_pattern
+
+    @title_pattern.setter
+    def title_pattern(self, value):
+        value = self.__get_as_string(value)
+        if value is not None:
+            if value == '':
+                raise ValueError('Invalid title pattern')
+
+            self.__title_pattern = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def force_overwrite(self):
+        return self.__force_overwrite
+
+    @force_overwrite.setter
+    def force_overwrite(self, value):
+        if value is not None and isinstance(value, bool):
+            self.__force_overwrite = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def files_in(self):
+        return self.__files_in
+
+    @files_in.setter
+    def files_in(self, value):
+        if value is not None:
+            self.__files_in = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def file_out(self):
+        return self.__file_out
+
+    @file_out.setter
+    def file_out(self, file_out):
+        file_out = self.__get_as_string(file_out, False)
+        if file_out is not None:
+            import os
+            if len(self.__files_in) > 1 and file_out is not None and not os.path.isdir(file_out):
+                raise ValueError('For multiple inputs, target must point to a directory')
+
+        self.__file_out = file_out
+
+    @property
+    def file_out_pattern(self):
+        return self.__file_out_pattern
+
+    @file_out_pattern.setter
+    def file_out_pattern(self, value):
+        value = self.__get_as_string(value)
+        if value is not None:
+            if value == '':
+                raise ValueError('Invalid out file name pattern')
+            self.__file_out_pattern = value
+
+    # *****************************************************************************************************************
 
     def load(self, file_name):
         """Load patch config file (if exists).
 
         Args:
-          file_name: path to config file to load
+          file_name: path to config file to load or None
 
         Returns:
           True if loading was successful, False if config file is missing. Raises exception on parse failure
         """
         result = False
+
+        if file_name is None:
+            return result
 
         config_file_full = os.path.expanduser(file_name)
 
@@ -148,26 +258,50 @@ class JobConfig(object):
 
             section = self.INI_SECTION_NAME
             if config.has_option(section, 'file_out_pattern'):
-                self.set_file_out_pattern(self.__sanitize_string(config.get(section, 'file_out_pattern')))
+                self.file_out_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'file_out_pattern'))
 
             if config.has_option(section, 'speech_speed'):
-                self.set_speech_speed(config.getint(section, 'speech_speed'))
+                self.speech_speed = config.getint(section, 'speech_speed')
             if config.has_option(section, 'speech_volume_factor'):
-                self.set_speech_volume_factor(float(config.get(section, 'speech_volume_factor').replace(',', '.')))
+                self.speech_volume_factor = config.get(section, 'speech_volume_factor').replace(',', '.')
 
             if config.has_option(section, 'title_pattern'):
-                self.set_title_pattern(self.__sanitize_string(config.get(section, 'title_pattern')))
+                self.title_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'title_pattern'))
 
             if config.has_option(section, 'tick_pattern'):
-                self.set_tick_pattern(self.__sanitize_string(config.get(section, 'tick_pattern')))
+                self.tick_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'tick_pattern'))
             if config.has_option(section, 'tick_offset'):
-                self.set_tick_offset(config.getint(section, 'tick_offset'))
+                self.tick_offset = config.getint(section, 'tick_offset')
             if config.has_option(section, 'tick_offset'):
-                self.set_tick_interval(config.getint(section, 'tick_interval'))
+                self.tick_interval = config.getint(section, 'tick_interval')
 
             result = True
 
         return result
+
+    # noinspection PyMethodMayBeStatic
+    def __strip_quotes_from_ini_string(self, string):
+        if string[0:1] == '"':
+            string = string[1:]
+        if string[-1:] == '"':
+            string = string[:-1]
+        return string.strip()
+
+    # *****************************************************************************************************************
+
+    # noinspection PyMethodMayBeStatic,PyMethodMayBeStatic
+    def __prepare_config_entry(self, ini_key, val):
+        result = None
+
+        if isinstance(val, (str, unicode)):
+            result = '"{}"'.format(val)
+        if isinstance(val, (int, float)):
+            result = '{}'.format(val)
+
+        if result is None:
+            raise ValueError('Unknown type of %r' % ini_key)
+
+        return '{} = {}'.format(ini_key, result)
 
     def save(self, file_name):
         """Dumps current configuration as INI file.
@@ -198,16 +332,3 @@ class JobConfig(object):
 
         with open(file_name_full, "w+") as fh:
             fh.writelines('\n'.join(out_buffer))
-
-    def __prepare_config_entry(self, ini_key, val):
-        result = None
-
-        if isinstance(val, (str, unicode)):
-            result = '"{}"'.format(val)
-        if isinstance(val, (int, float)):
-            result = '{}'.format(val)
-
-        if result is None:
-            raise ValueError('Unknown type of %r' % ini_key)
-
-        return '{} = {}'.format(ini_key, result)
