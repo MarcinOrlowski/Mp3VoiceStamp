@@ -15,6 +15,7 @@
 
 import os
 import ConfigParser
+from util import Util
 
 
 class Config(object):
@@ -39,6 +40,8 @@ class Config(object):
     # *****************************************************************************************************************
 
     def __init__(self):
+        self.name = ''
+
         self.force_overwrite = False
 
         self.speech_speed = Config.DEFAULT_SPEECH_SPEED
@@ -54,6 +57,16 @@ class Config(object):
         self.file_out = None
 
         self.file_out_pattern = Config.DEFAULT_FILE_OUT_PATTERN
+
+    # *****************************************************************************************************************
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        self.__name = str(value)
 
     # *****************************************************************************************************************
 
@@ -274,6 +287,10 @@ class Config(object):
             if config.has_option(section, 'tick_offset'):
                 self.tick_interval = config.getint(section, 'tick_interval')
 
+            name = os.path.basename(file_name)
+            name = name[:-4] if name[-4:] == '.ini' else name
+            self.name = Util.prepare_for_speak(name)
+
             result = True
 
         return result
@@ -329,5 +346,5 @@ class Config(object):
             self.__prepare_config_entry('tick_interval', self.tick_interval),
         ]
 
-        with open(file_name_full, "w+") as fh:
+        with open(file_name_full, 'w+') as fh:
             fh.writelines('\n'.join(out_buffer))
