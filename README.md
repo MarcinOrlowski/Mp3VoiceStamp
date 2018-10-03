@@ -175,7 +175,7 @@
 
  To install required Python libraries use `pip`:
 
-    pip install mutagen
+    pip install -r requirements.txt
 
  To install required binaries (on Debian/Ubuntu):
 
