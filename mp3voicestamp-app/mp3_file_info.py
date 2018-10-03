@@ -14,8 +14,9 @@
 """
 
 from __future__ import print_function
+
 import os
-from mutagen.mp3 import MP3, MutagenError
+from mutagen.mp3 import MP3
 from util import Util
 
 

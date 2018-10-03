@@ -13,7 +13,6 @@
 
 """
 
-import types
 import os
 import ConfigParser
 
@@ -71,7 +70,7 @@ class JobConfig(object):
 
     def set_tick_offset(self, tick_offset):
         if tick_offset < 1:
-            raise ValueError.abort('Tick Offset value cannot be shorter than 1 minute')
+            raise ValueError('Tick Offset value cannot be shorter than 1 minute')
         self.tick_offset = tick_offset
 
     def set_speech_volume_factor(self, speech_volume_factor):
@@ -110,7 +109,7 @@ class JobConfig(object):
         self.file_out = file_out
 
     def set_file_out_pattern(self, pattern):
-        if type(pattern) is not types.StringType:
+        if not isinstance(pattern, basestring):
             raise ValueError('Pattern must be a string. {} received.'.format(type(pattern)))
         pattern = pattern.strip()
         if pattern == '':

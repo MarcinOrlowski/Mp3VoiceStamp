@@ -158,7 +158,7 @@
     ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-template "{} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
- and save it all to `new-config.ini` file.
+ and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.
  
 
 ## Requirements ##
