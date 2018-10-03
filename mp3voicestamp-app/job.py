@@ -90,22 +90,6 @@ class Job(object):
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 
-    # noinspection PyMethodMayBeStatic
-    def prepare_for_speak(self, text):
-        """ Tries to process provided text for more natural sound when spoken, i.e.
-            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
-            We also replace '-' by coma, to enforce small pause in spoken text
-        """
-        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
-        parts_out = []
-        for part in parts_in:
-            match = re.match('[0-9]{2,}', part)
-            if match is not None:
-                part = str(int(part))
-            parts_out.append(part)
-
-        return ' '.join(parts_out)
-
     def __create_voice_wav(self, segments, speech_wav_file_name):
         for idx, segment_text in enumerate(segments):
             segment_file_name = os.path.join(self.tmp_dir, '{}.wav'.format(idx))

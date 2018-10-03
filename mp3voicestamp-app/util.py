@@ -18,6 +18,7 @@ from __future__ import print_function
 import os
 import sys
 from subprocess import Popen, PIPE
+import re
 
 
 class Util(object):
@@ -147,3 +148,20 @@ class Util(object):
         for tool in tools:
             if Util.which(tool) is None:
                 Util.abort('"{}" not found. See README.md for details.'.format(tool))
+
+    # noinspection PyMethodMayBeStatic
+    @staticmethod
+    def prepare_for_speak(text):
+        """ Tries to process provided text for more natural sound when spoken, i.e.
+            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
+            We also replace '-' by coma, to enforce small pause in spoken text
+        """
+        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
+        parts_out = []
+        for part in parts_in:
+            match = re.match('[0-9]{2,}', part)
+            if match is not None:
+                part = str(int(part))
+            parts_out.append(part)
+
+        return ' '.join(parts_out)
