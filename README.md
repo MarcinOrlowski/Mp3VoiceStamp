@@ -7,17 +7,16 @@
 
 ## Table of contents ##
 
- * [Introduction](#introduction)
- * [Sample MP3 file](#sample)
- * [Features](#features)
- * [Usage examples](#usage-examples)
- * [Configuration files](#configuration-files)
- * [Formatting spoken messages](#formatting-spoken-messages)
- * [Requirements](#requirements)
- * [Bugs reports and pull requests](#contributing)
- * [Credits and license](#credits-and-license)
- * [Changelog](CHANGES.md)
-
+  * [Introduction](#introduction)
+  * [Sample MP3 file](#sample)
+  * [Features](#features)
+  * [Usage examples](#usage-examples)
+  * [Configuration files](#configuration-files)
+  * [Formatting spoken messages](#formatting-spoken-messages)
+  * [Requirements](#requirements)
+  * [Bugs reports and pull requests](#contributing)
+  * [Credits and license](#credits-and-license)
+  * [Changelog](CHANGES.md)
 
 ## Introduction ##
  
@@ -27,9 +26,9 @@
  so-called DJ mixes - 1 hour long (or more) mixed tracks of various artists just to keep music go without gaps
  between tracks. Having no UI in audio player brings at least two problems:
  
- * it is sometimes hard to tell what mix you just started to listen to (they often need some time to spin up or 
+  * it is sometimes hard to tell what mix you just started to listen to (they often need some time to spin up or 
  feature the same opening intro jingle),
- * as there's no display to peek, you cannot easily tell how much time passed so you cannot tell how long you are 
+  * as there's no display to peek, you cannot easily tell how much time passed so you cannot tell how long you are 
  swimming already.
  
  The aim of this tool is to address these issues. The idea behind is quite simple: you take MP3 track of your choice
@@ -38,10 +37,10 @@
 
  > ![Tip!](img/tip.png)
  > _One of unexpected outcome of using this tool while swimming is that while title announcement 
- feature is just "useful one" and nothing more, then the "time ticks" works more like your personal trainer 
- and for me it adds some motivational bits to my swimming which was completely unexpected. It seems like it 
- puts kind of subtle pressure so I actually swim more, trying to hear next time "milestone" announced. 
- It's like some sort of gamification in swimming in practice... Interesting :)_
+ > feature is just "useful one" and nothing more, then the "time ticks" works more like your personal trainer 
+ > and for me it adds some motivational bits to my swimming which was completely unexpected. It seems like it 
+ > puts kind of subtle pressure so I actually swim more, trying to hear next time "milestone" announced. 
+ > It's like some sort of gamification in swimming in practice... Interesting :)_
 
 ## Sample ##
 
@@ -49,8 +48,8 @@
  Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
  starting at first minute of the track. Voice volume factor is x2.
 
- * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
- * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
+  * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
+  * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
 
  ----
  
@@ -59,16 +58,14 @@
  [MixCloud](https://www.mixcloud.com/olgamisty/olga-misty-ocean-planet-086-part-2-aug-06-2018-on-proton-radio/) and
  [SoundCloud](https://soundcloud.com/olga_misty/olga-misty-ocean-planet-086-part-2-aug-06-2018-on-proton-radio).
 
-
 ## Features ##
 
- * Reading MP3 tags
- * Automatic voice volume adjustment based on music file volume
- * Preserves quality of original audio file
- * Pretty customizable
- * Minimal runtime dependencies
- * Free
-
+  * Reading MP3 tags
+  * Automatic voice volume adjustment based on music file volume
+  * Preserves quality of original audio file
+  * Pretty customizable
+  * Minimal runtime dependencies
+  * Free
 
 ## Usage examples ##
  
@@ -103,7 +100,6 @@
  
  See all available options with `--help` (or `-h`).
  
-
 ## Configuration files ##
 
  `Mp3VoiceStamp` supports configuration files, so you can easily create one with settings of your choice and
@@ -213,7 +209,6 @@
 
     sudo apt install ffmpeg espeak normalize-audio sox
 
-
 ## Contributing ##
 
  Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/mp3voicestamp/issues).
@@ -228,10 +223,8 @@
  * send pull request,
  * glory.
  
-
 ## Credits and license ##
 
  * Written and copyrighted &copy;2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * MP3AudioStamp is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
  * Icons used in logo taken from free [Icons8 Olympics Sports Icon Pack](https://icons8.com/free-icons/olympics_sports)
-
