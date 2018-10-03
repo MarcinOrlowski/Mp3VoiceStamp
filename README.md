@@ -9,6 +9,7 @@
  * [Features](#features)
  * [Usage examples](#usage-examples)
  * [Configuration files](#configuration-files)
+ * [Formatting spoken messages](#formatting-spoken-messages)
  * [Requirements](#requirements)
  * [Bugs reports and pull requests](#contributing)
  * [Credits and license](#credits-and-license)
@@ -160,6 +161,34 @@
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
  and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.
  
+## Formatting spoken messages ##
+
+ You can define how both track title and clock tickes should be spoken by using configuring the format, 
+ using supported placeholders. Each placeholder uses `{name}` format and is then substituted by either
+ the correct value, or if no value can be obtained (i.e. MP3 tags are not available) by empty string.
+ You can combine multiple placeholders as well as enter regular text.
+ 
+#### Track title ####
+
+ Default track title format string is `{title} {config_name}` 
+ 
+ | Key | Description |
+ | ------ | ------ |
+ | {title} | Track title as set in MP3 tags of music file. If there's no title set (or it is not available), title will be generated based on MP3 file name. |
+ | {artist} | Artist name or empty string |
+ | {album_artist} | Album artist or empty string |
+ | {album_title} | Album title or empty string |
+ | {composer} | Track composer or empty string |
+ | {comment} | Content of track comment field or empty string |
+ | {config_name} | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+
+#### Ticks ####
+
+ Default tick title format string is `{minutes} minutes`.
+
+ | Key | Description |
+ | ------ | ------ |
+ | {minutes} | Minutes since start of the track | 
 
 ## Requirements ##
 
