@@ -169,9 +169,9 @@ class Util(object):
     @staticmethod
     def string_format(fmt, placeholders):
         if not isinstance(fmt, basestring):
-            raise ValueError('Format must be a string, {} given',format(type(fmt)))
+            raise ValueError('Format must be a string, {} given'.format(type(fmt)))
         if not isinstance(placeholders, dict):
-            raise ValueError('Placeholders must be a dict, {} given',format(type(placeholders)))
+            raise ValueError('Placeholders must be a dict, {} given'.format(type(placeholders)))
 
         for key, val in placeholders.items():
             fmt = fmt.replace('{' + key + '}', str(val))

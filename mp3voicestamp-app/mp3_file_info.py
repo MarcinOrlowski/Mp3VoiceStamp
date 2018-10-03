@@ -52,7 +52,7 @@ class Mp3FileInfo(object):
             extra_placeholders = {}
 
         if not isinstance(extra_placeholders, dict):
-            raise ValueError('Placeholders must be a dict, {} given',format(type(extra_placeholders)))
+            raise ValueError('Placeholders must be a dict, {} given'.format(type(extra_placeholders)))
 
         placeholders = extra_placeholders.copy()
         track_placeholders = {
