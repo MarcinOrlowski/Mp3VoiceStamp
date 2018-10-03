@@ -120,7 +120,7 @@ class Args(object):
         args = parser.parse_args()
 
         if args.files_in is None and args.config_save_name is None:
-            raise ValueError('Missing --in argument values')
+            raise ValueError('You must provide at least one audio file using --in argument.')
 
         if args.config_name is not None:
             job_config.load(args.config_name)

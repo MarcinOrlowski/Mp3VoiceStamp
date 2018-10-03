@@ -103,7 +103,7 @@ class JobConfig(object):
 
         import os
         if len(self.files_in) > 1 and file_out is not None:
-            file_out = file_out[0]
+            file_out = file_out
             if not os.path.isdir(file_out):
                 raise ValueError('For multiple inputs, target must point to a directory, not to a file')
 
