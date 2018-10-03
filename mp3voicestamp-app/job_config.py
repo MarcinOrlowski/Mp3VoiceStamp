@@ -61,7 +61,7 @@ class JobConfig(object):
     def __get_as_int(self, value):
         if value is not None:
             if isinstance(value, list):
-                assert len(value) > 0
+                assert value
                 value = value[0]
 
             if not isinstance(value, int):
@@ -73,7 +73,7 @@ class JobConfig(object):
     def __get_as_float(self, value):
         if value is not None:
             if isinstance(value, list):
-                assert len(value) > 0
+                assert value
                 value = value[0]
 
             if not isinstance(value, float):
@@ -85,7 +85,7 @@ class JobConfig(object):
     def __get_as_string(self, value, strip=True):
         if value is not None:
             if isinstance(value, list):
-                assert len(value) > 0
+                assert value
                 value = value[0]
 
             if not isinstance(value, basestring):
@@ -212,7 +212,6 @@ class JobConfig(object):
     def file_out(self, file_out):
         file_out = self.__get_as_string(file_out, False)
         if file_out is not None:
-            import os
             if len(self.__files_in) > 1 and file_out is not None and not os.path.isdir(file_out):
                 raise ValueError('For multiple inputs, target must point to a directory')
 
