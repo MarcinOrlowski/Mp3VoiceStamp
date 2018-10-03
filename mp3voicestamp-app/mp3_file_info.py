@@ -44,9 +44,12 @@ class Mp3FileInfo(object):
     def __get_tag(self, tag, default=''):
         return default if tag not in self.mp3 else str(self.mp3[tag])
 
-    def format_title(self, title_pattern, extra_placeholders={}):
+    def format_title(self, title_fmt, extra_placeholders=None):
         """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
         """
+
+        if extra_placeholders is None:
+            extra_placeholders = {}
 
         assert isinstance(extra_placeholders, dict)
 
@@ -62,11 +65,7 @@ class Mp3FileInfo(object):
         }
         placeholders.update(track_placeholders)
 
-        for key, val in placeholders.items():
-            title_pattern = title_pattern.replace('{' + key + '}', val)
-        os.exit(1)
-
-        return title_pattern
+        return Util.string_format(title_fmt, placeholders)
 
     def to_wav(self, output_file_name):
         """ Converts source audio track to WAV format

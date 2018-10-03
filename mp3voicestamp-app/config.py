@@ -26,7 +26,7 @@ class Config(object):
     DEFAULT_SPEECH_SPEED = 150
     DEFAULT_SPEECH_VOLUME_FACTOR = 1
 
-    DEFAULT_TICK_PATTERN = '{} minutes'
+    DEFAULT_TICK_PATTERN = '{minutes} minutes'
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
 

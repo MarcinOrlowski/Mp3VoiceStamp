@@ -165,3 +165,13 @@ class Util(object):
             parts_out.append(part)
 
         return ' '.join(parts_out)
+
+    @staticmethod
+    def string_format(fmt, placeholders):
+        assert isinstance(fmt, basestring)
+        assert isinstance(placeholders, dict)
+
+        for key, val in placeholders.items():
+            fmt = fmt.replace('{' + key + '}', str(val))
+
+        return fmt
