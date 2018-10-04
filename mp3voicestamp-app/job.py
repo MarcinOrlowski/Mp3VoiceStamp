@@ -21,6 +21,7 @@ import shutil
 
 from util import Util
 from mp3_file_info import Mp3FileInfo
+from audio import Audio
 
 
 class Job(object):
@@ -71,25 +72,6 @@ class Job(object):
             ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
 
-    # noinspection PyMethodMayBeStatic
-    def calculate_rms_amplitude(self, wav_file):
-        # now let's get the RMS amplitude of our track
-        src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
-        rc, output, err = Util.execute(src_amplitude_cmd)
-        if rc != 0:
-            raise RuntimeError('Failed to calculate RMS amplitude of "{}"'.format(wav_file))
-
-        # let's check what "sox" figured out
-        src_sox_results = {re.sub(' +', '_', err[i].split(':')[0].strip().lower()): err[i].split(':')[1].strip() for i
-                           in range(0, len(err))}
-        return float(src_sox_results['rms_amplitude'])
-
-    # noinspection PyMethodMayBeStatic
-    def adjust_wav_amplitude(self, wav_file, rms_amplitude):
-        voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
-        if Util.execute_rc(voice_gain_cmd) != 0:
-            raise RuntimeError('Failed to adjust voice overlay volume')
-
     def __create_voice_wav(self, segments, speech_wav_file_name):
         for idx, segment_text in enumerate(segments):
             segment_file_name = os.path.join(self.tmp_dir, '{}.wav'.format(idx))
@@ -129,19 +111,6 @@ class Job(object):
 
         if Util.execute_rc(concat_cmd) != 0:
             raise RuntimeError('Failed to merge voice segments')
-
-    def mix_tracks(self, file_out, encoding_quality, music_wav, speech_wav):
-        Util.print_no_lf('Creating "{}" file'.format(file_out))
-        merge_cmd = ['ffmpeg', '-y',
-                     '-i', os.path.join(self.tmp_dir, music_wav),
-                     '-i', speech_wav,
-                     '-filter_complex', 'amerge', '-ac', '2', '-c:a', 'libmp3lame',
-                     '-q:a', str(encoding_quality),
-                     file_out]
-        if Util.execute_rc(merge_cmd) != 0:
-            raise RuntimeError('Failed to create final MP3 file')
-
-        Util.print('OK')
 
     def voice_stamp(self, mp3_file_name):
         result = True
@@ -183,14 +152,17 @@ class Job(object):
             music_track.to_wav(music_wav_full_path)
 
             # calculate RMS amplitude of music track as reference to gain voice to match
-            rms_amplitude = self.calculate_rms_amplitude(music_wav_full_path)
+            rms_amplitude = Audio.calculate_rms_amplitude(music_wav_full_path)
 
             target_speech_rms_amplitude = rms_amplitude * self.job_config.speech_volume_factor
-            self.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
+            Audio.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together
-            self.mix_tracks(self.get_out_file_name(music_track), music_track.get_encoding_quality_for_lame_encoder(),
-                            music_wav_full_path, speech_wav_full)
+            file_out = self.get_out_file_name(music_track)
+            Util.print_no_lf('Creating "{}" file'.format(file_out))
+            self.mix_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
+                            [music_wav_full_path, speech_wav_full])
+            Util.print('OK')
 
         except RuntimeError as ex:
             Util.print('*** ' + str(ex))
