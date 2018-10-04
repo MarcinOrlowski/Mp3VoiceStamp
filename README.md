@@ -11,11 +11,11 @@
  * [Introduction](#introduction)
  * [Sample MP3 file](#sample)
  * [Features](#features)
- * [COnfiguration and usage](USAGE.md)
+ * [COnfiguration and usage](docs/USAGE.md)
  * [Requirements](#requirements)
  * [Bugs reports and pull requests](#contributing)
  * [Credits and license](#credits-and-license)
- * [Changelog](CHANGES.md)
+ * [Changelog](docs/CHANGES.md)
 
 ## Introduction ##
  
