@@ -36,7 +36,6 @@ class Mp3FileInfo(object):
 
         # get track title either from tag, or from filename
         base_name, _ = Util.split_file_name(file_name)
-        self.file_name = base_name
         self.title = self.__get_tag('TIT2', base_name)
 
         self.artist = self.__get_tag('TPE1')
@@ -59,9 +58,11 @@ class Mp3FileInfo(object):
         if not isinstance(extra_placeholders, dict):
             raise ValueError('Placeholders must be a dict, {} given'.format(type(extra_placeholders)))
 
+        base_name, _ = Util.split_file_name(self.file_name)
+
         placeholders = extra_placeholders.copy()
         track_placeholders = {
-            'file_name': self.file_name,
+            'file_name': base_name,
             'title': self.title,
             'artist': self.artist,
             'album_artist': self.album_artist,
