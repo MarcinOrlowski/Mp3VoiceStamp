@@ -13,6 +13,9 @@
 
 """
 
+# noinspection PyCompatibility
+from past.builtins import basestring
+
 import os
 import ConfigParser
 from util import Util
@@ -116,6 +119,7 @@ class Config(object):
                     raise ValueError('List cannot be empty')
                 value = value[0]
 
+            # noinspection PyCompatibility
             if not isinstance(value, basestring):
                 value = str(value)
 

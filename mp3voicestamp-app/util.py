@@ -14,6 +14,8 @@
 """
 
 from __future__ import print_function
+# noinspection PyCompatibility
+from past.builtins import basestring
 
 import os
 import sys
@@ -141,6 +143,7 @@ class Util(object):
 
     @staticmethod
     def string_format(fmt, placeholders):
+        # noinspection PyCompatibility
         if not isinstance(fmt, basestring):
             raise ValueError('Format must be a string, {} given'.format(type(fmt)))
         if not isinstance(placeholders, dict):
