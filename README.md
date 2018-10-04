@@ -8,16 +8,16 @@
  
 ## Table of contents ##
 
-* [Introduction](#introduction)
-* [Sample MP3 file](#sample)
-* [Features](#features)
-* [Usage examples](#usage-examples)
-* [Configuration files](#configuration-files)
-* [Formatting spoken messages](#formatting-spoken-messages)
-* [Requirements](#requirements)
-* [Bugs reports and pull requests](#contributing)
-* [Credits and license](#credits-and-license)
-* [Changelog](CHANGES.md)
+ * [Introduction](#introduction)
+ * [Sample MP3 file](#sample)
+ * [Features](#features)
+ * [Usage examples](#usage-examples)
+ * [Configuration files](#configuration-files)
+ * [Formatting spoken messages](#formatting-spoken-messages)
+ * [Requirements](#requirements)
+ * [Bugs reports and pull requests](#contributing)
+ * [Credits and license](#credits-and-license)
+ * [Changelog](CHANGES.md)
 
 ## Introduction ##
  
@@ -61,12 +61,12 @@
 
 ## Features ##
 
-* Reading MP3 tags
-* Automatic voice volume adjustment based on music file volume
-* Preserves quality of original audio file
-* Pretty customizable
-* Minimal runtime dependencies
-* Free
+ * Reading MP3 tags
+ * Automatic voice volume adjustment based on music file volume
+ * Preserves quality of original audio file
+ * Pretty customizable
+ * Minimal runtime dependencies
+ * Free
 
 ## Usage examples ##
  
@@ -192,14 +192,14 @@
 
 ## Requirements ##
 
-* [Python](https://www.python.org/) v2.7 or newer
-* required libraries:
-  * [mutagen](https://github.com/quodlibet/mutagen/)
-* required tools:
-  * [ffmpeg](https://www.ffmpeg.org/)
-  * [normalize-audio](http://normalize.nongnu.org/)
-  * [espeak](http://espeak.sourceforge.net/)
-  * [sox](http://sox.sourceforge.net/)
+ * [Python](https://www.python.org/) v2.7 or newer
+ * required libraries:
+   * [mutagen](https://github.com/quodlibet/mutagen/)
+ * required tools:
+   * [ffmpeg](https://www.ffmpeg.org/)
+   * [normalize-audio](http://normalize.nongnu.org/)
+   * [espeak](http://espeak.sourceforge.net/)
+   * [sox](http://sox.sourceforge.net/)
 
  To install required Python libraries use `pip`:
 
