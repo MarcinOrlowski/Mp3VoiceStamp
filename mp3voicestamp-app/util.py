@@ -50,11 +50,6 @@ class Util(object):
         sys.exit(1)
 
     @staticmethod
-    def key_to_label(key):
-        tmp = key.replace('_', ' ')
-        return tmp[0:1].upper() + tmp[1:]
-
-    @staticmethod
     def execute_rc(cmd_list, working_dir=None):
         rc, stdout, err = Util.execute(cmd_list, working_dir)
         return rc
@@ -103,23 +98,6 @@ class Util(object):
         return rc, stdout.splitlines(), err.splitlines()
 
     @staticmethod
-    def print_info(info_dict, title=None, quiet=None):
-        from itertools import imap
-
-        if quiet is None:
-            quiet = Util.quiet
-
-        if title is not None:
-            Util.print(title, quiet)
-            Util.print('=' * len(title), quiet)
-        # print out what we collected
-        label_len = max(imap(len, info_dict))
-
-        for key, value in info_dict.items():
-            Util.print('  %*s: %s' % (label_len, Util.key_to_label(key), value), quiet)
-        Util.print(quiet=quiet)
-
-    @staticmethod
     def which(program):
         def is_exe(full_path):
             return os.path.isfile(full_path) and os.access(full_path, os.X_OK)
@@ -145,7 +123,6 @@ class Util(object):
             if Util.which(tool) is None:
                 Util.abort('"{}" not found. See README.md for details.'.format(tool))
 
-    # noinspection PyMethodMayBeStatic
     @staticmethod
     def prepare_for_speak(text):
         """ Tries to process provided text for more natural sound when spoken, i.e.
