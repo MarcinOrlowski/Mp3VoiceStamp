@@ -25,13 +25,13 @@ from util import Util
 
 class Job(object):
 
-    def __init__(self, job_config):
-        self.__job_config = job_config
+    def __init__(self, config):
+        self.__config = config
         self.__tmp_dir = None
 
     @property
-    def job_config(self):
-        return self.__job_config
+    def config(self):
+        return self.__config
 
     @property
     def tmp_dir(self):
@@ -42,17 +42,17 @@ class Job(object):
         """
         out_base_name, out_base_ext = os.path.splitext(os.path.basename(music_track.file_name))
         out_base_ext = out_base_ext[1:] if out_base_ext[0:1] == '.' else out_base_ext
-        formatted_file_name = self.job_config.file_out_format.format(name=out_base_name, ext=out_base_ext)
+        formatted_file_name = self.config.file_out_format.format(name=out_base_name, ext=out_base_ext)
 
         out_file_name = os.path.basename(music_track.file_name)
-        if self.job_config.file_out is None:
+        if self.config.file_out is None:
             out_file_name = os.path.join(os.path.dirname(music_track.file_name), formatted_file_name)
         else:
-            if os.path.isfile(self.job_config.file_out):
-                out_file_name = self.job_config.file_out
+            if os.path.isfile(self.config.file_out):
+                out_file_name = self.config.file_out
             else:
-                if os.path.isdir(self.job_config.file_out):
-                    out_file_name = os.path.join(self.job_config.file_out, formatted_file_name)
+                if os.path.isdir(self.config.file_out):
+                    out_file_name = os.path.join(self.config.file_out, formatted_file_name)
 
         return out_file_name
 
@@ -68,7 +68,7 @@ class Job(object):
 
     def speak_to_wav(self, text, out_file_name):
         rc = Util.execute_rc(
-            ['espeak', '-s', str(self.job_config.speech_speed), '-z', '-w', out_file_name, str(text)])
+            ['espeak', '-s', str(self.config.speech_speed), '-z', '-w', out_file_name, str(text)])
         return rc == 0
 
     def __create_voice_wav(self, segments, speech_wav_file_name):
@@ -90,8 +90,8 @@ class Job(object):
         filter_complex_concat = ';'
         separator = ''
 
-        max_len_tick = speech_frame_rate * 60 * self.job_config.tick_interval
-        max_len_title = speech_frame_rate * 60 * self.job_config.tick_offset
+        max_len_tick = speech_frame_rate * 60 * self.config.tick_interval
+        max_len_title = speech_frame_rate * 60 * self.config.tick_offset
         for idx, _ in enumerate(segments):
             concat_cmd.extend(['-i', os.path.join(self.tmp_dir, '{}.wav'.format(idx))])
 
@@ -120,13 +120,13 @@ class Job(object):
             music_track = Mp3FileInfo(mp3_file_name)
 
             # some sanity checks first
-            min_track_length = 1 + self.job_config.tick_offset
+            min_track_length = 1 + self.config.tick_offset
             if music_track.duration < min_track_length:
                 raise ValueError(
                     'Track too short (min. {}, current len {})'.format(min_track_length, music_track.duration))
 
             # check if we can create output file too
-            if os.path.exists(self.get_out_file_name(music_track)) and not self.job_config.force_overwrite:
+            if os.path.exists(self.get_out_file_name(music_track)) and not self.config.force_overwrite:
                 raise OSError('Target "{}" already exists. Use -f to force overwrite.'.format(
                     self.get_out_file_name(music_track)))
 
@@ -135,13 +135,13 @@ class Job(object):
 
             # let's now create WAVs with our spoken parts.
             # First goes track title, then time ticks
-            ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
+            ticks = range(self.config.tick_offset, music_track.duration, self.config.tick_interval)
 
-            extras = {'config_name': self.job_config.name}
-            segments = [Util.prepare_for_speak(music_track.format_title(self.job_config.title_format, extras))]
+            extras = {'config_name': self.config.name}
+            segments = [Util.prepare_for_speak(music_track.format_title(self.config.title_format, extras))]
 
             _ = [segments.append(Util.prepare_for_speak(
-                Util.string_format(self.job_config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
+                Util.string_format(self.config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
             self.__create_voice_wav(segments, speech_wav_full)
@@ -153,7 +153,7 @@ class Job(object):
             # calculate RMS amplitude of music track as reference to gain voice to match
             rms_amplitude = Audio.calculate_rms_amplitude(music_wav_full_path)
 
-            target_speech_rms_amplitude = rms_amplitude * self.job_config.speech_volume_factor
+            target_speech_rms_amplitude = rms_amplitude * self.config.speech_volume_factor
             Audio.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together

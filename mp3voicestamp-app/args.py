@@ -24,7 +24,7 @@ class Args(object):
     """Handles command line arguments"""
 
     @staticmethod
-    def parse_args(job_config):
+    def parse_args(config):
         """Parses command line arguments
 
         :returns argsparse
@@ -115,22 +115,22 @@ class Args(object):
             parser.print_usage()
             raise ValueError('You must provide at least one mp3 file.')
 
-        job_config.load(args.config_name)
+        config.load(args.config_name)
 
-        job_config.force_overwrite = args.force
+        config.force_overwrite = args.force
 
-        job_config.speech_volume_factor = args.speech_volume_factor
-        job_config.speech_speed = args.speech_speed
+        config.speech_volume_factor = args.speech_volume_factor
+        config.speech_speed = args.speech_speed
 
-        job_config.tick_interval = args.tick_interval
-        job_config.tick_offset = args.tick_offset
-        job_config.tick_format = args.tick_format
+        config.tick_interval = args.tick_interval
+        config.tick_offset = args.tick_offset
+        config.tick_format = args.tick_format
 
-        job_config.title_format = args.title_format
+        config.title_format = args.title_format
 
-        job_config.files_in = args.files_in
+        config.files_in = args.files_in
 
-        job_config.file_out = args.file_out
-        job_config.file_out_format = args.file_out_format
+        config.file_out = args.file_out
+        config.file_out_format = args.file_out_format
 
         return args

@@ -30,21 +30,21 @@ class App(object):
         rc = 0
 
         try:
-            job_config = Config()
+            config = Config()
 
             # parse common line arguments
-            args = Args.parse_args(job_config)
+            args = Args.parse_args(config)
 
             # check runtime environment
             Util.check_env()
 
             if args.config_save_name is not None:
-                job_config.save(args.config_save_name)
+                config.save(args.config_save_name)
 
             else:
-                for file_name in job_config.files_in:
+                for file_name in config.files_in:
                     try:
-                        Job(job_config).voice_stamp(file_name)
+                        Job(config).voice_stamp(file_name)
                     except MutagenError as ex:
                         Util.print('*** ' + str(ex))
                         continue
