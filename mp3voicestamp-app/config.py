@@ -17,7 +17,12 @@
 from past.builtins import basestring
 
 import os
-import ConfigParser
+
+try:
+    import configparser
+except ImportError:
+    import ConfigParser as configparser
+
 from util import Util
 from const import *
 
@@ -280,7 +285,7 @@ class Config(object):
         config_file_full = os.path.expanduser(file_name)
 
         if os.path.isfile(config_file_full):
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             # custom optionxform prevents keys from being lower-cased (default implementation) as CaSe matters for us
             config.optionxform = str
 
