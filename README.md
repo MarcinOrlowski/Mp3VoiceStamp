@@ -66,38 +66,14 @@
  * Minimal runtime dependencies
  * Free
 
-## Requirements ##
-
- * [Python](https://www.python.org/) v2.7 or newer
- * required libraries:
-   * [mutagen](https://github.com/quodlibet/mutagen/)
- * required tools:
-   * [ffmpeg](https://www.ffmpeg.org/)
-   * [normalize-audio](http://normalize.nongnu.org/)
-   * [espeak](http://espeak.sourceforge.net/)
-   * [sox](http://sox.sourceforge.net/)
-
- To install required Python libraries use `pip`:
-
-    pip install -r requirements.txt
-
- To install required binaries (on Debian/Ubuntu):
-
-    sudo apt install ffmpeg espeak normalize-audio sox
-
 ## Contributing ##
 
  Please report any issue spotted using [GitHub's project tracker](https://github.com/MarcinOrlowski/mp3voicestamp/issues).
 
  If you'd like to contribute to the this project, please [open new ticket](https://github.com/MarcinOrlowski/mp3voicestamp/issues)
  **before doing any work**. This will help us save your time in case I'd not be accept PR either completely or in proposed form.
- But if all is good and clear then follow common routine:
-
- * fork the project,
- * create new branch,
- * do your changes,
- * send pull request,
- * glory.
+ But if all is good and clear then follow common routine - fork the project, create new branch in your fork, do your changes,
+ send pull request. Glory :)
  
 ## Credits and license ##
 
