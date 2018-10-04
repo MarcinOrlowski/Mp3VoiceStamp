@@ -46,19 +46,19 @@ class App(object):
                     try:
                         Job(config).voice_stamp(file_name)
                     except MutagenError as ex:
-                        Util.print('*** ' + str(ex))
+                        Util.print_error(ex)
                         if batch_mode:
                             continue
                         else:
                             rc = 1
                     except OSError as ex:
-                        Util.print('*** ' + str(ex))
+                        Util.print_error(ex)
                         if batch_mode:
                             continue
                         else:
                             rc = 1
         except (ValueError, IOError) as ex:
-            print('*** ' + str(ex))
+            Util.print_error(str(ex), False)
             rc = 1
 
         sys.exit(rc)

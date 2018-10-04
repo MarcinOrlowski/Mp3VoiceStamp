@@ -44,9 +44,13 @@ class Util(object):
             print(message)
 
     @staticmethod
+    def print_error(message='', quiet=None):
+        Util.print('*** {}'.format(str(message)), quiet)
+
+    @staticmethod
     def abort(message=None):
         if message is not None:
-            print('*** {}'.format(message))
+            Util.print_error(message)
         if message is None:
             print('*** Aborted')
         sys.exit(1)

@@ -163,7 +163,7 @@ class Job(object):
             Util.print('OK')
 
         except RuntimeError as ex:
-            Util.print('*** ' + str(ex))
+            Util.print_error(ex)
             result = False
 
         finally:
