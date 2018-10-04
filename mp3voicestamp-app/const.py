@@ -13,6 +13,9 @@
 
 """
 
+APP_NAME = 'Mp3VoiceStamp'
+APP_URL = 'https://github.com/MarcinOrlowski/Mp3VoiceStamp'
+
 VERSION = '1.1.0'
 
 # YYYY-MM-DD

@@ -16,6 +16,7 @@
 import os
 import ConfigParser
 from util import Util
+from const import *
 
 
 class Config(object):
@@ -346,8 +347,8 @@ class Config(object):
             raise IOError('File already exists. Use -f to force overwrite: {}.'.format(file_name))
 
         out_buffer = [
-            '# Mp3VoiceStamp configuration file',
-            '# https://github.com/MarcinOrlowski/mp3voicestamp',
+            '# {} configuration file'.format(APP_NAME),
+            '# {}'.format(APP_URL),
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
             Config.__format_ini_entry(self.INI_KEY_FILE_OUT_FORMAT, self.file_out_format),

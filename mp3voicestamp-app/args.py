@@ -17,7 +17,7 @@ import argparse
 from argparse import RawDescriptionHelpFormatter
 
 from config import Config
-from version import *
+from const import *
 
 
 class Args(object):
@@ -30,7 +30,7 @@ class Args(object):
         :returns argsparse
         """
         parser = argparse.ArgumentParser(
-            description='Mp3VoiceStamp v{v} ({rd})\n'.format(v=VERSION, rd=RELEASE_DATE) +
+            description='{app} v{v} ({rd})\n'.format(app=APP_NAME, v=VERSION, rd=RELEASE_DATE) +
                         'Adds spoken overlay to MP3 with title, time stamps and more.\n'
                         'Written by Marcin Orlowski <mail@marcinOrlowski.com>\n'
                         'WWW: https://github.com/MarcinOrlowski/Mp3VoiceStamp',
@@ -103,8 +103,9 @@ class Args(object):
         )
         group.add_argument(
             '--version', action='version',
-            version='%(prog)s v{v} ({rd}): Mixes speech information to your music files'.format(v=VERSION,
-                                                                                                rd=RELEASE_DATE))
+            version='{app} v{v} ({rd}): Mixes speech information to your music files'.format(app=APP_NAME,
+                                                                                             v=VERSION,
+                                                                                             rd=RELEASE_DATE))
 
         args = parser.parse_args()
 
