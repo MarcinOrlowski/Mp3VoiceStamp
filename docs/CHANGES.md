@@ -1,3 +1,5 @@
+## Changelog ##
+
 dev
 ---
  * Corrected config file examples

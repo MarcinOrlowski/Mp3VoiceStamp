@@ -9,13 +9,13 @@
 ## Table of contents ##
 
  * [Introduction](#introduction)
- * [Sample MP3 file](#sample)
+ * [Demo MP3 file](#sample)
  * [Features](#features)
- * [COnfiguration and usage](docs/USAGE.md)
- * [Requirements](#requirements)
+ * [Configuration and usage](docs/USAGE.md)
+ * [Requirements and installation](docs/INSTALL.md)
  * [Bugs reports and pull requests](#contributing)
  * [Credits and license](#credits-and-license)
- * [Changelog](docs/CHANGES.md)
+ * [What's new?](docs/CHANGES.md)
 
 ## Introduction ##
  
