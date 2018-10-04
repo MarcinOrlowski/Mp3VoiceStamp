@@ -70,8 +70,8 @@ class Config(object):
 
     # *****************************************************************************************************************
 
-    # noinspection PyMethodMayBeStatic
-    def __get_as_int(self, value):
+    @staticmethod
+    def __get_as_int(value):
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -83,8 +83,8 @@ class Config(object):
 
         return value
 
-    # noinspection PyMethodMayBeStatic
-    def __get_as_float(self, value):
+    @staticmethod
+    def __get_as_float(value):
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -96,8 +96,8 @@ class Config(object):
 
         return value
 
-    # noinspection PyMethodMayBeStatic
-    def __get_as_string(self, value, strip=True):
+    @staticmethod
+    def __get_as_string(value, strip=True):
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -133,7 +133,7 @@ class Config(object):
 
     @tick_offset.setter
     def tick_offset(self, value):
-        value = self.__get_as_int(value)
+        value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
                 raise ValueError('Tick Offset value cannot be shorter than 1 minute')
@@ -146,7 +146,7 @@ class Config(object):
 
     @tick_interval.setter
     def tick_interval(self, value):
-        value = self.__get_as_int(value)
+        value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
                 raise ValueError('Tick Interval value cannot be shorter than 1 minute')
@@ -161,7 +161,7 @@ class Config(object):
 
     @speech_volume_factor.setter
     def speech_volume_factor(self, value):
-        value = self.__get_as_float(value)
+        value = Config.__get_as_float(value)
         if value is not None:
             if value <= 0:
                 raise ValueError('Volume Factor must be non zero positive value')
@@ -174,7 +174,7 @@ class Config(object):
 
     @speech_speed.setter
     def speech_speed(self, value):
-        value = self.__get_as_int(value)
+        value = Config.__get_as_int(value)
         if value is not None:
             if value < Config.SPEECH_SPEED_MIN or value > Config.SPEECH_SPEED_MAX:
                 raise ValueError('Speech speed must be between {} and {}'.format(Config.SPEECH_SPEED_MIN,
@@ -189,7 +189,7 @@ class Config(object):
 
     @title_pattern.setter
     def title_pattern(self, value):
-        value = self.__get_as_string(value)
+        value = Config.__get_as_string(value)
         if value is not None:
             if value == '':
                 raise ValueError('Invalid title pattern')
@@ -226,7 +226,7 @@ class Config(object):
 
     @file_out.setter
     def file_out(self, file_out):
-        file_out = self.__get_as_string(file_out, False)
+        file_out = Config.__get_as_string(file_out, False)
         if file_out is not None:
             if len(self.__files_in) > 1 and file_out is not None and not os.path.isdir(file_out):
                 raise ValueError('For multiple inputs, target must point to a directory')
@@ -239,7 +239,7 @@ class Config(object):
 
     @file_out_pattern.setter
     def file_out_pattern(self, value):
-        value = self.__get_as_string(value)
+        value = Config.__get_as_string(value)
         if value is not None:
             if value == '':
                 raise ValueError('Invalid out file name pattern')
