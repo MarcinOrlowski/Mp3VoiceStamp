@@ -23,7 +23,7 @@ class Audio(object):
 
     @staticmethod
     def calculate_rms_amplitude(wav_file):
-        """Calls SOX to get the RMS amlitude of WAV file
+        """Calls SOX to get the RMS amplitude of WAV file
 
         Args:
             :wav_file

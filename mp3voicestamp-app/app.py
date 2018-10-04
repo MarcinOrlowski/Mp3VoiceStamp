@@ -52,6 +52,7 @@ class App(object):
                         else:
                             rc = 1
                     except OSError as ex:
+                        Util.print('*** ' + str(ex))
                         if batch_mode:
                             continue
                         else:
