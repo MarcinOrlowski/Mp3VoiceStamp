@@ -135,15 +135,10 @@ class Util(object):
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
             We also replace '-' by coma, to enforce small pause in spoken text
         """
-        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
-        parts_out = []
-        for part in parts_in:
-            match = re.match('\d{2,}', part)
-            if match is not None:
-                part = str(int(match.group(0)))
-            parts_out.append(part)
+        def strip_leading_zeros(m):
+            return str(int(m.group(0)))
 
-        return ' '.join(parts_out)
+        return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ','))
 
     @staticmethod
     def string_format(fmt, placeholders):
