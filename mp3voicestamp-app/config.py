@@ -19,8 +19,6 @@ from util import Util
 
 
 class Config(object):
-    INI_SECTION_NAME = 'mp3voicestamp'
-
     DEFAULT_TITLE_FORMAT = '{title}'
 
     DEFAULT_SPEECH_SPEED = 150
@@ -35,7 +33,20 @@ class Config(object):
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
 
-    DEFAULT_CONFIG_FILE_NAME = 'default.ini'
+    # *****************************************************************************************************************
+
+    INI_SECTION_NAME = 'mp3voicestamp'
+
+    INI_KEY_FILE_OUT_FORMAT = 'file_out_format'
+
+    INI_KEY_SPEECH_SPEED = 'speech_speed'
+    INI_KEY_SPEECH_VOLUME_FACTOR = 'speech_volume_factor'
+
+    INI_KEY_TITLE_FORMAT = 'title_format'
+
+    INI_KEY_TICK_FORMAT = 'tick_format'
+    INI_KEY_TICK_OFFSET = 'tick_offset'
+    INI_KEY_TICK_INTERVAL = 'tick_interval'
 
     # *****************************************************************************************************************
 
@@ -272,23 +283,25 @@ class Config(object):
             config.read(config_file_full)
 
             section = self.INI_SECTION_NAME
-            if config.has_option(section, 'file_out_format'):
-                self.file_out_format = Config.__strip_quotes_from_ini_string(config.get(section, 'file_out_format'))
+            if config.has_option(section, self.INI_KEY_FILE_OUT_FORMAT):
+                self.file_out_format = Config.__strip_quotes_from_ini_string(
+                    config.get(section, self.INI_KEY_FILE_OUT_FORMAT))
 
-            if config.has_option(section, 'speech_speed'):
-                self.speech_speed = config.getint(section, 'speech_speed')
-            if config.has_option(section, 'speech_volume_factor'):
-                self.speech_volume_factor = config.get(section, 'speech_volume_factor').replace(',', '.')
+            if config.has_option(section, self.INI_KEY_SPEECH_SPEED):
+                self.speech_speed = config.getint(section, self.INI_KEY_SPEECH_SPEED)
+            if config.has_option(section, self.INI_KEY_SPEECH_VOLUME_FACTOR):
+                self.speech_volume_factor = config.get(section, self.INI_KEY_SPEECH_VOLUME_FACTOR).replace(',', '.')
 
-            if config.has_option(section, 'title_format'):
-                self.title_format = Config.__strip_quotes_from_ini_string(config.get(section, 'title_format'))
+            if config.has_option(section, self.INI_KEY_TITLE_FORMAT):
+                self.title_format = Config.__strip_quotes_from_ini_string(
+                    config.get(section, self.INI_KEY_TITLE_FORMAT))
 
-            if config.has_option(section, 'tick_format'):
-                self.tick_format = Config.__strip_quotes_from_ini_string(config.get(section, 'tick_format'))
-            if config.has_option(section, 'tick_offset'):
-                self.tick_offset = config.getint(section, 'tick_offset')
-            if config.has_option(section, 'tick_offset'):
-                self.tick_interval = config.getint(section, 'tick_interval')
+            if config.has_option(section, self.INI_KEY_TICK_FORMAT):
+                self.tick_format = Config.__strip_quotes_from_ini_string(config.get(section, self.INI_KEY_TICK_FORMAT))
+            if config.has_option(section, self.INI_KEY_TICK_OFFSET):
+                self.tick_offset = config.getint(section, self.INI_KEY_TICK_OFFSET)
+            if config.has_option(section, self.INI_KEY_TICK_OFFSET):
+                self.tick_interval = config.getint(section, self.INI_KEY_TICK_INTERVAL)
 
             name = os.path.basename(file_name)
             name = name[:-4] if name[-4:] == '.ini' else name
@@ -337,16 +350,16 @@ class Config(object):
             '# https://github.com/MarcinOrlowski/mp3voicestamp',
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
-            Config.__format_ini_entry('file_out_format', self.file_out_format),
+            Config.__format_ini_entry(self.INI_KEY_FILE_OUT_FORMAT, self.file_out_format),
             '',
-            Config.__format_ini_entry('speech_speed', self.speech_speed),
-            Config.__format_ini_entry('speech_volume_factor', self.speech_volume_factor),
+            Config.__format_ini_entry(self.INI_KEY_SPEECH_SPEED, self.speech_speed),
+            Config.__format_ini_entry(self.INI_KEY_SPEECH_VOLUME_FACTOR, self.speech_volume_factor),
             '',
-            Config.__format_ini_entry('title_format', self.title_format),
+            Config.__format_ini_entry(self.INI_KEY_TITLE_FORMAT, self.title_format),
             '',
-            Config.__format_ini_entry('tick_format', self.tick_format),
-            Config.__format_ini_entry('tick_offset', self.tick_offset),
-            Config.__format_ini_entry('tick_interval', self.tick_interval),
+            Config.__format_ini_entry(self.INI_KEY_TICK_FORMAT, self.tick_format),
+            Config.__format_ini_entry(self.INI_KEY_TICK_OFFSET, self.tick_offset),
+            Config.__format_ini_entry(self.INI_KEY_TICK_INTERVAL, self.tick_interval),
         ]
 
         with open(file_name_full, 'w+') as fh:
