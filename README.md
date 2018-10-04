@@ -28,9 +28,9 @@
  between tracks. Having no UI in audio player brings at least two problems:
  
   * it is sometimes hard to tell what mix you just started to listen to (they often need some time to spin up or 
- feature the same opening intro jingle),
+    feature the same opening intro jingle),
   * as there's no display to peek, you cannot easily tell how much time passed so you cannot tell how long you are 
- swimming already.
+    swimming already.
  
  The aim of this tool is to address these issues. The idea behind is quite simple: you take MP3 track of your choice
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
@@ -49,8 +49,8 @@
  Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
  starting at first minute of the track. Voice volume factor is x2.
 
-* [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
-* [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
+ * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
+ * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
 
  ----
  
@@ -148,7 +148,7 @@
  Finally `[mp3voicestamp]` is a section header and must always be present in the file. You also add comments
  with use of `#` at beginning of comment line. See [example config file](example-config.ini).
  
- #### Saving confguration files ####
+ ### Saving confguration files ###
  
  You can use `--config-save` (`-cs`) option to dump current configuration state to a file for further reuse:
  
@@ -168,7 +168,7 @@
  the correct value, or if no value can be obtained (i.e. MP3 tags are not available) by empty string.
  You can combine multiple placeholders as well as enter regular text.
  
-### Track title ###
+ ### Track title ###
 
  Default track title format string is `{title} {config_name}` 
  
@@ -182,7 +182,7 @@
  | {comment}      | Content of track comment field or empty string                                   |
  | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
 
-### Ticks ###
+ ### Ticks ###
 
  Default tick title format string is `{minutes} minutes`.
 
