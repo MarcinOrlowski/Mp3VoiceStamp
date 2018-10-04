@@ -46,9 +46,8 @@ class App(object):
             else:
                 batch_mode = len(config.files_in) > 1
 
-                if config.dry_run_mode:
-                    if batch_mode:
-                        Util.print('Files to process: {}'.format(len(config.files_in)))
+                if config.dry_run_mode and config.files_in and batch_mode:
+                    Util.print('Files to process: {}'.format(len(config.files_in)))
                     Util.print('Title format: "{}"'.format(config.title_format))
                     Util.print('Tick format: "{}"'.format(config.tick_format))
                     Util.print('Ticks interval {freq} mins, start offset: {offset} mins'.format(
