@@ -1,39 +1,28 @@
 # coding=utf8
 
+"""
+
+ MP3 Voice Stamp
+
+ Athletes' companion: add synthetized voice overlay with various
+ info and on-going timer to your audio files
+
+ Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
+
+ https://github.com/MarcinOrlowski/Mp3VoiceStamp
+
+"""
+
 from __future__ import print_function
 
 import os
 import sys
-
 from subprocess import Popen, PIPE
+import re
 
-
-# #################################################################
-#
-# MP3 Voice Tag
-#
-# Athletes' companion: add synthetized voice overlay with various
-# info and on-going timer to your audio files
-#
-# #################################################################
-#
-# Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.Com>
-#
-# Project page: https://github.com/MarcinOrlowski/mp3voicestamp
-#
-# #################################################################
 
 class Util(object):
-
-    @classmethod
-    def init(cls, args):
-        cls.debug_mode = args.debug
-        cls.quiet = args.quiet
-
-    @staticmethod
-    def debug(message):
-        if Util.debug_mode:
-            print('[D] {}'.format(message))
+    quiet = True
 
     @staticmethod
     def print_no_lf(message, quiet=None):
@@ -88,19 +77,24 @@ class Util(object):
         stdout, err = p.communicate(None)
         rc = p.returncode
 
+        if rc != 0:
+            print('Command')
+            print('=======')
+            print(' '.join(cmd_list))
+
+            if stdout.splitlines():
+                print('Command output (stdout)')
+                print('=======================')
+                _ = [print('%r' % line) for line in stdout.splitlines()]
+
+            if err.splitlines():
+                print('Command output (stderr)')
+                print('=======================')
+                _ = [print('%r' % line) for line in err.splitlines()]
+
         # if rc != 0:
-        #     print('Command')
-        #     print(' '.join(cmd_list))
-        #
-        #     print('Command output (stdout)')
-        #     [print('%r' % line) for line in stdout.splitlines()]
-        #
         #     print('Command output (stderr)')
         #     [print('%r' % line) for line in err.splitlines()]
-
-        if rc != 0:
-            print('Command output (stderr)')
-            [print('%r' % line) for line in err.splitlines()]
 
         if working_dir:
             # noinspection PyUnboundLocalVariable
@@ -141,3 +135,41 @@ class Util(object):
                     return exe_file
 
         return None
+
+    @staticmethod
+    def check_env():
+        """Checks if all external tools we need are already available and in $PATH
+        """
+        tools = ['ffmpeg', 'normalize-audio', 'espeak', 'sox']
+        for tool in tools:
+            if Util.which(tool) is None:
+                Util.abort('"{}" not found. See README.md for details.'.format(tool))
+
+    # noinspection PyMethodMayBeStatic
+    @staticmethod
+    def prepare_for_speak(text):
+        """ Tries to process provided text for more natural sound when spoken, i.e.
+            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
+            We also replace '-' by coma, to enforce small pause in spoken text
+        """
+        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
+        parts_out = []
+        for part in parts_in:
+            match = re.match('[0-9]{2,}', part)
+            if match is not None:
+                part = str(int(part))
+            parts_out.append(part)
+
+        return ' '.join(parts_out)
+
+    @staticmethod
+    def string_format(fmt, placeholders):
+        if not isinstance(fmt, basestring):
+            raise ValueError('Format must be a string, {} given'.format(type(fmt)))
+        if not isinstance(placeholders, dict):
+            raise ValueError('Placeholders must be a dict, {} given'.format(type(placeholders)))
+
+        for key, val in placeholders.items():
+            fmt = fmt.replace('{' + key + '}', str(val))
+
+        return fmt
