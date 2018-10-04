@@ -49,14 +49,14 @@ class Args(object):
         )
         group.add_argument(
             '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1, metavar='PATTERN',
-            help='Pattern used to generate name of output. Default is "{}". ' +
-                 'See docs for available placeholders.'.format(Config.DEFAULT_FILE_OUT_PATTERN))
+            help='Pattern used to generate name of output. Default is "{}". '.format(Config.DEFAULT_FILE_OUT_PATTERN) +
+                 'See docs for available placeholders.')
 
         group = parser.add_argument_group('Track title speech')
         group.add_argument(
             '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1, metavar='PATTERN',
-            help='Pattern for track title voice overlay. Default is "{}". ' +
-                 'See docs for available placeholders.'.format(Config.DEFAULT_TITLE_PATTERN))
+            help='Pattern for track title voice overlay. Default is "{}". '.format(Config.DEFAULT_TITLE_PATTERN) +
+                 'See docs for available placeholders.')
 
         group = parser.add_argument_group('Spoken timer')
         group.add_argument(
