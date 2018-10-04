@@ -8,6 +8,7 @@ dev
  * Moved usage documentation to separate document
  * Improved Python3 code compatibility
  * Added --dry-run mode
+ * Added support for '{file_name}' placeholder in title format
 
 v1.1.0 (2018-10-04)
 -------------------

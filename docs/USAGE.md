@@ -151,6 +151,7 @@
  | {composer}     | Track composer or empty string                                                   |
  | {comment}      | Content of track comment field or empty string                                   |
  | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+ | {file_name}    | Name of the audio file without name extension                                    |
 
  ### Ticks ###
 
