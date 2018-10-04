@@ -273,7 +273,7 @@ class Config(object):
 
             section = self.INI_SECTION_NAME
             if config.has_option(section, 'file_out_pattern'):
-                self.file_out_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'file_out_pattern'))
+                self.file_out_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'file_out_pattern'))
 
             if config.has_option(section, 'speech_speed'):
                 self.speech_speed = config.getint(section, 'speech_speed')
@@ -281,10 +281,10 @@ class Config(object):
                 self.speech_volume_factor = config.get(section, 'speech_volume_factor').replace(',', '.')
 
             if config.has_option(section, 'title_pattern'):
-                self.title_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'title_pattern'))
+                self.title_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'title_pattern'))
 
             if config.has_option(section, 'tick_pattern'):
-                self.tick_pattern = self.__strip_quotes_from_ini_string(config.get(section, 'tick_pattern'))
+                self.tick_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'tick_pattern'))
             if config.has_option(section, 'tick_offset'):
                 self.tick_offset = config.getint(section, 'tick_offset')
             if config.has_option(section, 'tick_offset'):
@@ -298,8 +298,8 @@ class Config(object):
 
         return result
 
-    # noinspection PyMethodMayBeStatic
-    def __strip_quotes_from_ini_string(self, string):
+    @staticmethod
+    def __strip_quotes_from_ini_string(string):
         if string[0:1] == '"':
             string = string[1:]
         if string[-1:] == '"':
@@ -308,8 +308,8 @@ class Config(object):
 
     # *****************************************************************************************************************
 
-    # noinspection PyMethodMayBeStatic,PyMethodMayBeStatic
-    def __prepare_config_entry(self, ini_key, val):
+    @staticmethod
+    def __format_ini_entry(ini_key, val):
         result = None
 
         if isinstance(val, (str, unicode)):
@@ -337,16 +337,16 @@ class Config(object):
             '# https://github.com/MarcinOrlowski/mp3voicestamp',
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
-            self.__prepare_config_entry('file_out_pattern', self.file_out_pattern),
+            Config.__format_ini_entry('file_out_pattern', self.file_out_pattern),
             '',
-            self.__prepare_config_entry('speech_speed', self.speech_speed),
-            self.__prepare_config_entry('speech_volume_factor', self.speech_volume_factor),
+            Config.__format_ini_entry('speech_speed', self.speech_speed),
+            Config.__format_ini_entry('speech_volume_factor', self.speech_volume_factor),
             '',
-            self.__prepare_config_entry('title_pattern', self.title_pattern),
+            Config.__format_ini_entry('title_pattern', self.title_pattern),
             '',
-            self.__prepare_config_entry('tick_pattern', self.tick_pattern),
-            self.__prepare_config_entry('tick_offset', self.tick_offset),
-            self.__prepare_config_entry('tick_interval', self.tick_interval),
+            Config.__format_ini_entry('tick_pattern', self.tick_pattern),
+            Config.__format_ini_entry('tick_offset', self.tick_offset),
+            Config.__format_ini_entry('tick_interval', self.tick_interval),
         ]
 
         with open(file_name_full, 'w+') as fh:
