@@ -29,11 +29,15 @@ class Mp3FileInfo(object):
         self.file_name = file_name
 
         self.mp3 = MP3(file_name)
+
+        # we round up duration to full minutes
         self.duration = int(round(self.mp3.info.length / 60 + 0.5))
         self.bitrate = self.mp3.info.bitrate
 
         # get track title either from tag, or from filename
-        self.title = self.__get_tag('TIT2', str(file_name[:-4].replace('_', ' ')))
+        base_name, _ = Util.split_file_name(file_name)
+        self.title = self.__get_tag('TIT2', base_name)
+
         self.artist = self.__get_tag('TPE1')
         self.album_artist = self.__get_tag('TPE2')
         self.album_title = self.__get_tag('TALB')

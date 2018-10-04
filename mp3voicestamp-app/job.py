@@ -40,8 +40,7 @@ class Job(object):
     def get_out_file_name(self, music_track):
         """Build out file name based on provided template and music_track data
         """
-        out_base_name, out_base_ext = os.path.splitext(os.path.basename(music_track.file_name))
-        out_base_ext = out_base_ext[1:] if out_base_ext[0:1] == '.' else out_base_ext
+        out_base_name, out_base_ext = Util.split_file_name(music_track.file_name)
         formatted_file_name = self.config.file_out_format.format(name=out_base_name, ext=out_base_ext)
 
         out_file_name = os.path.basename(music_track.file_name)

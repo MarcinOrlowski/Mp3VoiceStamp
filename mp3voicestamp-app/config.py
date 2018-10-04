@@ -161,7 +161,7 @@ class Config(object):
         value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
-                raise ValueError('Tick Interval value cannot be shorter than 1 minute')
+                raise ValueError('Tick interval value cannot be shorter than 1 minute')
 
             self.__tick_interval = value
 
@@ -176,7 +176,7 @@ class Config(object):
         value = Config.__get_as_float(value)
         if value is not None:
             if value <= 0:
-                raise ValueError('Volume Factor must be non zero positive value')
+                raise ValueError('Volume factor must be non zero positive value')
 
             self.__speech_volume_factor = value
 
@@ -204,7 +204,7 @@ class Config(object):
         value = Config.__get_as_string(value)
         if value is not None:
             if value == '':
-                raise ValueError('Invalid title format')
+                raise ValueError('Invalid title format string')
 
             self.__title_format = value
 

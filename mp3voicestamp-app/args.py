@@ -111,7 +111,7 @@ class Args(object):
 
         if args.files_in is None and args.config_save_name is None:
             parser.print_usage()
-            raise ValueError('You must provide at least one mp3 file.')
+            raise ValueError('You must provide at least one MP3 file.')
 
         config.load(args.config_name)
 

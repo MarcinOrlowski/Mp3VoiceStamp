@@ -150,3 +150,10 @@ class Util(object):
             fmt = fmt.replace('{' + key + '}', str(val))
 
         return fmt
+
+    @staticmethod
+    def split_file_name(file_name):
+        base, ext = os.path.splitext(os.path.basename(file_name))
+        ext = ext[1:] if ext[0:1] == '.' else ext
+
+        return base, ext
