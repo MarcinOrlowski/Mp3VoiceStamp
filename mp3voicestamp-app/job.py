@@ -143,7 +143,7 @@ class Job(object):
                 Util.string_format(self.config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
 
             if self.config.dry_run_mode:
-                Util.print('  Duration {} mins'.format(music_track.duration))
+                Util.print('  Duration: {} mins'.format(music_track.duration))
                 Util.print('  Title to speak: "{}"'.format(track_title_to_speak))
                 Util.print('  Ticks count: {cnt}'.format(cnt=(len(segments) - 1)))
 
