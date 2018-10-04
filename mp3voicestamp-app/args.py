@@ -62,9 +62,11 @@ class Args(object):
                  'See docs for available placeholders.')
 
         group = parser.add_argument_group('Spoken timer')
+        # noinspection PyTypeChecker
         group.add_argument(
             '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1, metavar='MINUTES',
             help='Interval (in minutes) between spoken ticks. Default is {}.'.format(Config.DEFAULT_TICK_INTERVAL))
+        # noinspection PyTypeChecker
         group.add_argument(
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
             help='Offset (in minutes) for first spoken tick. Default is {}.'.format(Config.DEFAULT_TICK_OFFSET))
@@ -80,6 +82,7 @@ class Args(object):
             help='Speech volume adjustment multiplier, relative to calculated value. ' +
                  'I.e. "0.5" would lower the volume 50%%, while "2" boost it up to make it twice as loud ' +
                  'as it would be by default. Default is {}.'.format(Config.DEFAULT_SPEECH_VOLUME_FACTOR))
+        # noinspection PyTypeChecker
         group.add_argument(
             '-ss', '--speech-speed', action='store', dest='speech_speed', nargs=1, type=int, metavar='INTEGER',
             help='Speech speed in words per minute, in range from {} to {}. Default is {}.'.format(
