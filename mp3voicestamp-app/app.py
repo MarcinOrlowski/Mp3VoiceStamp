@@ -40,17 +40,22 @@ class App(object):
 
             if args.config_save_name is not None:
                 config.save(args.config_save_name)
-
             else:
+                batch_mode = len(config.files_in) > 1
                 for file_name in config.files_in:
                     try:
                         Job(config).voice_stamp(file_name)
                     except MutagenError as ex:
                         Util.print('*** ' + str(ex))
-                        continue
+                        if batch_mode:
+                            continue
+                        else:
+                            rc = 1
                     except OSError as ex:
-                        Util.print('*** ' + str(ex))
-                        continue
+                        if batch_mode:
+                            continue
+                        else:
+                            rc = 1
         except (ValueError, IOError) as ex:
             print('*** ' + str(ex))
             rc = 1
