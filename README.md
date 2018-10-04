@@ -168,26 +168,26 @@
  the correct value, or if no value can be obtained (i.e. MP3 tags are not available) by empty string.
  You can combine multiple placeholders as well as enter regular text.
  
-#### Track title ####
+### Track title ###
 
  Default track title format string is `{title} {config_name}` 
  
- | Key | Description |
- | ------ | ------ |
- | {title} | Track title as set in MP3 tags of music file. If there's no title set (or it is not available), title will be generated based on MP3 file name. |
- | {artist} | Artist name or empty string |
- | {album_artist} | Album artist or empty string |
- | {album_title} | Album title or empty string |
- | {composer} | Track composer or empty string |
- | {comment} | Content of track comment field or empty string |
- | {config_name} | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+ | Key            | Description                                                                      |
+ | -------------- | -------------------------------------------------------------------------------- |
+ | {title}        | Track title from MP3 tags or based on file name if no tag is available           |
+ | {artist}       | Artist name or empty string                                                      |
+ | {album_artist} | Album artist or empty string                                                     |
+ | {album_title}  | Album title or empty string                                                      |
+ | {composer}     | Track composer or empty string                                                   |
+ | {comment}      | Content of track comment field or empty string                                   |
+ | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
 
-#### Ticks ####
+### Ticks ###
 
  Default tick title format string is `{minutes} minutes`.
 
- | Key | Description |
- | ------ | ------ |
+ | Key       | Description                      |
+ | --------- | -------------------------------- |
  | {minutes} | Minutes since start of the track | 
 
 ## Requirements ##
