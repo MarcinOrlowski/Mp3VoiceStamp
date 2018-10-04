@@ -138,9 +138,9 @@ class Util(object):
         parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
         parts_out = []
         for part in parts_in:
-            match = re.match('[0-9]{2,}', part)
+            match = re.match('\d{2,}', part)
             if match is not None:
-                part = str(int(part))
+                part = str(int(match.group(0)))
             parts_out.append(part)
 
         return ' '.join(parts_out)
