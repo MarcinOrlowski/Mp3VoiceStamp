@@ -101,10 +101,6 @@ class Args(object):
             help='Forces overwrite of existing output file'
         )
         group.add_argument(
-            '-q', '--quiet', action='store_true', dest='quiet',
-            help='Mutes all messages.'
-        )
-        group.add_argument(
             '-v', '--verbose', action='store_true', dest='verbose',
             help='Makes app more verbose'
         )
@@ -131,9 +127,6 @@ class Args(object):
         job_config.tick_format = args.tick_format
 
         job_config.title_format = args.title_format
-
-        # other settings
-        job_config.quiet = args.quiet
 
         job_config.files_in = args.files_in
 

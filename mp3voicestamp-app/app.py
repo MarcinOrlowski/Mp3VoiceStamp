@@ -35,9 +35,6 @@ class App(object):
             # parse common line arguments
             args = Args.parse_args(job_config)
 
-            # init helper
-            Util.init(args.quiet)
-
             # check runtime environment
             Util.check_env()
 

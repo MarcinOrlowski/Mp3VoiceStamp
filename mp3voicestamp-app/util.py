@@ -24,10 +24,6 @@ import re
 class Util(object):
     quiet = True
 
-    @classmethod
-    def init(cls, quiet):
-        cls.quiet = quiet
-
     @staticmethod
     def print_no_lf(message, quiet=None):
         if quiet is None:
