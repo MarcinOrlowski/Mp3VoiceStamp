@@ -32,6 +32,9 @@ class App(object):
         try:
             config = Config()
 
+            # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
+            config.debug = True
+
             # parse common line arguments
             args = Args.parse_args(config)
 
@@ -70,8 +73,11 @@ class App(object):
                         else:
                             rc = 1
         except (ValueError, IOError) as ex:
-            Util.print_error(str(ex), False)
-            rc = 1
+            if not config.debug:
+                Util.print_error(str(ex), False)
+                rc = 1
+            else:
+                raise
 
         sys.exit(rc)
 

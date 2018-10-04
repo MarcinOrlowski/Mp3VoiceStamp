@@ -114,6 +114,12 @@ class Args(object):
                                                                                              v=VERSION,
                                                                                              rd=RELEASE_DATE))
 
+        group = parser.add_argument_group('Developer tools')
+        group.add_argument(
+            '-d', '--debug', action='store_true', dest='debug',
+            help='Enables debug mode.'
+        )
+
         args = parser.parse_args()
 
         if args.files_in is None and args.config_save_name is None:
@@ -124,6 +130,7 @@ class Args(object):
 
         config.force_overwrite = args.force
         config.dry_run_mode = args.dry_run_mode
+        config.debug = args.debug
 
         config.speech_volume_factor = args.speech_volume_factor
         config.speech_speed = args.speech_speed
