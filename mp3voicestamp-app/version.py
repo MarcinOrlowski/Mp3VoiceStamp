@@ -14,3 +14,6 @@
 """
 
 VERSION = '1.1.0'
+
+# YYYY-MM-DD
+RELEASE_DATE = '2018-10-04'
