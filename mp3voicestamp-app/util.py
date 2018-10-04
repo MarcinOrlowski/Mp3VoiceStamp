@@ -51,7 +51,7 @@ class Util(object):
 
     @staticmethod
     def execute_rc(cmd_list, working_dir=None):
-        rc, stdout, err = Util.execute(cmd_list, working_dir)
+        rc, _, _ = Util.execute(cmd_list, working_dir)
         return rc
 
     @staticmethod
@@ -102,7 +102,7 @@ class Util(object):
         def is_exe(full_path):
             return os.path.isfile(full_path) and os.access(full_path, os.X_OK)
 
-        fpath, fname = os.path.split(program)
+        fpath, _ = os.path.split(program)
         if fpath:
             if is_exe(program):
                 return program
