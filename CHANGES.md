@@ -1,5 +1,5 @@
-@dev
-----
+v1.1.0 (2018-10-04)
+-------------------
  * Added support for batch processing of multiple audio files
  * Added --verbose and muted most of the messages by default
  * Complete rewrite for better internal architecture

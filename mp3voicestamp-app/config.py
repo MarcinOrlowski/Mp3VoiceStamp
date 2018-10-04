@@ -9,7 +9,7 @@
 
  Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
 
- https://github.com/MarcinOrlowski/mp3voicestamp
+ https://github.com/MarcinOrlowski/Mp3VoiceStamp
 
 """
 
