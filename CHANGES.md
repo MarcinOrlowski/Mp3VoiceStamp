@@ -3,6 +3,7 @@ dev
  * Corrected config file examples
  * MP3 failure returns with non-zero RC when only one input file is provided
  * Improved track title generation from file name
+ * Moved usage documentation to separate document
 
 v1.1.0 (2018-10-04)
 -------------------
