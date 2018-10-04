@@ -92,7 +92,7 @@ class Job(object):
 
         max_len_tick = speech_frame_rate * 60 * self.job_config.tick_interval
         max_len_title = speech_frame_rate * 60 * self.job_config.tick_offset
-        for idx, i in enumerate(segments):
+        for idx, _ in enumerate(segments):
             concat_cmd.extend(['-i', os.path.join(self.tmp_dir, '{}.wav'.format(idx))])
 
             # samples = rate_per_second * seconds * tick_interval_in_minutes

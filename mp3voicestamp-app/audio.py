@@ -32,7 +32,7 @@ class Audio(object):
             float
         """
         src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
-        rc, output, err = Util.execute(src_amplitude_cmd)
+        rc, _, err = Util.execute(src_amplitude_cmd)
         if rc != 0:
             raise RuntimeError('Failed to calculate RMS amplitude of "{}"'.format(wav_file))
 
