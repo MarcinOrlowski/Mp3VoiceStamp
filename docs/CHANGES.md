@@ -7,6 +7,7 @@ dev
  * Improved track title generation from file name
  * Moved usage documentation to separate document
  * Improved Python3 code compatibility
+ * Added --dry-run mode
 
 v1.1.0 (2018-10-04)
 -------------------
