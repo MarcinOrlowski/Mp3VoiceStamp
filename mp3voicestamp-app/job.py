@@ -15,13 +15,12 @@
 
 from __future__ import print_function
 
-import re
 import os
 import shutil
 
-from util import Util
-from mp3_file_info import Mp3FileInfo
 from audio import Audio
+from mp3_file_info import Mp3FileInfo
+from util import Util
 
 
 class Job(object):
@@ -160,8 +159,8 @@ class Job(object):
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
             Util.print_no_lf('Creating "{}" file'.format(file_out))
-            self.mix_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
-                            [music_wav_full_path, speech_wav_full])
+            Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
+                                 [music_wav_full_path, speech_wav_full])
             Util.print('OK')
 
         except RuntimeError as ex:

@@ -54,8 +54,15 @@ class Audio(object):
             raise RuntimeError('Failed to adjust voice overlay volume')
 
     @staticmethod
-    def mix_tracks(file_out, encoding_quality, wav_files):
-        merge_cmd = ['ffmpeg', '-y'];
+    def mix_wav_tracks(file_out, encoding_quality, wav_files):
+        """Mixes given WAV tracks together
+
+        Args:
+            :file_out
+            :encoding_quality LAME encoder quality parameter
+            :wav_files list of WAV files to mix
+        """
+        merge_cmd = ['ffmpeg', '-y']
         _ = [merge_cmd.extend(['-i', wav]) for wav in wav_files]
         merge_cmd.extend([
             '-filter_complex', 'amerge',
@@ -63,16 +70,5 @@ class Audio(object):
             '-c:a', 'libmp3lame',
             '-q:a', str(encoding_quality),
             file_out])
-        if Util.execute_rc(merge_cmd) != 0:
-            raise RuntimeError('Failed to create final MP3 file')
-
-    @staticmethod
-    def mix_tracks(file_out, encoding_quality, music_wav, speech_wav):
-        merge_cmd = ['ffmpeg', '-y',
-                     '-i', music_wav,
-                     '-i', speech_wav,
-                     '-filter_complex', 'amerge', '-ac', '2', '-c:a', 'libmp3lame',
-                     '-q:a', str(encoding_quality),
-                     file_out]
         if Util.execute_rc(merge_cmd) != 0:
             raise RuntimeError('Failed to create final MP3 file')
