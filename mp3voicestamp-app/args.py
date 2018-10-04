@@ -101,6 +101,10 @@ class Args(object):
 
         group = parser.add_argument_group('Misc')
         group.add_argument(
+            '--dry-run', action='store_true', dest='dry_run_mode',
+            help='Simulates processing of the files, printing information on how real files would be processed.'
+        )
+        group.add_argument(
             '-f', '--force', action='store_true', dest='force',
             help='Forces overwrite of existing output file.'
         )
@@ -119,6 +123,7 @@ class Args(object):
         config.load(args.config_name)
 
         config.force_overwrite = args.force
+        config.dry_run_mode = args.dry_run_mode
 
         config.speech_volume_factor = args.speech_volume_factor
         config.speech_speed = args.speech_speed

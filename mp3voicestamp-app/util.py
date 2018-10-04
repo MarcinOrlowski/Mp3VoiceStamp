@@ -24,7 +24,7 @@ import re
 
 
 class Util(object):
-    quiet = True
+    quiet = False
 
     @staticmethod
     def print_no_lf(message, quiet=None):

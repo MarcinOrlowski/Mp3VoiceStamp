@@ -63,6 +63,7 @@ class Config(object):
         self.name = ''
 
         self.force_overwrite = False
+        self.dry_run_mode = False
 
         self.speech_speed = Config.DEFAULT_SPEECH_SPEED
         self.speech_volume_factor = Config.DEFAULT_SPEECH_VOLUME_FACTOR

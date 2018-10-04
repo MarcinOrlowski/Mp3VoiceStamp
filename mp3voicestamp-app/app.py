@@ -42,18 +42,30 @@ class App(object):
                 config.save(args.config_save_name)
             else:
                 batch_mode = len(config.files_in) > 1
+
+                if config.dry_run_mode:
+                    if batch_mode:
+                        Util.print('Files to process: {}'.format(len(config.files_in)))
+                    Util.print('Title format: "{}"'.format(config.title_format))
+                    Util.print('Tick format: "{}"'.format(config.tick_format))
+                    Util.print('Ticks interval {freq} mins, start offset: {offset} mins'.format(
+                        freq=config.tick_interval, offset=config.tick_offset))
+                    Util.print()
+
                 for file_name in config.files_in:
                     try:
                         Job(config).voice_stamp(file_name)
                     except MutagenError as ex:
                         Util.print_error(ex)
                         if batch_mode:
+                            Util.print()
                             continue
                         else:
                             rc = 1
                     except OSError as ex:
                         Util.print_error(ex)
                         if batch_mode:
+                            Util.print()
                             continue
                         else:
                             rc = 1
