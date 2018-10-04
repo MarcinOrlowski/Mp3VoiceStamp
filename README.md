@@ -117,7 +117,7 @@
 
     title_format = "{title}"
 
-    tick_format = "{} minutes"
+    tick_format = "{minutes} minutes"
     tick_offset = 5
     tick_interval = 5
 
@@ -125,7 +125,7 @@
  to defaults:
 
     [mp3voicestamp]
-    tick_format = "{} long minutes passed"
+    tick_format = "{minutes} long minutes passed"
 
  To use config file specify path to the file with `--config` (or `-c`):
  
@@ -135,7 +135,7 @@
  config file as your `config.ini`:
  
     [mp3voicestamp]
-    tick_format = "{} minutes"
+    tick_format = "{minutes} minutes"
     tick_offset = 5
     tick_interval = 5
 
@@ -156,7 +156,7 @@
  
  More over you can combine saving with config loading and manual tweaks as well:
  
-    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{} passed" -cs new-config.ini
+    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{minutes} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
  and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.
@@ -228,3 +228,4 @@
  * Written and copyrighted &copy;2018 by Marcin Orlowski <mail (#) marcinorlowski (.) com>
  * MP3AudioStamp is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
  * Icons used in logo taken from free [Icons8 Olympics Sports Icon Pack](https://icons8.com/free-icons/olympics_sports)
+

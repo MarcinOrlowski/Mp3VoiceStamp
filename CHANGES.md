@@ -1,3 +1,7 @@
+dev
+---
+ * Corrected config file examples
+
 v1.1.0 (2018-10-04)
 -------------------
  * Added support for batch processing of multiple audio files
