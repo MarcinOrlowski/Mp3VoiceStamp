@@ -7,6 +7,7 @@
  * Added -out-pattern to customize how auto-generated files are named
  * Added -title for customized track title announcement format
  * Added support for config files for easier batch processing
+ * Changed command line option name 
 
 v1.0.0 (2018-10-01)
 -------------------

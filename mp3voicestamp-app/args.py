@@ -48,14 +48,16 @@ class Args(object):
                  'If not specified, file name will be generated.'
         )
         group.add_argument(
-            '-op', '--out-pattern', action='store', dest='file_out_pattern', nargs=1, metavar='PATTERN',
-            help='Pattern used to generate name of output. Default is "{}". '.format(Config.DEFAULT_FILE_OUT_PATTERN) +
+            '-of', '--out-format', action='store', dest='file_out_format', nargs=1, metavar='FORMAT',
+            help='Format string used to generate name of output files. ' +
+                 'Default is "{}". '.format(Config.DEFAULT_FILE_OUT_FORMAT) +
                  'See docs for available placeholders.')
 
         group = parser.add_argument_group('Track title speech')
         group.add_argument(
-            '-t', '--title-pattern', action='store', dest='title_pattern', nargs=1, metavar='PATTERN',
-            help='Pattern for track title voice overlay. Default is "{}". '.format(Config.DEFAULT_TITLE_PATTERN) +
+            '-tf', '--title-format', action='store', dest='title_format', nargs=1, metavar='FORMAT',
+            help='Format string used to generate track title to be spoken. ' +
+                 'Default is "{}". '.format(Config.DEFAULT_TITLE_FORMAT) +
                  'See docs for available placeholders.')
 
         group = parser.add_argument_group('Spoken timer')
@@ -66,8 +68,10 @@ class Args(object):
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
             help='Offset (in minutes) for first spoken tick. Default is {}.'.format(Config.DEFAULT_TICK_OFFSET))
         group.add_argument(
-            '-tp', '--tick-pattern', action='store', dest='tick_pattern', nargs=1, metavar='PATTERN',
-            help='Pattern for spoken ticks with "{}" replaced with minute tick value.')
+            '-tp', '--tick-format', action='store', dest='tick_format', nargs=1, metavar='FORMAT',
+            help='Format string for spoken time ticks.' +
+                 'Default is "{}". '.format(Config.DEFAULT_TICK_FORMAT) +
+                 'See docs for available placeholders.')
 
         group = parser.add_argument_group('Voice synthesizer')
         group.add_argument(
@@ -124,9 +128,9 @@ class Args(object):
 
         job_config.tick_interval = args.tick_interval
         job_config.tick_offset = args.tick_offset
-        job_config.tick_pattern = args.tick_pattern
+        job_config.tick_format = args.tick_format
 
-        job_config.title_pattern = args.title_pattern
+        job_config.title_format = args.title_format
 
         # other settings
         job_config.quiet = args.quiet
@@ -134,6 +138,6 @@ class Args(object):
         job_config.files_in = args.files_in
 
         job_config.file_out = args.file_out
-        job_config.file_out_pattern = args.file_out_pattern
+        job_config.file_out_format = args.file_out_format
 
         return args

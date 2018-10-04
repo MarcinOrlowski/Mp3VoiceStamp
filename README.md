@@ -110,14 +110,14 @@
  Configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
  
     [mp3voicestamp]
-    file_out_pattern = "{name} (voicestamped).{ext}"
+    file_out_format = "{name} (voicestamped).{ext}"
 
     speech_speed = 150
     speech_volume_factor = 1.0
 
-    title_pattern = "{title}"
+    title_format = "{title}"
 
-    tick_pattern = "{} minutes"
+    tick_format = "{} minutes"
     tick_offset = 5
     tick_interval = 5
 
@@ -125,7 +125,7 @@
  to defaults:
 
     [mp3voicestamp]
-    tick_pattern = "{} long minutes passed"
+    tick_format = "{} long minutes passed"
 
  To use config file specify path to the file with `--config` (or `-c`):
  
@@ -135,7 +135,7 @@
  config file as your `config.ini`:
  
     [mp3voicestamp]
-    tick_pattern = "{} minutes"
+    tick_format = "{} minutes"
     tick_offset = 5
     tick_interval = 5
 
@@ -156,7 +156,7 @@
  
  More over you can combine saving with config loading and manual tweaks as well:
  
-    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-template "{} passed" -cs new-config.ini
+    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
  and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.

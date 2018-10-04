@@ -21,16 +21,16 @@ from util import Util
 class Config(object):
     INI_SECTION_NAME = 'mp3voicestamp'
 
-    DEFAULT_TITLE_PATTERN = '{title}'
+    DEFAULT_TITLE_FORMAT = '{title}'
 
     DEFAULT_SPEECH_SPEED = 150
     DEFAULT_SPEECH_VOLUME_FACTOR = 1
 
-    DEFAULT_TICK_PATTERN = '{minutes} minutes'
+    DEFAULT_TICK_FORMAT = '{minutes} minutes'
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
 
-    DEFAULT_FILE_OUT_PATTERN = '{name} (voicestamped).{ext}'
+    DEFAULT_FILE_OUT_FORMAT = '{name} (voicestamped).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -47,16 +47,16 @@ class Config(object):
         self.speech_speed = Config.DEFAULT_SPEECH_SPEED
         self.speech_volume_factor = Config.DEFAULT_SPEECH_VOLUME_FACTOR
 
-        self.tick_pattern = Config.DEFAULT_TICK_PATTERN
+        self.tick_format = Config.DEFAULT_TICK_FORMAT
         self.tick_interval = Config.DEFAULT_TICK_INTERVAL
         self.tick_offset = Config.DEFAULT_TICK_OFFSET
 
-        self.title_pattern = Config.DEFAULT_TITLE_PATTERN
+        self.title_format = Config.DEFAULT_TITLE_FORMAT
 
         self.files_in = []
         self.file_out = None
 
-        self.file_out_pattern = Config.DEFAULT_FILE_OUT_PATTERN
+        self.file_out_format = Config.DEFAULT_FILE_OUT_FORMAT
 
     # *****************************************************************************************************************
 
@@ -115,17 +115,17 @@ class Config(object):
     # *****************************************************************************************************************
 
     @property
-    def tick_pattern(self):
-        return self.__tick_pattern
+    def tick_format(self):
+        return self.__tick_format
 
-    @tick_pattern.setter
-    def tick_pattern(self, value):
+    @tick_format.setter
+    def tick_format(self, value):
         value = self.__get_as_string(value)
         if value is not None:
             if value == '':
-                raise ValueError('Invalid tick pattern')
+                raise ValueError('Invalid tick format')
 
-            self.__tick_pattern = value
+            self.__tick_format = value
 
     @property
     def tick_offset(self):
@@ -136,7 +136,7 @@ class Config(object):
         value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
-                raise ValueError('Tick Offset value cannot be shorter than 1 minute')
+                raise ValueError('Tick offset value cannot be shorter than 1 minute')
 
             self.__tick_offset = value
 
@@ -184,17 +184,17 @@ class Config(object):
     # *****************************************************************************************************************
 
     @property
-    def title_pattern(self):
-        return self.__title_pattern
+    def title_format(self):
+        return self.__title_format
 
-    @title_pattern.setter
-    def title_pattern(self, value):
+    @title_format.setter
+    def title_format(self, value):
         value = Config.__get_as_string(value)
         if value is not None:
             if value == '':
-                raise ValueError('Invalid title pattern')
+                raise ValueError('Invalid title format')
 
-            self.__title_pattern = value
+            self.__title_format = value
 
     # *****************************************************************************************************************
 
@@ -234,16 +234,16 @@ class Config(object):
         self.__file_out = file_out
 
     @property
-    def file_out_pattern(self):
-        return self.__file_out_pattern
+    def file_out_format(self):
+        return self.__file_out_format
 
-    @file_out_pattern.setter
-    def file_out_pattern(self, value):
+    @file_out_format.setter
+    def file_out_format(self, value):
         value = Config.__get_as_string(value)
         if value is not None:
             if value == '':
-                raise ValueError('Invalid out file name pattern')
-            self.__file_out_pattern = value
+                raise ValueError('Invalid out file name format string')
+            self.__file_out_format = value
 
     # *****************************************************************************************************************
 
@@ -272,19 +272,19 @@ class Config(object):
             config.read(config_file_full)
 
             section = self.INI_SECTION_NAME
-            if config.has_option(section, 'file_out_pattern'):
-                self.file_out_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'file_out_pattern'))
+            if config.has_option(section, 'file_out_format'):
+                self.file_out_format = Config.__strip_quotes_from_ini_string(config.get(section, 'file_out_format'))
 
             if config.has_option(section, 'speech_speed'):
                 self.speech_speed = config.getint(section, 'speech_speed')
             if config.has_option(section, 'speech_volume_factor'):
                 self.speech_volume_factor = config.get(section, 'speech_volume_factor').replace(',', '.')
 
-            if config.has_option(section, 'title_pattern'):
-                self.title_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'title_pattern'))
+            if config.has_option(section, 'title_format'):
+                self.title_format = Config.__strip_quotes_from_ini_string(config.get(section, 'title_format'))
 
-            if config.has_option(section, 'tick_pattern'):
-                self.tick_pattern = Config.__strip_quotes_from_ini_string(config.get(section, 'tick_pattern'))
+            if config.has_option(section, 'tick_format'):
+                self.tick_format = Config.__strip_quotes_from_ini_string(config.get(section, 'tick_format'))
             if config.has_option(section, 'tick_offset'):
                 self.tick_offset = config.getint(section, 'tick_offset')
             if config.has_option(section, 'tick_offset'):
@@ -337,14 +337,14 @@ class Config(object):
             '# https://github.com/MarcinOrlowski/mp3voicestamp',
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
-            Config.__format_ini_entry('file_out_pattern', self.file_out_pattern),
+            Config.__format_ini_entry('file_out_format', self.file_out_format),
             '',
             Config.__format_ini_entry('speech_speed', self.speech_speed),
             Config.__format_ini_entry('speech_volume_factor', self.speech_volume_factor),
             '',
-            Config.__format_ini_entry('title_pattern', self.title_pattern),
+            Config.__format_ini_entry('title_format', self.title_format),
             '',
-            Config.__format_ini_entry('tick_pattern', self.tick_pattern),
+            Config.__format_ini_entry('tick_format', self.tick_format),
             Config.__format_ini_entry('tick_offset', self.tick_offset),
             Config.__format_ini_entry('tick_interval', self.tick_interval),
         ]

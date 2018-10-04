@@ -42,7 +42,7 @@ class Job(object):
         """
         out_base_name, out_base_ext = os.path.splitext(os.path.basename(music_track.file_name))
         out_base_ext = out_base_ext[1:] if out_base_ext[0:1] == '.' else out_base_ext
-        formatted_file_name = self.job_config.file_out_pattern.format(name=out_base_name, ext=out_base_ext)
+        formatted_file_name = self.job_config.file_out_format.format(name=out_base_name, ext=out_base_ext)
 
         out_file_name = os.path.basename(music_track.file_name)
         if self.job_config.file_out is None:
@@ -138,10 +138,10 @@ class Job(object):
             ticks = range(self.job_config.tick_offset, music_track.duration, self.job_config.tick_interval)
 
             extras = {'config_name': self.job_config.name}
-            segments = [Util.prepare_for_speak(music_track.format_title(self.job_config.title_pattern, extras))]
+            segments = [Util.prepare_for_speak(music_track.format_title(self.job_config.title_format, extras))]
 
             _ = [segments.append(Util.prepare_for_speak(
-                Util.string_format(self.job_config.tick_pattern, {'minutes': time_marker}))) for time_marker in ticks]
+                Util.string_format(self.job_config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
 
             speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
             self.__create_voice_wav(segments, speech_wav_full)
