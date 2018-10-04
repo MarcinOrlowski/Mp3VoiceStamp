@@ -171,7 +171,7 @@ class Job(object):
             else:
                 msg = '  Result file "{}" '.format(file_out)
                 if os.path.exists(self.get_out_file_name(music_track)):
-                    msg += (' *** TARGET FILE AREADY EXISTS ***')
+                    msg += ' *** TARGET FILE AREADY EXISTS ***'
                 Util.print(msg)
                 Util.print()
 
