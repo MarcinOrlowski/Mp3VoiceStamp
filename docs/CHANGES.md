@@ -7,18 +7,18 @@ dev
  * Improved track title generation from file name
  * Moved usage documentation to separate document
  * Improved Python3 code compatibility
- * Added --dry-run mode
+ * Added `--dry-run` mode
  * Added support for `{file_name}` placeholder in title format
  * Fixed speach preprocessing dropping some parts under certain conditions
 
 v1.1.0 (2018-10-04)
 -------------------
  * Added support for batch processing of multiple audio files
- * Added --verbose and muted most of the messages by default
+ * Added `--verbose` and muted most of the messages by default
  * Complete rewrite for better internal architecture
  * Speech speed is now configurable
- * Added --out-format to customize how auto-generated files are named
- * Added --title-format for customized track title announcement format
+ * Added `--out-format` to customize how auto-generated files are named
+ * Added `--title-format` for customized track title announcement format
  * Added support for config files for easier batch processing
  * Changed command line option name 
 
