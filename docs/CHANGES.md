@@ -12,6 +12,7 @@ dev
  * Added support for `{file_name}` placeholder in title format
  * Fixed speach preprocessing dropping some parts under certain conditions
  * Default speech volume factor is now set to `2`
+ * Copies some ID3 tags from source audio file to voicestamped MP3 one
 
 v1.1.0 (2018-10-04)
 -------------------

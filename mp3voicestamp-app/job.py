@@ -167,6 +167,10 @@ class Job(object):
                 Util.print_no_lf('Creating "{}" file'.format(file_out))
                 Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
                                      [music_wav_full_path, speech_wav_full])
+
+                # copy some ID tags to newly create MP3 file
+                music_track.write_id3_tags(file_out)
+
                 Util.print('OK')
             else:
                 msg = '  Result file "{}" '.format(file_out)

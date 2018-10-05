@@ -16,11 +16,27 @@
 from __future__ import print_function
 
 import os
+
 from mutagen.mp3 import MP3
+from mutagen.id3 import ID3NoHeaderError
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TSSE, TOFN
+
+from const import *
 from util import Util
 
 
 class Mp3FileInfo(object):
+    # https://en.wikipedia.org/wiki/ID3
+    TAG_TITLE = 'TIT2'
+    TAG_ARTIST = 'TPE1'
+    TAG_ALBUM_ARTIST = 'TPE2'
+    TAG_ALBUM_TITLE = 'TALB'
+    TAG_COMPOSER = 'TCOM'
+    TAG_PERFORMER = 'TOPE'
+    TAG_COMMENT = 'COMM::XXX:'
+    TAG_SOFTWARE = 'TSSE'
+
+    TAG_ORIGINAL_FILENAME = 'TOFN'
 
     def __init__(self, file_name):
         if not os.path.isfile(file_name):
@@ -36,14 +52,14 @@ class Mp3FileInfo(object):
 
         # get track title either from tag, or from filename
         base_name, _ = Util.split_file_name(file_name)
-        self.title = self.__get_tag('TIT2', base_name)
+        self.title = self.__get_tag(self.TAG_TITLE, base_name)
 
-        self.artist = self.__get_tag('TPE1')
-        self.album_artist = self.__get_tag('TPE2')
-        self.album_title = self.__get_tag('TALB')
-        self.composer = self.__get_tag('TCOM')
-        self.performer = self.__get_tag('TOPE')
-        self.comment = self.__get_tag('COMM::XXX:')
+        self.artist = self.__get_tag(self.TAG_ARTIST)
+        self.album_artist = self.__get_tag(self.TAG_ALBUM_ARTIST)
+        self.album_title = self.__get_tag(self.TAG_ALBUM_TITLE)
+        self.composer = self.__get_tag(self.TAG_COMPOSER)
+        self.performer = self.__get_tag(self.TAG_PERFORMER)
+        self.comment = self.__get_tag(self.TAG_COMMENT)
 
     def __get_tag(self, tag, default=''):
         return default if tag not in self.mp3 else str(self.mp3[tag])
@@ -103,3 +119,26 @@ class Mp3FileInfo(object):
                 quality += 1
 
         return quality
+
+    def write_id3_tags(self, file_name):
+        """Writes ID3 tags from out music file into given MP3 file
+
+        Args:
+            :file_name
+        """
+        try:
+            tags = ID3(file_name)
+        except ID3NoHeaderError:
+            # Adding ID3 header
+            tags = ID3()
+
+        tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (voicestamped)'.format(self.title))
+        tags[self.TAG_ALBUM_TITLE] = TALB(encoding=3, text=self.album_title)
+        tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
+        tags[self.TAG_ARTIST] = TPE1(encoding=3, text=self.artist)
+        tags[self.TAG_COMPOSER] = TCOM(encoding=3, text=self.composer)
+
+        tags[self.TAG_ORIGINAL_FILENAME] = TOFN(encoding=3, text=self.file_name)
+        tags[self.TAG_SOFTWARE] = TSSE(encoding=3, text='{app} v{v} {url}'.format(app=APP_NAME, v=VERSION, url=APP_URL))
+
+        tags.save(file_name)
