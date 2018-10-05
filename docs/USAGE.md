@@ -68,9 +68,7 @@
       Ticks count: 12
       Result file "out/Clay van Dijk guest mix (voicestamped).mp3" 
  
- 
-  
- 
+
 ## Configuration files ##
 
  `Mp3VoiceStamp` supports configuration files, so you can easily create one with settings of your choice and
@@ -140,7 +138,7 @@
  
  ### Track title ###
 
- Default track title format string is `{title} {config_name}` 
+ Default track title format string is `{title} {config_name}`. 
  
  | Key            | Description                                                                      |
  | -------------- | -------------------------------------------------------------------------------- |
@@ -153,6 +151,9 @@
  | {comment}      | Content of track comment field or empty string                                   |
  | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
  | {file_name}    | Name of the audio file without name extension                                    |
+
+ > ![Tip](../img/tip.png) If you don't want to have track title announced, set title format to empty 
+ > string either in config or via command line argument `--title-format=""` 
  
  ### Ticks ###
 
@@ -162,4 +163,9 @@
  | --------- | -------------------------------- |
  | {minutes} | Minutes since start of the track | 
  
- If you want, you can also use any of the track title placeholders in tick format too! 
+ If you want, you can also use any of the track title placeholders in tick format too!
+ 
+ > ![Tip](../img/tip.png) If you don't want to have ticks said, tick format to empty 
+ > string either in config or via command line argument `--tick-format=""`. Alternatively
+ > you can set `--tick-offset` to some ridiculosly high value, say `500`. 
+ 
