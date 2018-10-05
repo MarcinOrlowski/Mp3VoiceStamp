@@ -56,7 +56,7 @@ class Args(object):
 
         group = parser.add_argument_group('Spoken track title')
         group.add_argument(
-            '-tf', '--title-format', action='store', dest='title_format', nargs=1, metavar='FORMAT',
+            '-tp', '--title-format', action='store', dest='title_format', nargs=1, metavar='FORMAT',
             help='Format string used to generate track title to be spoken. ' +
                  'Default is "{}". '.format(Config.DEFAULT_TITLE_FORMAT) +
                  'See docs for available placeholders.')
@@ -71,7 +71,7 @@ class Args(object):
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
             help='Offset (in minutes) for first spoken tick. Default is {}.'.format(Config.DEFAULT_TICK_OFFSET))
         group.add_argument(
-            '-tp', '--tick-format', action='store', dest='tick_format', nargs=1, metavar='FORMAT',
+            '-tf', '--tick-format', action='store', dest='tick_format', nargs=1, metavar='FORMAT',
             help='Format string for spoken time ticks.' +
                  'Default is "{}". '.format(Config.DEFAULT_TICK_FORMAT) +
                  'See docs for available placeholders.')
