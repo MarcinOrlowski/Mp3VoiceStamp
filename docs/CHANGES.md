@@ -6,6 +6,7 @@ dev
  * MP3 failure returns with non-zero RC when only one input file is provided
  * Improved track title generation from file name
  * Moved usage documentation to separate document
+ * App is less talkative. `--verbose` is gone now.
  * Improved Python3 code compatibility
  * Added `--dry-run` mode
  * Added support for `{file_name}` placeholder in title format
