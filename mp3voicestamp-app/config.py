@@ -28,7 +28,7 @@ from const import *
 
 
 class Config(object):
-    DEFAULT_TITLE_FORMAT = '{title}'
+    DEFAULT_TITLE_FORMAT = '{title} {config_name}'
 
     DEFAULT_SPEECH_SPEED = 150
     DEFAULT_SPEECH_VOLUME_FACTOR = 2
