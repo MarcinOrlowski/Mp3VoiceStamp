@@ -155,8 +155,8 @@ class Job(object):
                     segments.append(Util.prepare_for_speak(tick_string))
 
             if self.config.dry_run_mode:
-                Util.print('  Duration: {} mins, ticks count: {}'.format(music_track.duration, (len(segments) - 1)))
-                Util.print('  Title to speak: "{}"'.format(track_title_to_speak))
+                Util.print('  Duration: {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
+                Util.print('  Voice title: "{}"'.format(track_title_to_speak))
 
             if not self.config.dry_run_mode:
                 speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
@@ -176,7 +176,7 @@ class Job(object):
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
             if not self.config.dry_run_mode:
-                Util.print_no_lf('Creating "{}" file'.format(file_out))
+                Util.print_no_lf('Writing: "{}"'.format(file_out))
                 # noinspection PyUnboundLocalVariable
                 Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
                                      [music_wav_full_path, speech_wav_full])
@@ -186,7 +186,7 @@ class Job(object):
 
                 Util.print('OK')
             else:
-                msg = '  Result file "{}" '.format(file_out)
+                msg = '  Output file: "{}" '.format(file_out)
                 if os.path.exists(self.get_out_file_name(music_track)):
                     msg += ' *** TARGET FILE AREADY EXISTS ***'
                 Util.print(msg)
