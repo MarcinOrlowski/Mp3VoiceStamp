@@ -101,6 +101,19 @@ class Mp3FileInfo(object):
     def artist(self, value):
         self.__artist = str(value).strip()
 
+    @property
+    def track_number(self):
+        return self.__track_number
+
+    @track_number.setter
+    def track_number(self, value):
+        if value == '-1':
+            value = ''
+
+        print('%r' % value)
+
+        self.__track_number = value
+
     # *****************************************************************************************************************
 
     @staticmethod
