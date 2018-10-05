@@ -144,9 +144,9 @@
  
  | Key            | Description                                                                      |
  | -------------- | -------------------------------------------------------------------------------- |
- | {title}        | Track title from MP3 tags or based on file name if no tag is available           |
+ | {title}        | Track title from MP3 tags or based on file name if no tag is set                 |
  | {track_number} | Track number as set in tags or empty string                                      |
- | {artist}       | Artist name or empty string                                                      |
+ | {artist}       | Artist name (if set) or album artist, otherwise empty string                     |
  | {album_artist} | Album artist or empty string                                                     |
  | {album_title}  | Album title or empty string                                                      |
  | {composer}     | Track composer or empty string                                                   |

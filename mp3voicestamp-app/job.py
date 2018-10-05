@@ -133,10 +133,10 @@ class Job(object):
                 self.__make_temp_dir()
 
             # let's now create WAVs with our spoken parts.
-            # First goes track title, then time ticks
             ticks = range(self.config.tick_offset, music_track.duration, self.config.tick_interval)
-
             extras = {'config_name': self.config.name}
+
+            # First goes track title, then time ticks
             track_title_to_speak = Util.prepare_for_speak(music_track.format_title(self.config.title_format, extras))
             segments = [track_title_to_speak]
             _ = [segments.append(Util.prepare_for_speak(

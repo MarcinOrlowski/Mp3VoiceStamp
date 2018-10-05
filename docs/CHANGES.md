@@ -13,7 +13,9 @@ dev
  * Fixed speach preprocessing dropping some parts under certain conditions
  * Default speech volume factor is now set to `2`
  * Copies some ID3 tags from source audio file to voicestamped MP3 one
- * Added `{track_number}` to title format placeholders 
+ * Added `{track_number}` to title format placeholders
+ * `{artist}` title format placeholder now can include album artist if track artist is not set
+ * Fixed `{title}` being empty string and not original file name, when MP3 file has the tag but with no content
 
 v1.1.0 (2018-10-04)
 -------------------

@@ -39,32 +39,77 @@ class Mp3FileInfo(object):
     TAG_SOFTWARE = 'TSSE'
     TAG_ORIGINAL_FILENAME = 'TOFN'
 
+    # *****************************************************************************************************************
+
     def __init__(self, file_name):
         if not os.path.isfile(file_name):
             raise OSError('File not found: "{}"'.format(file_name))
 
+        mp3 = MP3(file_name)
+
+        base_name, _ = Util.split_file_name(self.file_name)
+        self.base_name = base_name
+
         self.file_name = file_name
 
-        self.mp3 = MP3(file_name)
-
         # we round up duration to full minutes
-        self.duration = int(round(self.mp3.info.length / 60 + 0.5))
+        self.duration = self.mp3.info.length
         self.bitrate = self.mp3.info.bitrate
 
         # get track title either from tag, or from filename
-        base_name, _ = Util.split_file_name(file_name)
-        self.title = self.__get_tag(self.TAG_TITLE, base_name)
+        self.title = self.__get_tag(mp3, self.TAG_TITLE)
+        self.artist = self.__get_tag(mp3, self.TAG_ARTIST)
+        self.album_artist = self.__get_tag(mp3, self.TAG_ALBUM_ARTIST)
+        self.album_title = self.__get_tag(mp3, self.TAG_ALBUM_TITLE)
+        self.composer = self.__get_tag(mp3, self.TAG_COMPOSER)
+        self.performer = self.__get_tag(mp3, self.TAG_PERFORMER)
+        self.comment = self.__get_tag(mp3, self.TAG_COMMENT)
+        self.track_number = self.__get_tag(mp3, self.TAG_TRACK_NUMBER)
 
-        self.artist = self.__get_tag(self.TAG_ARTIST)
-        self.album_artist = self.__get_tag(self.TAG_ALBUM_ARTIST)
-        self.album_title = self.__get_tag(self.TAG_ALBUM_TITLE)
-        self.composer = self.__get_tag(self.TAG_COMPOSER)
-        self.performer = self.__get_tag(self.TAG_PERFORMER)
-        self.comment = self.__get_tag(self.TAG_COMMENT)
-        self.track_number = self.__get_tag(self.TAG_TRACK_NUMBER)
+    # *****************************************************************************************************************
 
-    def __get_tag(self, tag, default=''):
-        return default if tag not in self.mp3 else str(self.mp3[tag])
+    @property
+    def duration(self):
+        return int(round(self.__duration / 60 + 0.5))
+
+    @duration.setter
+    def duration(self, value):
+        self.__duration = value
+
+    @property
+    def bitrate(self):
+        return self.__bitrate
+
+    @bitrate.setter
+    def bitrate(self, value):
+        self.__bitrate = int(value)
+
+    @property
+    def title(self):
+        result = self.__title
+        if self.__title == '':
+            result = self.base_name
+        return result
+
+    @title.setter
+    def title(self, value):
+        self.__title = str(value).strip()
+
+    @property
+    def artist(self):
+        return self.__artist if self.artist != '' else self.album_artist
+
+    @artist.setter
+    def artist(self, value):
+        self.__artist = str(value).strip()
+
+    # *****************************************************************************************************************
+
+    @staticmethod
+    def __get_tag(mp3, tag, default=''):
+        return default if tag not in mp3 else str(mp3[tag])
+
+    # *****************************************************************************************************************
 
     def format_title(self, title_fmt, extra_placeholders=None):
         """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
@@ -76,11 +121,9 @@ class Mp3FileInfo(object):
         if not isinstance(extra_placeholders, dict):
             raise ValueError('Placeholders must be a dict, {} given'.format(type(extra_placeholders)))
 
-        base_name, _ = Util.split_file_name(self.file_name)
-
         placeholders = extra_placeholders.copy()
         track_placeholders = {
-            'file_name': base_name,
+            'file_name': self.base_name,
             'track_number': self.track_number,
             'title': self.title,
             'artist': self.artist,
@@ -93,6 +136,8 @@ class Mp3FileInfo(object):
         placeholders.update(track_placeholders)
 
         return Util.string_format(title_fmt, placeholders)
+
+    # *****************************************************************************************************************
 
     def to_wav(self, output_file_name):
         """ Converts source audio track to WAV format
@@ -109,6 +154,8 @@ class Mp3FileInfo(object):
         if Util.execute_rc(wav_cmd) != 0:
             raise RuntimeError('Failed to convert to WAV file')
 
+    # *****************************************************************************************************************
+
     def get_encoding_quality_for_lame_encoder(self):
         """Selects LAME quality switch based on source file bitrate
 
@@ -122,6 +169,8 @@ class Mp3FileInfo(object):
                 quality += 1
 
         return quality
+
+    # *****************************************************************************************************************
 
     def write_id3_tags(self, file_name):
         """Writes ID3 tags from out music file into given MP3 file
