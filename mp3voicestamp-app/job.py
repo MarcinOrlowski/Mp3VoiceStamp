@@ -149,6 +149,7 @@ class Job(object):
 
             if not self.config.dry_run_mode:
                 speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
+
                 self.__create_voice_wav(segments, speech_wav_full)
 
                 # convert source music track to WAV
@@ -165,6 +166,7 @@ class Job(object):
             file_out = self.get_out_file_name(music_track)
             if not self.config.dry_run_mode:
                 Util.print_no_lf('Creating "{}" file'.format(file_out))
+                # noinspection PyUnboundLocalVariable
                 Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
                                      [music_wav_full_path, speech_wav_full])
 
@@ -180,7 +182,10 @@ class Job(object):
                 Util.print()
 
         except RuntimeError as ex:
-            Util.print_error(ex)
+            if not self.config.debug:
+                Util.print_error(ex)
+            else:
+                raise
             result = False
 
         finally:

@@ -29,9 +29,9 @@ class App(object):
     def main():
         rc = 0
 
-        try:
-            config = Config()
+        config = Config()
 
+        try:
             # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
             config.debug = True
 
@@ -58,19 +58,25 @@ class App(object):
                     try:
                         Job(config).voice_stamp(file_name)
                     except MutagenError as ex:
-                        Util.print_error(ex)
-                        if batch_mode:
-                            Util.print()
-                            continue
+                        if not config.debug:
+                            Util.print_error(ex)
+                            if batch_mode:
+                                Util.print()
+                                continue
+                            else:
+                                rc = 1
                         else:
-                            rc = 1
+                            raise
                     except OSError as ex:
-                        Util.print_error(ex)
-                        if batch_mode:
-                            Util.print()
-                            continue
+                        if not config.debug:
+                            Util.print_error(ex)
+                            if batch_mode:
+                                Util.print()
+                                continue
+                            else:
+                                rc = 1
                         else:
-                            rc = 1
+                            raise
         except (ValueError, IOError) as ex:
             if not config.debug:
                 Util.print_error(str(ex), False)
