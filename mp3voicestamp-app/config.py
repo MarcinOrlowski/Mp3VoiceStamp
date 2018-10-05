@@ -145,9 +145,6 @@ class Config(object):
     def tick_format(self, value):
         value = self.__get_as_string(value)
         if value is not None:
-            if value == '':
-                raise ValueError('Invalid tick format')
-
             self.__tick_format = value
 
     @property
@@ -214,9 +211,6 @@ class Config(object):
     def title_format(self, value):
         value = Config.__get_as_string(value)
         if value is not None:
-            if value == '':
-                raise ValueError('Invalid title format string')
-
             self.__title_format = value
 
     # *****************************************************************************************************************

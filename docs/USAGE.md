@@ -166,6 +166,5 @@
  If you want, you can also use any of the track title placeholders in tick format too!
  
  > ![Tip](../img/tip.png) If you don't want to have ticks said, tick format to empty 
- > string either in config or via command line argument `--tick-format=""`. Alternatively
- > you can set `--tick-offset` to some ridiculosly high value, say `500`. 
+ > string either in config or via command line argument `--tick-format=""`.
  

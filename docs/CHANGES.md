@@ -17,6 +17,7 @@ dev
  * `{artist}` title format placeholder now can include album artist if track artist is not set
  * Fixed `{title}` being empty string and not original file name, when MP3 file has the tag but empty
  * Track title placeholders are now supported for tick format as well
+ * Title or tick format strings can now be empty (useful if you do not want either of them)
 
 v1.1.0 (2018-10-04)
 -------------------

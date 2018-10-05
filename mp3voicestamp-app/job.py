@@ -137,16 +137,22 @@ class Job(object):
             extras = {'config_name': self.config.name}
 
             # First goes track title, then time ticks
+            # NOTE: we will generate title WAV even if i.e. title_format is empty. This is intentional, to keep
+            #       further logic simpler, because if both title and tick formats would be empty, then skipping
+            #       WAV generation would left us with no speech overlay file for processing and mixing.
+            #       I do not want to have the checks for such case
             track_title_to_speak = Util.prepare_for_speak(
                 Util.process_placeholders(self.config.title_format,
                                           Util.merge_dicts(music_track.get_placeholders(), extras)))
 
             segments = [track_title_to_speak]
-            for time_marker in ticks:
-                extras = {'minutes': time_marker}
-                tick_string = Util.process_placeholders(self.config.tick_format,
-                                                        Util.merge_dicts(music_track.get_placeholders(), extras))
-                segments.append(Util.prepare_for_speak(tick_string))
+
+            if self.config.tick_format != '':
+                for time_marker in ticks:
+                    extras = {'minutes': time_marker}
+                    tick_string = Util.process_placeholders(self.config.tick_format,
+                                                            Util.merge_dicts(music_track.get_placeholders(), extras))
+                    segments.append(Util.prepare_for_speak(tick_string))
 
             if self.config.dry_run_mode:
                 Util.print('  Duration: {} mins, ticks count: {}'.format(music_track.duration, (len(segments) - 1)))
