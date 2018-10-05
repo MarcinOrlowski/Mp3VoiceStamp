@@ -116,7 +116,7 @@
  then `tick offset` will be set to `10`, shadowing config file entry.
  
  Finally `[mp3voicestamp]` is a section header and must always be present in the file. You also add comments
- with use of `#` at beginning of comment line. See [example config file](../example-config.ini).
+ with use of `#` at beginning of comment line. See [example config file](../config/example.ini).
  
  ### Saving configuration files ###
  
