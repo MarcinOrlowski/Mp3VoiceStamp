@@ -11,6 +11,7 @@ dev
  * Added `--dry-run` mode
  * Added support for `{file_name}` placeholder in title format
  * Fixed speach preprocessing dropping some parts under certain conditions
+ * Default speech volume factor is now set to `2`
 
 v1.1.0 (2018-10-04)
 -------------------
