@@ -109,7 +109,20 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def format_title(self, title_fmt, extra_placeholders=None):
+    def get_placeholders(self):
+        return {
+            'file_name': self.base_name,
+            'track_number': self.track_number,
+            'title': self.title,
+            'artist': self.artist,
+            'album_artist': self.album_artist,
+            'album_title': self.album_title,
+            'composer': self.composer,
+            'performer': self.performer,
+            'comment': self.comment,
+        }
+
+    def process_placeholders(self, title_fmt, extra_placeholders=None):
         """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
         """
 
@@ -133,7 +146,7 @@ class Mp3FileInfo(object):
         }
         placeholders.update(track_placeholders)
 
-        return Util.string_format(title_fmt, placeholders)
+        return Util.process_placeholders(title_fmt, placeholders)
 
     # *****************************************************************************************************************
 

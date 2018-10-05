@@ -141,7 +141,29 @@ class Util(object):
         return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ','))
 
     @staticmethod
-    def string_format(fmt, placeholders):
+    def merge_dicts(dict1, dict2):
+        """Merge two dictionaries
+
+        :type dict1: dict
+        :type dict2: dict
+        """
+        res = dict2.copy()
+        res.update(dict1)
+
+        return res
+
+    @staticmethod
+    def process_placeholders(fmt, placeholders):
+        """
+
+        :param fmt:
+        :param placeholders:
+
+        :type fmt: basestring
+        :type placeholders: dict
+
+        :return:
+        """
         # noinspection PyCompatibility
         if not isinstance(fmt, basestring):
             raise ValueError('Format must be a string, {} given'.format(type(fmt)))

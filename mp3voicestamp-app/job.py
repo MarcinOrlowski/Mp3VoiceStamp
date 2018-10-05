@@ -137,15 +137,20 @@ class Job(object):
             extras = {'config_name': self.config.name}
 
             # First goes track title, then time ticks
-            track_title_to_speak = Util.prepare_for_speak(music_track.format_title(self.config.title_format, extras))
+            track_title_to_speak = Util.prepare_for_speak(
+                Util.process_placeholders(self.config.title_format,
+                                          Util.merge_dicts(music_track.get_placeholders(), extras)))
+
             segments = [track_title_to_speak]
-            _ = [segments.append(Util.prepare_for_speak(
-                Util.string_format(self.config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
+            for time_marker in ticks:
+                extras = {'minutes': time_marker}
+                tick_string = Util.process_placeholders(self.config.tick_format,
+                                                        Util.merge_dicts(music_track.get_placeholders(), extras))
+                segments.append(Util.prepare_for_speak(tick_string))
 
             if self.config.dry_run_mode:
-                Util.print('  Duration: {} mins'.format(music_track.duration))
+                Util.print('  Duration: {} mins, ticks count: {}'.format(music_track.duration, (len(segments) - 1)))
                 Util.print('  Title to speak: "{}"'.format(track_title_to_speak))
-                Util.print('  Ticks count: {cnt}'.format(cnt=(len(segments) - 1)))
 
             if not self.config.dry_run_mode:
                 speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')

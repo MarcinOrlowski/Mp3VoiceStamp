@@ -161,3 +161,5 @@
  | Key       | Description                      |
  | --------- | -------------------------------- |
  | {minutes} | Minutes since start of the track | 
+ 
+ If you want, you can also use any of the track title placeholders in tick format too! 
