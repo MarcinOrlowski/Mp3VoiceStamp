@@ -57,15 +57,13 @@
     Ticks interval 5 mins, start offset: 5 mins
 
     Processing "mp3/Momentum 49.mp3"
-      Duration: 143 mins
+      Duration: 143 mins, ticks count: 28
       Title to speak: "Momentum 49"
-      Ticks count: 28
       Result file "out/Momentum 49 (voicestamped).mp3" *** FILE ALREADY EXISTS ***
 
     Processing "mp3/Clay van Dijk guest mix.mp3"
-      Duration: 61 mins
+      Duration: 61 mins, ticks count: 12
       Title to speak: "Clay van Dijk guest mix"
-      Ticks count: 12
       Result file "out/Clay van Dijk guest mix (voicestamped).mp3" 
  
 
