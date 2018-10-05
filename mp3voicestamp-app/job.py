@@ -115,7 +115,6 @@ class Job(object):
 
         try:
             Util.print('Processing "{}"'.format(mp3_file_name))
-
             music_track = Mp3FileInfo(mp3_file_name)
 
             # some sanity checks first
@@ -125,42 +124,56 @@ class Job(object):
                     'Track too short (min. {}, current len {})'.format(min_track_length, music_track.duration))
 
             # check if we can create output file too
-            if os.path.exists(self.get_out_file_name(music_track)) and not self.config.force_overwrite:
-                raise OSError('Target "{}" already exists. Use -f to force overwrite.'.format(
-                    self.get_out_file_name(music_track)))
+            if not self.config.dry_run_mode:
+                if os.path.exists(self.get_out_file_name(music_track)) and not self.config.force_overwrite:
+                    raise OSError('Target "{}" already exists. Use -f to force overwrite.'.format(
+                        self.get_out_file_name(music_track)))
 
-            # create temporary folder
-            self.__make_temp_dir()
+                # create temporary folder
+                self.__make_temp_dir()
 
             # let's now create WAVs with our spoken parts.
             # First goes track title, then time ticks
             ticks = range(self.config.tick_offset, music_track.duration, self.config.tick_interval)
 
             extras = {'config_name': self.config.name}
-            segments = [Util.prepare_for_speak(music_track.format_title(self.config.title_format, extras))]
-
+            track_title_to_speak = Util.prepare_for_speak(music_track.format_title(self.config.title_format, extras))
+            segments = [track_title_to_speak]
             _ = [segments.append(Util.prepare_for_speak(
                 Util.string_format(self.config.tick_format, {'minutes': time_marker}))) for time_marker in ticks]
 
-            speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
-            self.__create_voice_wav(segments, speech_wav_full)
+            if self.config.dry_run_mode:
+                Util.print('  Duration: {} mins'.format(music_track.duration))
+                Util.print('  Title to speak: "{}"'.format(track_title_to_speak))
+                Util.print('  Ticks count: {cnt}'.format(cnt=(len(segments) - 1)))
 
-            # convert source music track to WAV
-            music_wav_full_path = os.path.join(self.tmp_dir, os.path.basename(music_track.file_name) + '.wav')
-            music_track.to_wav(music_wav_full_path)
+            if not self.config.dry_run_mode:
+                speech_wav_full = os.path.join(self.tmp_dir, 'speech.wav')
+                self.__create_voice_wav(segments, speech_wav_full)
 
-            # calculate RMS amplitude of music track as reference to gain voice to match
-            rms_amplitude = Audio.calculate_rms_amplitude(music_wav_full_path)
+                # convert source music track to WAV
+                music_wav_full_path = os.path.join(self.tmp_dir, os.path.basename(music_track.file_name) + '.wav')
+                music_track.to_wav(music_wav_full_path)
 
-            target_speech_rms_amplitude = rms_amplitude * self.config.speech_volume_factor
-            Audio.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
+                # calculate RMS amplitude of music track as reference to gain voice to match
+                rms_amplitude = Audio.calculate_rms_amplitude(music_wav_full_path)
+
+                target_speech_rms_amplitude = rms_amplitude * self.config.speech_volume_factor
+                Audio.adjust_wav_amplitude(music_wav_full_path, target_speech_rms_amplitude)
 
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
-            Util.print_no_lf('Creating "{}" file'.format(file_out))
-            Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
-                                 [music_wav_full_path, speech_wav_full])
-            Util.print('OK')
+            if not self.config.dry_run_mode:
+                Util.print_no_lf('Creating "{}" file'.format(file_out))
+                Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
+                                     [music_wav_full_path, speech_wav_full])
+                Util.print('OK')
+            else:
+                msg = '  Result file "{}" '.format(file_out)
+                if os.path.exists(self.get_out_file_name(music_track)):
+                    msg += ' *** TARGET FILE AREADY EXISTS ***'
+                Util.print(msg)
+                Util.print()
 
         except RuntimeError as ex:
             Util.print_error(ex)

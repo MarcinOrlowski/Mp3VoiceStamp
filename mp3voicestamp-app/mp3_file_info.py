@@ -58,8 +58,11 @@ class Mp3FileInfo(object):
         if not isinstance(extra_placeholders, dict):
             raise ValueError('Placeholders must be a dict, {} given'.format(type(extra_placeholders)))
 
+        base_name, _ = Util.split_file_name(self.file_name)
+
         placeholders = extra_placeholders.copy()
         track_placeholders = {
+            'file_name': base_name,
             'title': self.title,
             'artist': self.artist,
             'album_artist': self.album_artist,

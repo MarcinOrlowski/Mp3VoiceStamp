@@ -59,11 +59,12 @@
 
 ## Features ##
 
- * Reading MP3 tags
  * Automatic voice volume adjustment based on music file volume
- * Preserves quality of original audio file
- * Pretty customizable
+ * Supports batch processing of multiple files
+ * Features dry-run mode for quick tests
+ * Highly customizable
  * Minimal runtime dependencies
+ * Works on Linux, Mac OS and Windows
  * Free
 
 ## Credits and license ##

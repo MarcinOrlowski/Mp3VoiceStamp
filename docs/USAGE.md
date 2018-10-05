@@ -2,12 +2,13 @@
 ## Table of contents ##
 
  * [Usage examples](#usage-examples)
+ * [Dry-run mode](#dry-run-mode)
  * [Configuration files](#configuration-files)
  * [Formatting spoken messages](#formatting-spoken-messages)
 
 
 ## Usage examples ##
- 
+
  The simplest use case is like this:
 
     ./mp3voicestamp -i music.mp3
@@ -38,6 +39,37 @@
      ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
  
  See all available options with `--help` (or `-h`).
+
+## Dry-run mode ##
+
+ For testing purposes, there's dry-run mode available as well, which is extremely useful with batch processing.
+ By adding `--dry-run` to your command line arguments, you make the app process all the files, but instead
+ of speaking, normalizing, mixing etc, it will just simulate this and print all the info you may be interested
+ seeing as what will be the spoken title or how many ticks will be added to each file:
+ 
+    ./mp3voicestamp -i mp3/*.mp3 -o out/ --dry-run
+
+ would produce no result files, but the following output only:
+    
+    Files to process: 2
+    Title format: "{title}"
+    Tick format: "{minutes} minutes"
+    Ticks interval 5 mins, start offset: 5 mins
+
+    Processing "mp3/Momentum 49.mp3"
+      Duration: 143 mins
+      Title to speak: "Momentum 49"
+      Ticks count: 28
+      Result file "out/Momentum 49 (voicestamped).mp3" *** FILE ALREADY EXISTS ***
+
+    Processing "mp3/Clay van Dijk guest mix.mp3"
+      Duration: 61 mins
+      Title to speak: "Clay van Dijk guest mix"
+      Ticks count: 12
+      Result file "out/Clay van Dijk guest mix (voicestamped).mp3" 
+ 
+ 
+  
  
 ## Configuration files ##
 
@@ -119,6 +151,7 @@
  | {composer}     | Track composer or empty string                                                   |
  | {comment}      | Content of track comment field or empty string                                   |
  | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+ | {file_name}    | Name of the audio file without name extension                                    |
 
  ### Ticks ###
 

@@ -24,7 +24,7 @@ import re
 
 
 class Util(object):
-    quiet = True
+    quiet = False
 
     @staticmethod
     def print_no_lf(message, quiet=None):
@@ -135,15 +135,10 @@ class Util(object):
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
             We also replace '-' by coma, to enforce small pause in spoken text
         """
-        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
-        parts_out = []
-        for part in parts_in:
-            match = re.match('[0-9]{2,}', part)
-            if match is not None:
-                part = str(int(part))
-            parts_out.append(part)
+        def strip_leading_zeros(re_match):
+            return str(int(re_match.group(0)))
 
-        return ' '.join(parts_out)
+        return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ','))
 
     @staticmethod
     def string_format(fmt, placeholders):
