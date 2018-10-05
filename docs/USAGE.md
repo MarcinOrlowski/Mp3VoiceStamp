@@ -151,7 +151,7 @@
  | {file_name}    | Name of the audio file without name extension                                    |
 
  > ![Tip](../img/tip-small.png) If you don't want to have track title announced, set title format to empty 
- > string either in config or via command line argument `--title-format=""` 
+ > string either in config or via command line argument `--title-format ""` 
  
  ### Ticks ###
 
@@ -164,5 +164,5 @@
  If you want, you can also use any of the track title placeholders in tick format too!
  
  > ![Tip](../img/tip-small.png) If you don't want to have ticks said, tick format to empty 
- > string either in config or via command line argument `--tick-format=""`.
+ > string either in config or via command line argument `--tick-format ""`.
  
