@@ -54,14 +54,14 @@ class Args(object):
                  'Default is "{}". '.format(Config.DEFAULT_FILE_OUT_FORMAT) +
                  'See docs for available placeholders.')
 
-        group = parser.add_argument_group('Track title speech')
+        group = parser.add_argument_group('Spoken track title')
         group.add_argument(
             '-tf', '--title-format', action='store', dest='title_format', nargs=1, metavar='FORMAT',
             help='Format string used to generate track title to be spoken. ' +
                  'Default is "{}". '.format(Config.DEFAULT_TITLE_FORMAT) +
                  'See docs for available placeholders.')
 
-        group = parser.add_argument_group('Spoken timer')
+        group = parser.add_argument_group('Spoken time ticks')
         # noinspection PyTypeChecker
         group.add_argument(
             '-ti', '--tick-interval', action='store', type=int, dest='tick_interval', nargs=1, metavar='MINUTES',
