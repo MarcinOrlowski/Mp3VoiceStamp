@@ -18,8 +18,7 @@ from __future__ import print_function
 import os
 
 from mutagen.mp3 import MP3
-from mutagen.id3 import ID3NoHeaderError
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TSSE, TOFN, TRCK
+from mutagen.id3 import ID3, ID3NoHeaderError, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TSSE, TOFN, TRCK
 
 from const import *
 from util import Util
@@ -47,14 +46,13 @@ class Mp3FileInfo(object):
 
         mp3 = MP3(file_name)
 
-        base_name, _ = Util.split_file_name(self.file_name)
+        base_name, _ = Util.split_file_name(file_name)
         self.base_name = base_name
-
         self.file_name = file_name
 
         # we round up duration to full minutes
-        self.duration = self.mp3.info.length
-        self.bitrate = self.mp3.info.bitrate
+        self.duration = mp3.info.length
+        self.bitrate = mp3.info.bitrate
 
         # get track title either from tag, or from filename
         self.title = self.__get_tag(mp3, self.TAG_TITLE)
@@ -97,7 +95,7 @@ class Mp3FileInfo(object):
 
     @property
     def artist(self):
-        return self.__artist if self.artist != '' else self.album_artist
+        return self.__artist if self.__artist != '' else self.album_artist
 
     @artist.setter
     def artist(self, value):
