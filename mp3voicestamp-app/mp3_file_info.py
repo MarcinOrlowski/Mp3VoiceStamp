@@ -19,7 +19,7 @@ import os
 
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3NoHeaderError
-from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TSSE, TOFN
+from mutagen.id3 import ID3, TIT2, TALB, TPE1, TPE2, COMM, TCOM, TSSE, TOFN, TRCK
 
 from const import *
 from util import Util
@@ -34,8 +34,9 @@ class Mp3FileInfo(object):
     TAG_COMPOSER = 'TCOM'
     TAG_PERFORMER = 'TOPE'
     TAG_COMMENT = 'COMM::XXX:'
-    TAG_SOFTWARE = 'TSSE'
+    TAG_TRACK_NUMBER = 'TRCK'
 
+    TAG_SOFTWARE = 'TSSE'
     TAG_ORIGINAL_FILENAME = 'TOFN'
 
     def __init__(self, file_name):
@@ -60,6 +61,7 @@ class Mp3FileInfo(object):
         self.composer = self.__get_tag(self.TAG_COMPOSER)
         self.performer = self.__get_tag(self.TAG_PERFORMER)
         self.comment = self.__get_tag(self.TAG_COMMENT)
+        self.track_number = self.__get_tag(self.TAG_TRACK_NUMBER)
 
     def __get_tag(self, tag, default=''):
         return default if tag not in self.mp3 else str(self.mp3[tag])
@@ -79,6 +81,7 @@ class Mp3FileInfo(object):
         placeholders = extra_placeholders.copy()
         track_placeholders = {
             'file_name': base_name,
+            'track_number': self.track_number,
             'title': self.title,
             'artist': self.artist,
             'album_artist': self.album_artist,
@@ -137,6 +140,7 @@ class Mp3FileInfo(object):
         tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
         tags[self.TAG_ARTIST] = TPE1(encoding=3, text=self.artist)
         tags[self.TAG_COMPOSER] = TCOM(encoding=3, text=self.composer)
+        tags[self.TAG_TRACK_NUMBER] = TRCK(encoding=3, text=self.track_number)
 
         tags[self.TAG_ORIGINAL_FILENAME] = TOFN(encoding=3, text=self.file_name)
         tags[self.TAG_SOFTWARE] = TSSE(encoding=3, text='{app} v{v} {url}'.format(app=APP_NAME, v=VERSION, url=APP_URL))

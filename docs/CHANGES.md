@@ -13,6 +13,7 @@ dev
  * Fixed speach preprocessing dropping some parts under certain conditions
  * Default speech volume factor is now set to `2`
  * Copies some ID3 tags from source audio file to voicestamped MP3 one
+ * Added `{track_number}` to title format placeholders 
 
 v1.1.0 (2018-10-04)
 -------------------
