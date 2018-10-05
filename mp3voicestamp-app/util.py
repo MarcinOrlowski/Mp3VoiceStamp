@@ -138,7 +138,7 @@ class Util(object):
         def strip_leading_zeros(re_match):
             return str(int(re_match.group(0)))
 
-        return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ','))
+        return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ',')).strip()
 
     @staticmethod
     def merge_dicts(dict1, dict2):
