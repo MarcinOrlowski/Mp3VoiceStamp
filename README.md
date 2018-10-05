@@ -34,7 +34,7 @@
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
  and then keeps speaking time passed at given intervals (each 5 minutes by default).
 
- > ![Tip!](img/tip.png)
+ > ![Tip!](img/tip-small.png)
  > _One of unexpected outcome of using this tool while swimming is that while title announcement 
  > feature is just "useful one" and nothing more, then the "time ticks" works more like your personal trainer 
  > and for me it adds some motivational bits to my swimming which was completely unexpected. It seems like it 
