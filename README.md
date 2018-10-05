@@ -35,11 +35,10 @@
  and then keeps speaking time passed at given intervals (each 5 minutes by default).
 
  > ![Tip!](img/tip-small.png)
- > _One of unexpected outcome of using this tool while swimming is that while title announcement 
- > feature is just "useful one" and nothing more, then the "time ticks" works more like your personal trainer 
- > and for me it adds some motivational bits to my swimming which was completely unexpected. It seems like it 
- > puts kind of subtle pressure so I actually swim more, trying to hear next time "milestone" announced. 
- > It's like some sort of gamification in swimming in practice... Interesting :)_
+ > _while swimming is that while title announcement feature is just "useful thing" and nothing more, then the 
+ > "time ticks" works more like your personal trainer and for me it adds some motivational bits to my swimming which 
+ > is completely unexpected. It seems like it puts kind of subtle pressure so I actually swim more, trying to hear
+ > next time "milestone" announced.  It's like some sort of gamification in swimming in practice... Interesting :)_
 
 ## Sample ##
 
