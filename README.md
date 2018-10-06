@@ -32,8 +32,8 @@
     swimming already.
  
  The aim of this tool is to address these issues. The idea behind is quite simple: you take MP3 track of your choice
- and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
- and then keeps speaking time passed at given intervals (each 5 minutes by default).
+ and add synthetized voice overlay with required information. The voice announces the track (by title, filename
+ or ID3 tags of your choice), then can keep speaking time passed at given intervals (each 5 minutes by default).
 
  > ![Tip!](docs/img/tip-small.png)
  > _while swimming is that while title announcement feature is just "useful thing" and nothing more, then the 
@@ -44,8 +44,7 @@
 ## Sample ##
 
  ![Sample MP3](docs/img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
- Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
- starting at first minute of the track. Voice volume factor is x2.
+ Hear for yourself what this tool does in practice!
 
  * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
  * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
