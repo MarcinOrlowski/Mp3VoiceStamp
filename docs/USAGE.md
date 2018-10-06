@@ -13,7 +13,7 @@
 
     ./mp3voicestamp -i music.mp3
 
- which would produce file named `music (voicestamped).mp3` with audio overlay added to it with track title
+ which would produce file named `music (mp3voicestamped).mp3` with audio overlay added to it with track title
  and time stamps every 5 minute. You can also provide own name for result file using `--out`:
  
     ./mp3voicestamp -i music.mp3 -o music_with_voice.mp3
@@ -59,12 +59,12 @@
     Processing "mp3/Momentum 49.mp3"
       Duration: 143 mins, tick count: 28
       Voice title: "Momentum 49"
-      Output file "out/Momentum 49 (voicestamped).mp3" *** FILE ALREADY EXISTS ***
+      Output file "out/Momentum 49 (mp3voicestamped).mp3" *** FILE ALREADY EXISTS ***
 
     Processing "mp3/Clay van Dijk guest mix.mp3"
       Duration: 61 mins, tick count: 12
       Voice title: "Clay van Dijk guest mix"
-      Output file "out/Clay van Dijk guest mix (voicestamped).mp3" 
+      Output file "out/Clay van Dijk guest mix (mp3voicestamped).mp3" 
  
 
 ## Configuration files ##
@@ -76,7 +76,7 @@
  Configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
  
     [mp3voicestamp]
-    file_out_format = "{name} (voicestamped).{ext}"
+    file_out_format = "{name} (mp3voicestamped).{ext}"
 
     speech_speed = 150
     speech_volume_factor = 1.0

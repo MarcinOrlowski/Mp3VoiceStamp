@@ -17,14 +17,23 @@
    * [normalize-audio](http://normalize.nongnu.org/)
    * [espeak](http://espeak.sourceforge.net/)
    * [sox](http://sox.sourceforge.net/)
-   * [lame](http://lame.sourceforge.net/)
 
 ## Installation ##
 
+ Installation differs and depends on target platform you use. Below you can find information or links to 
+ binaries for your platform.
+
 ### Windows ###
 
+  * [Python 2.7](https://www.python.org/downloads/release/python-2715/)
   * [ffmpeg](https://www.lesliesikos.com/install-ffmpeg-under-windows/)
   * [normalize-audio](http://normalize.nongnu.org/) in `Binary downloads' section
+  * [espeak](http://espeak.sourceforge.net/download.html)
+  * [sox](https://sourceforge.net/projects/sox/files/sox/14.4.2/)
+  
+  once you got all binaries installed you need to install Python dependecies:
+  
+    pip install -r requirements.txt
 
 ### Debian/Ubuntu ###
 

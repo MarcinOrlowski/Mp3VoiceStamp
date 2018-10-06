@@ -37,7 +37,7 @@ class Config(object):
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
 
-    DEFAULT_FILE_OUT_FORMAT = '{name} (voicestamped).{ext}'
+    DEFAULT_FILE_OUT_FORMAT = '{name} (mp3voicestamped).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
