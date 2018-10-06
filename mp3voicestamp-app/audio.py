@@ -49,6 +49,9 @@ class Audio(object):
             :wav_file
             :rms_amplitude
         """
+        if rms_amplitude > 1.0:
+            rms_amplitude = 1.0
+
         voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
