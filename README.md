@@ -1,4 +1,5 @@
-![MP3 Voice Stamp Logo](img/logo.png)
+
+![MP3 Voice Stamp Logo](docs/img/logo.png)
 
  Athletes' companion: add synthetized voice overlay with various info and on-going timer to your audio files
 
@@ -34,7 +35,7 @@
  and add synthetized voice overlay with required information. The voice tells what track title is (at its beginning)
  and then keeps speaking time passed at given intervals (each 5 minutes by default).
 
- > ![Tip!](img/tip-small.png)
+ > ![Tip!](docs/img/tip-small.png)
  > _while swimming is that while title announcement feature is just "useful thing" and nothing more, then the 
  > "time ticks" works more like your personal trainer and for me it adds some motivational bits to my swimming which 
  > is completely unexpected. It seems like it puts kind of subtle pressure so I actually swim more, trying to hear
@@ -42,7 +43,7 @@
 
 ## Sample ##
 
- ![Sample MP3](img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
+ ![Sample MP3](docs/img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
  Hear for yourself what this tool does in practice. For demo purposes time stamps are announced at one minute interval,
  starting at first minute of the track. Voice volume factor is x2.
 
@@ -51,7 +52,7 @@
 
  ----
  
- ![OceanPlanet Cover](img/oceanplanet.jpg)
+ ![OceanPlanet Cover](docs/img/oceanplanet.jpg)
  And if you are interested in music, sample is based on Olga Misty's DJ mix "Ocean Planet 086 Part 2" which can be found on 
  [MixCloud](https://www.mixcloud.com/olgamisty/olga-misty-ocean-planet-086-part-2-aug-06-2018-on-proton-radio/) and
  [SoundCloud](https://soundcloud.com/olga_misty/olga-misty-ocean-planet-086-part-2-aug-06-2018-on-proton-radio).
