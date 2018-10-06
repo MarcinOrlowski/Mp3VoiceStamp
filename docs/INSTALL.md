@@ -14,6 +14,7 @@
    * [normalize-audio](http://normalize.nongnu.org/)
    * [espeak](http://espeak.sourceforge.net/)
    * [sox](http://sox.sourceforge.net/)
+   * [lame](http://lame.sourceforge.net/)
 
  To install required Python libraries use `pip`:
 
@@ -21,5 +22,5 @@
 
  To install required binaries (on Debian/Ubuntu):
 
-    sudo apt install ffmpeg espeak normalize-audio sox
+    sudo apt install ffmpeg espeak normalize-audio sox lame
 

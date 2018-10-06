@@ -124,7 +124,13 @@ class Util(object):
     def check_env():
         """Checks if all external tools we need are already available and in $PATH
         """
-        tools = ['ffmpeg', 'normalize-audio', 'espeak', 'sox']
+        tools = [
+            'ffmpeg',
+            'normalize-audio',
+            'espeak',
+            'sox',
+            'lame',
+        ]
         for tool in tools:
             if Util.which(tool) is None:
                 Util.abort('"{}" not found. See README.md for details.'.format(tool))
@@ -135,6 +141,7 @@ class Util(object):
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
             We also replace '-' by coma, to enforce small pause in spoken text
         """
+
         def strip_leading_zeros(re_match):
             return str(int(re_match.group(0)))
 
