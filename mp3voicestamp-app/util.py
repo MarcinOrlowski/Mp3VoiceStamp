@@ -126,13 +126,16 @@ class Util(object):
         """
         tools = [
             'ffmpeg',
-            'normalize-audio',
             'espeak',
             'sox',
         ]
+
+        normalize = 'normalize' if sys.platform == 'win32' else 'normalize-audio'
+        tools.append(normalize)
+
         for tool in tools:
             if Util.which(tool) is None:
-                Util.abort('"{}" not found. See README.md for details.'.format(tool))
+                Util.abort('"{}" not found. See README.md for installation details.'.format(tool))
 
     @staticmethod
     def prepare_for_speak(text):

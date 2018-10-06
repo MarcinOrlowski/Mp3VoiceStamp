@@ -16,6 +16,8 @@
 from __future__ import print_function
 
 import re
+import sys
+
 from util import Util
 
 
@@ -52,7 +54,11 @@ class Audio(object):
         if rms_amplitude > 1.0:
             rms_amplitude = 1.0
 
-        voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
+        normalize_bin = 'normalize-audio'
+        if sys.platform == 'win32':
+            normalize_bin = 'normalize.exe'
+
+        voice_gain_cmd = [normalize_bin, '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 

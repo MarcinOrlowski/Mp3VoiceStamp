@@ -23,8 +23,8 @@
 
 ### Windows ###
 
-  * [normalize-audio](http://normalize.nongnu.org/)
   * [ffmpeg](https://www.lesliesikos.com/install-ffmpeg-under-windows/)
+  * [normalize-audio](http://normalize.nongnu.org/) in `Binary downloads' section
 
 ### Debian/Ubuntu ###
 
