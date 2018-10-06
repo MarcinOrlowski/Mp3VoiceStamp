@@ -4,7 +4,7 @@
 
  MP3 Voice Stamp
 
- Athletes' companion: add synthetized voice overlay with various
+ Athletes' companion: adds synthetized voice overlay with various
  info and on-going timer to your audio files
 
  Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
