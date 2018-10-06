@@ -135,32 +135,6 @@ class Mp3FileInfo(object):
             'comment': self.comment,
         }
 
-    def process_placeholders(self, title_fmt, extra_placeholders=None):
-        """ Formats track title string (used for voice synthesis) using MP3 tags represented by placeholders.
-        """
-
-        if extra_placeholders is None:
-            extra_placeholders = {}
-
-        if not isinstance(extra_placeholders, dict):
-            raise ValueError('Placeholders must be a dict, {} given'.format(type(extra_placeholders)))
-
-        placeholders = extra_placeholders.copy()
-        track_placeholders = {
-            'file_name': self.base_name,
-            'track_number': self.track_number,
-            'title': self.title,
-            'artist': self.artist,
-            'album_artist': self.album_artist,
-            'album_title': self.album_title,
-            'composer': self.composer,
-            'performer': self.performer,
-            'comment': self.comment,
-        }
-        placeholders.update(track_placeholders)
-
-        return Util.process_placeholders(title_fmt, placeholders)
-
     # *****************************************************************************************************************
 
     def to_wav(self, output_file_name):
