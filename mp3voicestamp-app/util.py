@@ -129,7 +129,6 @@ class Util(object):
             'normalize-audio',
             'espeak',
             'sox',
-            'lame',
         ]
         for tool in tools:
             if Util.which(tool) is None:

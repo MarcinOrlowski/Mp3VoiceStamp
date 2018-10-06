@@ -1,7 +1,10 @@
  
 ## Table of contents ##
 
- * [Requirements and installation](#requirements)
+ * [Requirements](#requirements)
+ * Installation
+   * [Windows](#windows)
+   * [Debian/Ubuntu](#debianubuntu)
 
 
 ## Requirements ##
@@ -16,11 +19,20 @@
    * [sox](http://sox.sourceforge.net/)
    * [lame](http://lame.sourceforge.net/)
 
+## Installation ##
+
+### Windows ###
+
+  * [normalize-audio](http://normalize.nongnu.org/)
+  * [ffmpeg](https://www.lesliesikos.com/install-ffmpeg-under-windows/)
+
+### Debian/Ubuntu ###
+
  To install required Python libraries use `pip`:
 
     pip install -r requirements.txt
 
  To install required binaries (on Debian/Ubuntu):
 
-    sudo apt install ffmpeg espeak normalize-audio sox lame
+    sudo apt install ffmpeg espeak normalize-audio sox
 
