@@ -176,7 +176,8 @@ class Job(object):
                 Util.print_no_lf('Writing: "{}"'.format(file_out))
 
                 # noinspection PyProtectedMember
-                self.__tmp_mp3_file = os.path.join(os.path.dirname(file_out), next(tempfile._get_candidate_names()) + '.mp3')
+                self.__tmp_mp3_file = os.path.join(os.path.dirname(file_out),
+                                                   next(tempfile._get_candidate_names()) + '.mp3')
 
                 # noinspection PyUnboundLocalVariable
                 Audio.mix_wav_tracks(self.__tmp_mp3_file, music_track.get_encoding_quality_for_lame_encoder(),
