@@ -19,7 +19,8 @@ dev
  * Track title placeholders are now supported for tick format as well
  * Title or tick format strings can now be empty (useful if you do not want either of them)
  * Default title format is now `{title} {config_name}`
-
+ * Uses temp file for MP3 encoding for safe abort even if that file is expected to overwrite existing one
+ 
 v1.1.0 (2018-10-04)
 -------------------
  * Added support for batch processing of multiple audio files

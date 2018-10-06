@@ -17,6 +17,7 @@ from __future__ import print_function
 
 import os
 import shutil
+import tempfile
 
 from audio import Audio
 from mp3_file_info import Mp3FileInfo
@@ -177,12 +178,21 @@ class Job(object):
             file_out = self.get_out_file_name(music_track)
             if not self.config.dry_run_mode:
                 Util.print_no_lf('Writing: "{}"'.format(file_out))
+
+                # noinspection PyProtectedMember
+                tmp_file_out = os.path.join(os.path.dirname(file_out), next(tempfile._get_candidate_names()) + '.mp3')
+
                 # noinspection PyUnboundLocalVariable
-                Audio.mix_wav_tracks(file_out, music_track.get_encoding_quality_for_lame_encoder(),
+                Audio.mix_wav_tracks(tmp_file_out, music_track.get_encoding_quality_for_lame_encoder(),
                                      [music_wav_full_path, speech_wav_full])
 
                 # copy some ID tags to newly create MP3 file
-                music_track.write_id3_tags(file_out)
+                music_track.write_id3_tags(tmp_file_out)
+
+                if os.path.exists(file_out):
+                    os.remove(file_out)
+
+                os.rename(tmp_file_out, file_out)
 
                 Util.print('OK')
             else:
