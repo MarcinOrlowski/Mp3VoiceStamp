@@ -110,9 +110,9 @@ class Args(object):
         )
         group.add_argument(
             '--version', action='version',
-            version='{app} v{v} ({rd}): Mixes speech information to your music files'.format(app=APP_NAME,
-                                                                                             v=VERSION,
-                                                                                             rd=RELEASE_DATE))
+            version='{app} v{v} ({rd}): Mixes synthesised speech info with your music files'.format(app=APP_NAME,
+                                                                                                    v=VERSION,
+                                                                                                    rd=RELEASE_DATE))
 
         group = parser.add_argument_group('Developer tools')
         group.add_argument(
