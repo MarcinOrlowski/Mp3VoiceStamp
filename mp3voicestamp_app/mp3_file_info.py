@@ -20,8 +20,8 @@ import os
 from mutagen.mp3 import MP3
 from mutagen.id3 import ID3, ID3NoHeaderError, TIT2, TALB, TPE1, TPE2, TCOM, TSSE, TOFN, TRCK
 
-from .const import *
-from .util import Util
+from mp3voicestamp_app.const import *
+from mp3voicestamp_app.util import Util
 
 
 class Mp3FileInfo(object):
