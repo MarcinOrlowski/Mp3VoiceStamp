@@ -11,32 +11,32 @@
 
  The simplest use case is like this:
 
-    ./mp3voicestamp -i music.mp3
+    mp3voicestamp -i music.mp3
 
  which would produce file named `music (mp3voicestamped).mp3` with audio overlay added to it with track title
  and time stamps every 5 minute. You can also provide own name for result file using `--out`:
  
-    ./mp3voicestamp -i music.mp3 -o music_with_voice.mp3
+    mp3voicestamp -i music.mp3 -o music_with_voice.mp3
 
  You can also process more than one file at once:
  
-    ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3
+    mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3
 
  When using multiple input files you can still use `--out` but in such case it must point to target folder
  (so you loose ability to manually specify target file name):
  
-    ./mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
+    mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
 
  You can change certain parameters, incl. frequency of tick announcer, or i.e. boost (or decrease) volume of voice
  overlay (relative to auto calculated volume level), change template for spoken track title or time announcements. 
   
  Sample MP3 include with project was created with:
  
-    ./mp3voicestamp --in music.mp3 --tick-offset 1 --tick-interval 1 --speech-volume 2
+    mp3voicestamp --in music.mp3 --tick-offset 1 --tick-interval 1 --speech-volume 2
 
  or in short notation
  
-     ./mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
+     mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
  
  See all available options with `--help` (or `-h`).
 
@@ -47,7 +47,7 @@
  of speaking, normalizing, mixing etc, it will just simulate this and print all the info you may be interested
  seeing as what will be the spoken title or how many ticks will be added to each file:
  
-    ./mp3voicestamp -i mp3/*.mp3 -o out/ --dry-run
+    mp3voicestamp -i mp3/*.mp3 -o out/ --dry-run
 
  would produce no result files, but the following output only:
     
@@ -95,7 +95,7 @@
 
  To use config file specify path to the file with `--config` (or `-c`):
  
-    ./mp3voicestamp -i music.mp3 -c my-settings.ini
+    mp3voicestamp -i music.mp3 -c my-settings.ini
 
  Additionally, command line arguments overshadow config file parameters. For example if you save the following 
  config file as your `config.ini`:
@@ -107,7 +107,7 @@
 
  and then invoke tool like this:
  
-    ./mp3voicestamp -i music.mp3 -c config.ini --tick-offset 10
+    mp3voicestamp -i music.mp3 -c config.ini --tick-offset 10
 
  then `tick offset` will be set to `10`, shadowing config file entry.
  
@@ -118,11 +118,11 @@
  
  You can use `--config-save` (`-cs`) option to dump current configuration state to a file for further reuse:
  
-    ./mp3voicestamp -cs new-config.ini
+    mp3voicestamp -cs new-config.ini
  
  More over you can combine saving with config loading and manual tweaks as well:
  
-    ./mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{minutes} passed" -cs new-config.ini
+    mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{minutes} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
  and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.
