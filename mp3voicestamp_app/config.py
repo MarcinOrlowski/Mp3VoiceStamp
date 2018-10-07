@@ -15,16 +15,12 @@
 
 # noinspection PyCompatibility
 from past.builtins import basestring
+from backports import configparser
 
 import os
 
-try:
-    import configparser
-except ImportError:
-    import ConfigParser as configparser
-
-from .util import Util
-from .const import *
+from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.const import *
 
 
 class Config(object):
