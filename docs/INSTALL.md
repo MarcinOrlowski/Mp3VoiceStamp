@@ -4,17 +4,14 @@
  * [Requirements](#requirements)
  * Installation
    * [Windows](#windows)
-   * [Debian/Ubuntu](#debianubuntu)
-
+   * [Linux](#linux)
 
 ## Requirements ##
 
  * [Python](https://www.python.org/) v2.7 or newer
- * required libraries:
-   * [mutagen](https://github.com/quodlibet/mutagen/)
- * required tools:
+ * external tools:
    * [ffmpeg](https://www.ffmpeg.org/)
-   * [normalize-audio](http://normalize.nongnu.org/)
+   * [normalize](http://normalize.nongnu.org/)
    * [espeak](http://espeak.sourceforge.net/)
    * [sox](http://sox.sourceforge.net/)
 
@@ -25,23 +22,29 @@
 
 ### Windows ###
 
-  * [Python 2.7](https://www.python.org/downloads/release/python-2715/)
-  * [ffmpeg](https://www.lesliesikos.com/install-ffmpeg-under-windows/)
-  * [normalize-audio](http://normalize.nongnu.org/) in `Binary downloads' section
-  * [espeak](http://espeak.sourceforge.net/download.html)
-  * [sox](https://sourceforge.net/projects/sox/files/sox/14.4.2/)
+ Since v1.2.0, binary installer for Windows is also available for download on project's 
+ [Releases](https://github.com/MarcinOrlowski/Mp3VoiceStamp/releases) page. 
+ 
+ Please note there still is no GUI for the tool, and you will need to face Command Line to use it, but fear not - 
+ that's pretty much trivial and already [covered in details](USAGE.md) in usage examples.
+
+#### Binaries bundled #### 
+ 
+ The following binaries are bundled in Windows installer:
+ 
+  * [espeak v1.48](https://sourceforge.net/projects/espeak/files/espeak/espeak-1.48/setup_espeak-1.48.04.exe/download),
+  * [ffmpeg v20181007-0a41a8b-win64](https://ffmpeg.zeranoe.com/builds/win64/static/ffmpeg-20181007-0a41a8b-win64-static.zip) 
+  (more on this build [here](https://www.lesliesikos.com/install-ffmpeg-under-windows/)),
+  * [sox v14.4.2](https://sourceforge.net/projects/sox/files/sox/14.4.2/),
+  * [normalize v0.7.7](http://savannah.nongnu.org/download/normalize/normalize-0.7.7-win32.zip).
   
-  once you got all binaries installed you need to install Python dependecies:
-  
-    pip install -r requirements.txt
+### Linux ###
 
-### Debian/Ubuntu ###
+ On Linux you need to check out the project from the repository using `git`. Then go to project folder and install
+ python dependencies using `pip` tool:
+ 
+     pip install -r requirements.txt --user
 
- To install required Python libraries use `pip`:
+ Binary tools needed should be installed using your distribution's package manager. For Debian/Ubuntu it'd be like:
 
-    pip install -r requirements.txt
-
- To install required binaries (on Debian/Ubuntu):
-
-    sudo apt install ffmpeg espeak normalize-audio sox
-
+    apt install ffmpeg espeak normalize-audio sox
