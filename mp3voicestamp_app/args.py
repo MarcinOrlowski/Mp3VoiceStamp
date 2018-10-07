@@ -16,8 +16,8 @@
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
-from config import Config
-from const import *
+from .config import Config
+from .const import *
 
 
 class Args(object):

@@ -16,10 +16,10 @@
 from __future__ import print_function
 
 import sys
-from args import Args
-from util import Util
-from config import Config
-from job import Job
+from .args import Args
+from .util import Util
+from .config import Config
+from .job import Job
 from mutagen import MutagenError
 
 

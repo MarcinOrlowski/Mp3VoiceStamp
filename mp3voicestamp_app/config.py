@@ -23,8 +23,8 @@ try:
 except ImportError:
     import ConfigParser as configparser
 
-from util import Util
-from const import *
+from .util import Util
+from .const import *
 
 
 class Config(object):

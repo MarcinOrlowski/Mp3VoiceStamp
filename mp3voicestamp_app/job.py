@@ -19,9 +19,9 @@ import os
 import shutil
 import tempfile
 
-from audio import Audio
-from mp3_file_info import Mp3FileInfo
-from util import Util
+from .audio import Audio
+from .mp3_file_info import Mp3FileInfo
+from .util import Util
 
 
 class Job(object):
