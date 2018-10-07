@@ -16,10 +16,11 @@
 from __future__ import print_function
 
 import sys
-from .args import Args
-from .util import Util
-from .config import Config
-from .job import Job
+from mp3voicestamp_app.args import Args
+from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.config import Config
+from mp3voicestamp_app.job import Job
+
 from mutagen import MutagenError
 
 
@@ -32,9 +33,6 @@ class App(object):
         config = Config()
 
         try:
-            # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
-            config.debug = True
-
             # parse common line arguments
             args = Args.parse_args(config)
 

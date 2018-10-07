@@ -16,8 +16,8 @@
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
-from .config import Config
-from .const import *
+from mp3voicestamp_app.config import Config
+from mp3voicestamp_app.const import *
 
 
 class Args(object):
@@ -120,7 +120,14 @@ class Args(object):
             help='Enables debug mode.'
         )
 
+        # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
+        old_config_debug = config.debug
+        if not config.debug:
+            config.debug = True
+
         args = parser.parse_args()
+
+        config.debug = old_config_debug
 
         if args.files_in is None and args.config_save_name is None:
             parser.print_usage()
