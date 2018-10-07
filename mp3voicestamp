@@ -15,4 +15,4 @@
 
 
 MY_DIR=$( dirname $0 )
-PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=${PYTHONPATH}:"${MY_DIR}" /usr/bin/env python -B "${MY_DIR}/mp3voicestamp-app/app.py" "$@"
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=${PYTHONPATH}:"${MY_DIR}" /usr/bin/env python -B "${MY_DIR}/mp3voicestamp_app/app.py" "$@"
