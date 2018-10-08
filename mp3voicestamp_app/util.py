@@ -61,7 +61,7 @@ class Util(object):
         return rc
 
     @staticmethod
-    def execute(cmd_list, working_dir=None):
+    def execute(cmd_list, working_dir=None, debug=False):
         """Executes commands from cmd_list changing CWD to working_dir.
 
         Args:
@@ -73,6 +73,9 @@ class Util(object):
         if working_dir:
             old_cwd = os.getcwd()
             os.chdir(working_dir)
+
+        if debug:
+            print('Executing: {}'.format(' '.join(cmd_list)))
 
         p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         stdout, err = p.communicate(None)
@@ -134,8 +137,10 @@ class Util(object):
         tools.append(normalize)
 
         for tool in tools:
+            if sys.platform == 'win32':
+                tool += '.exe'
             if Util.which(tool) is None:
-                Util.abort('"{}" not found. See README.md for installation details.'.format(tool))
+                Util.abort('"{}" not found. See documentation for installation guidelines.'.format(tool))
 
     @staticmethod
     def prepare_for_speak(text):

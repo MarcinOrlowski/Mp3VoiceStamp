@@ -54,6 +54,9 @@ class Job(object):
 
         self.__tmp_dir = tempfile.mkdtemp()
 
+        if self.__config.debug:
+            print('Tmp dir: {}'.format(self.__tmp_dir))
+
     def __cleanup(self):
         if self.__tmp_dir is not None and os.path.isdir(self.__tmp_dir):
             shutil.rmtree(self.__tmp_dir)

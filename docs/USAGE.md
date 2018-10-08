@@ -13,7 +13,7 @@
 
     mp3voicestamp -i music.mp3
 
- which would produce file named `music (mp3voicestamped).mp3` with audio overlay added to it with track title
+ which would produce file named `music (mp3voicestamp).mp3` with audio overlay added to it with track title
  and time stamps every 5 minute. You can also provide own name for result file using `--out`:
  
     mp3voicestamp -i music.mp3 -o music_with_voice.mp3
@@ -25,7 +25,7 @@
  When using multiple input files you can still use `--out` but in such case it must point to target folder
  (so you loose ability to manually specify target file name):
  
-    mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder/
+    mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder
 
  You can change certain parameters, incl. frequency of tick announcer, or i.e. boost (or decrease) volume of voice
  overlay (relative to auto calculated volume level), change template for spoken track title or time announcements. 
@@ -47,7 +47,7 @@
  of speaking, normalizing, mixing etc, it will just simulate this and print all the info you may be interested
  seeing as what will be the spoken title or how many ticks will be added to each file:
  
-    mp3voicestamp -i mp3/*.mp3 -o out/ --dry-run
+    mp3voicestamp -i *.mp3 --dry-run
 
  would produce no result files, but the following output only:
     
@@ -56,15 +56,15 @@
     Tick format: "{minutes} minutes"
     Ticks interval 5 mins, start offset: 5 mins
 
-    Processing "mp3/Momentum 49.mp3"
+    Processing "Momentum 49.mp3"
       Duration: 143 mins, tick count: 28
       Voice title: "Momentum 49"
-      Output file "out/Momentum 49 (mp3voicestamped).mp3" *** FILE ALREADY EXISTS ***
+      Output file "Momentum 49 (mp3voicestamp).mp3" *** FILE ALREADY EXISTS ***
 
-    Processing "mp3/Clay van Dijk guest mix.mp3"
+    Processing "Clay van Dijk guest mix.mp3"
       Duration: 61 mins, tick count: 12
       Voice title: "Clay van Dijk guest mix"
-      Output file "out/Clay van Dijk guest mix (mp3voicestamped).mp3" 
+      Output file "Clay van Dijk guest mix (mp3voicestamp).mp3" 
  
 
 ## Configuration files ##
@@ -76,7 +76,7 @@
  Configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
  
     [mp3voicestamp]
-    file_out_format = "{name} (mp3voicestamped).{ext}"
+    file_out_format = "{name} (mp3voicestamp).{ext}"
 
     speech_speed = 150
     speech_volume_factor = 1.0
