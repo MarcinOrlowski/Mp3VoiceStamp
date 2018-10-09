@@ -3,6 +3,10 @@
 
 ## Changelog ##
 
+@dev
+----
+ * Track annoucement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
+
 v1.2.0 (2018-10-09)
 -------------------
  * Corrected config file examples

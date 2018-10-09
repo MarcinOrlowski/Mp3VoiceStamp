@@ -164,6 +164,7 @@ class Job(object):
             track_title_to_speak = Util.prepare_for_speak(
                 Util.process_placeholders(self.__config.title_format,
                                           Util.merge_dicts(music_track.get_placeholders(), extras)))
+            Util.print('  Annouced as "{}"'.format(track_title_to_speak))
 
             segments = [track_title_to_speak]
 
@@ -176,7 +177,6 @@ class Job(object):
 
             if self.__config.dry_run_mode:
                 Util.print('  Duration: {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
-                Util.print('  Voice title: "{}"'.format(track_title_to_speak))
 
             if not self.__config.dry_run_mode:
                 speech_wav_full = os.path.join(self.__tmp_dir, 'speech.wav')
@@ -195,8 +195,9 @@ class Job(object):
 
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
+            output_file_msg = '  Output file: "{}"'.format(file_out)
             if not self.__config.dry_run_mode:
-                Util.print_no_lf('Writing: "{}"'.format(file_out))
+                Util.print_no_lf(output_file_msg)
 
                 # noinspection PyProtectedMember
                 self.__tmp_mp3_file = os.path.join(os.path.dirname(file_out),
@@ -217,10 +218,9 @@ class Job(object):
 
                 Util.print('OK')
             else:
-                msg = '  Output file: "{}" '.format(file_out)
                 if os.path.exists(self.get_out_file_name(music_track)):
-                    msg += ' *** TARGET FILE ALREADY EXISTS ***'
-                Util.print(msg)
+                    output_file_msg += ' *** TARGET FILE ALREADY EXISTS ***'
+                Util.print(output_file_msg)
                 Util.print()
 
         except RuntimeError as ex:
