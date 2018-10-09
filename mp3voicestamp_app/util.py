@@ -41,7 +41,11 @@ class Util(object):
             quiet = Util.quiet
 
         if not quiet:
-            print(message)
+            if isinstance(message, list):
+                for entry in message:
+                    print(entry)
+            else:
+                print(message)
 
     @staticmethod
     def print_error(message='', quiet=None):
