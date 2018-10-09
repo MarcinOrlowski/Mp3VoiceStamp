@@ -1,5 +1,7 @@
  
-## Table of contents ##
+![MP3 Voice Stamp Logo](img/banner.png)
+
+## Installation  ##
 
  * [Requirements](#requirements)
  * Installation

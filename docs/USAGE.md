@@ -1,13 +1,15 @@
 
-## Table of contents ##
+![MP3 Voice Stamp Logo](img/banner.png)
 
- * [Usage examples](#usage-examples)
+## Usage ##
+
+ * [Examples](#examples)
  * [Dry-run mode](#dry-run-mode)
  * [Configuration files](#configuration-files)
  * [Formatting spoken messages](#formatting-spoken-messages)
 
 
-## Usage examples ##
+## Examples ##
 
  The simplest use case is like this:
 

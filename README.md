@@ -1,5 +1,5 @@
 
-![MP3 Voice Stamp Logo](docs/img/logo.png)
+![MP3 Voice Stamp Logo](docs/img/banner.png)
 
  Athletes' companion: adds synthetized voice overlay with various info and on-going timer to your audio files
 

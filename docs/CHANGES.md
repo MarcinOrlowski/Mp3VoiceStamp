@@ -1,3 +1,6 @@
+
+![MP3 Voice Stamp Logo](img/banner.png)
+
 ## Changelog ##
 
 v1.2.0 (2018-10-09)
