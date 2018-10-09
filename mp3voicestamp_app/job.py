@@ -61,12 +61,15 @@ class Job(object):
             print('Tmp dir: {}'.format(self.__tmp_dir))
 
     def __cleanup(self):
-        if self.__tmp_dir is not None and os.path.isdir(self.__tmp_dir):
-            shutil.rmtree(self.__tmp_dir)
-            self.__tmp_dir = None
+        if not self.__config.no_cleanup:
+            if self.__tmp_dir is not None and os.path.isdir(self.__tmp_dir):
+                shutil.rmtree(self.__tmp_dir)
+                self.__tmp_dir = None
 
-        if self.__tmp_mp3_file is not None and os.path.isfile(self.__tmp_mp3_file):
-            os.remove(self.__tmp_mp3_file)
+            if self.__tmp_mp3_file is not None and os.path.isfile(self.__tmp_mp3_file):
+                os.remove(self.__tmp_mp3_file)
+        else:
+            print('Temp folder "{}" not cleared.'.format(self.__tmp_dir))
 
     def speak_to_wav(self, text, out_file_name):
         # noinspection PyProtectedMember
@@ -79,9 +82,10 @@ class Job(object):
                                   '-s', str(self.__config.speech_speed),
                                   '-z',
                                   '-w', out_file_name,
-                                  '-f', text_tmp_file])
+                                  '-f', text_tmp_file],
+                                 debug=self.__config.debug)
 
-            if rc == 0 and not self.__config.debug:
+            if rc == 0 and not self.__config.no_cleanup:
                 os.remove(text_tmp_file)
 
             return rc == 0

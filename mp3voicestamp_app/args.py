@@ -119,6 +119,10 @@ class Args(object):
             '-d', '--debug', action='store_true', dest='debug',
             help='Enables debug mode.'
         )
+        group.add_argument(
+            '-nc', '--no-cleanup', action='store_true', dest='no_cleanup',
+            help='Do not remove working files and folders on exit.'
+        )
 
         # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
         old_config_debug = config.debug
@@ -138,6 +142,7 @@ class Args(object):
         config.force_overwrite = args.force
         config.dry_run_mode = args.dry_run_mode
         config.debug = args.debug
+        config.no_cleanup = args.no_cleanup
 
         config.speech_volume_factor = args.speech_volume_factor
         config.speech_speed = args.speech_speed

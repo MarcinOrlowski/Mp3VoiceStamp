@@ -56,8 +56,8 @@ class Util(object):
         sys.exit(1)
 
     @staticmethod
-    def execute_rc(cmd_list, working_dir=None):
-        rc, _, _ = Util.execute(cmd_list, working_dir)
+    def execute_rc(cmd_list, working_dir=None, debug=False):
+        rc, _, _ = Util.execute(cmd_list, working_dir, debug)
         return rc
 
     @staticmethod
@@ -78,7 +78,7 @@ class Util(object):
         if debug:
             print('Executing: {}'.format(' '.join(cmd_list)))
 
-        p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         stdout, err = p.communicate(None)
         rc = p.returncode
 
