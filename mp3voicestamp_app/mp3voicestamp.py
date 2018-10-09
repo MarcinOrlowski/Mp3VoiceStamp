@@ -21,6 +21,7 @@ from mp3voicestamp_app.util import Util
 from mp3voicestamp_app.config import Config
 from mp3voicestamp_app.job import Job
 from mp3voicestamp_app.tools import Tools
+from mp3voicestamp_app.const import *
 
 from mutagen import MutagenError
 
@@ -33,6 +34,10 @@ class App(object):
 
         config = Config()
 
+        Util.print(['{app} v{v} by Marcin Orlowski <{e}>'.format(app=APP_NAME, v=VERSION, e=APP_EMAIL),
+                    APP_URL,
+                    ''
+                    ])
         try:
             # parse common line arguments
             args = Args.parse_args(config)
@@ -47,11 +52,12 @@ class App(object):
                 batch_mode = len(config.files_in) > 1
 
                 if config.dry_run_mode and config.files_in and batch_mode:
-                    Util.print('Files to process: {}'.format(len(config.files_in)))
-                    Util.print('Title format: "{}"'.format(config.title_format))
-                    Util.print('Tick format: "{}"'.format(config.tick_format))
-                    Util.print('Ticks interval {freq} mins, start offset: {offset} mins'.format(
-                        freq=config.tick_interval, offset=config.tick_offset))
+                    Util.print([
+                        'Files to process: {}'.format(len(config.files_in)),
+                        'Title format: "{}"'.format(config.title_format),
+                        'Tick format: "{}"'.format(config.tick_format),
+                        'Ticks interval {freq} mins, start offset: {offset} mins'.format(freq=config.tick_interval, offset=config.tick_offset),
+                    ])
                     Util.print()
 
                 for file_name in config.files_in:

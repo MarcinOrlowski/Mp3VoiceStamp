@@ -15,6 +15,7 @@
 
 APP_NAME = 'Mp3VoiceStamp'
 APP_URL = 'https://github.com/MarcinOrlowski/Mp3VoiceStamp'
+APP_EMAIL = 'mail@marcinorlowski.com'
 
 VERSION = '1.1.0'
 

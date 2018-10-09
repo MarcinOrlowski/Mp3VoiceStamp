@@ -30,6 +30,7 @@ class Args(object):
         :returns argsparse
         """
         parser = argparse.ArgumentParser(
+            prog=APP_NAME.lower(),
             description='{app} v{v} ({rd})\n'.format(app=APP_NAME, v=VERSION, rd=RELEASE_DATE) +
                         'Adds spoken overlay to MP3 with title, time stamps and more.\n'
                         'Written by Marcin Orlowski <mail@marcinOrlowski.com>\n'
