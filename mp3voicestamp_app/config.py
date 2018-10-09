@@ -4,7 +4,7 @@
 
  MP3 Voice Stamp
 
- Athletes' companion: add synthetized voice overlay with various
+ Athletes' companion: adds synthetized voice overlay with various
  info and on-going timer to your audio files
 
  Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
@@ -13,23 +13,27 @@
 
 """
 
+# noinspection PyCompatibility
+from past.builtins import basestring
+from backports import configparser
+
 import os
-import ConfigParser
-from util import Util
-from const import *
+
+from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.const import *
 
 
 class Config(object):
-    DEFAULT_TITLE_FORMAT = '{title}'
+    DEFAULT_TITLE_FORMAT = '{title} {config_name}'
 
     DEFAULT_SPEECH_SPEED = 150
-    DEFAULT_SPEECH_VOLUME_FACTOR = 1
+    DEFAULT_SPEECH_VOLUME_FACTOR = 2
 
     DEFAULT_TICK_FORMAT = '{minutes} minutes'
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
 
-    DEFAULT_FILE_OUT_FORMAT = '{name} (voicestamped).{ext}'
+    DEFAULT_FILE_OUT_FORMAT = '{name} (mp3voicestamp).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -55,6 +59,9 @@ class Config(object):
         self.name = ''
 
         self.force_overwrite = False
+        self.dry_run_mode = False
+        self.debug = False
+        self.no_cleanup = False
 
         self.speech_speed = Config.DEFAULT_SPEECH_SPEED
         self.speech_volume_factor = Config.DEFAULT_SPEECH_VOLUME_FACTOR
@@ -116,6 +123,7 @@ class Config(object):
                     raise ValueError('List cannot be empty')
                 value = value[0]
 
+            # noinspection PyCompatibility
             if not isinstance(value, basestring):
                 value = str(value)
 
@@ -134,9 +142,6 @@ class Config(object):
     def tick_format(self, value):
         value = self.__get_as_string(value)
         if value is not None:
-            if value == '':
-                raise ValueError('Invalid tick format')
-
             self.__tick_format = value
 
     @property
@@ -161,7 +166,7 @@ class Config(object):
         value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
-                raise ValueError('Tick Interval value cannot be shorter than 1 minute')
+                raise ValueError('Tick interval value cannot be shorter than 1 minute')
 
             self.__tick_interval = value
 
@@ -176,7 +181,7 @@ class Config(object):
         value = Config.__get_as_float(value)
         if value is not None:
             if value <= 0:
-                raise ValueError('Volume Factor must be non zero positive value')
+                raise ValueError('Volume factor must be non zero positive value')
 
             self.__speech_volume_factor = value
 
@@ -203,9 +208,6 @@ class Config(object):
     def title_format(self, value):
         value = Config.__get_as_string(value)
         if value is not None:
-            if value == '':
-                raise ValueError('Invalid title format')
-
             self.__title_format = value
 
     # *****************************************************************************************************************
@@ -276,7 +278,7 @@ class Config(object):
         config_file_full = os.path.expanduser(file_name)
 
         if os.path.isfile(config_file_full):
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             # custom optionxform prevents keys from being lower-cased (default implementation) as CaSe matters for us
             config.optionxform = str
 

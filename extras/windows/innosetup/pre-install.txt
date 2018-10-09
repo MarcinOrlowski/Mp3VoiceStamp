@@ -1,0 +1,4 @@
+Athletes' companion: add synthetized voice overlay with various info and on-going timer to your audio files 
+
+For more details see https://github.com/MarcinOrlowski/Mp3VoiceStamp
+

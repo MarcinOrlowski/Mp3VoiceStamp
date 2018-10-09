@@ -4,7 +4,7 @@
 
  MP3 Voice Stamp
 
- Athletes' companion: add synthetized voice overlay with various
+ Athletes' companion: adds synthetized voice overlay with various
  info and on-going timer to your audio files
 
  Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
@@ -14,6 +14,8 @@
 """
 
 from __future__ import print_function
+# noinspection PyCompatibility
+from past.builtins import basestring
 
 import os
 import sys
@@ -22,7 +24,7 @@ import re
 
 
 class Util(object):
-    quiet = True
+    quiet = False
 
     @staticmethod
     def print_no_lf(message, quiet=None):
@@ -39,39 +41,46 @@ class Util(object):
             quiet = Util.quiet
 
         if not quiet:
-            print(message)
+            if isinstance(message, list):
+                for entry in message:
+                    print(entry)
+            else:
+                print(message)
+
+    @staticmethod
+    def print_error(message='', quiet=None):
+        Util.print('*** {}'.format(str(message)), quiet)
 
     @staticmethod
     def abort(message=None):
         if message is not None:
-            print('*** {}'.format(message))
+            Util.print_error(message)
         if message is None:
             print('*** Aborted')
         sys.exit(1)
 
     @staticmethod
-    def key_to_label(key):
-        tmp = key.replace('_', ' ')
-        return tmp[0:1].upper() + tmp[1:]
-
-    @staticmethod
-    def execute_rc(cmd_list, working_dir=None):
-        rc, stdout, err = Util.execute(cmd_list, working_dir)
+    def execute_rc(cmd_list, working_dir=None, debug=False):
+        rc, _, _ = Util.execute(cmd_list, working_dir, debug)
         return rc
 
     @staticmethod
-    def execute(cmd_list, working_dir=None):
+    def execute(cmd_list, working_dir=None, debug=False):
         """Executes commands from cmd_list changing CWD to working_dir.
 
         Args:
           cmd_list: list with command i.e. ['g4', '-option', ...]
           working_dir: if not None working directory is set to it for cmd exec
+          debug: if True, prints executed command string
 
         Returns: rc of executed command (usually 0 == success)
         """
         if working_dir:
             old_cwd = os.getcwd()
             os.chdir(working_dir)
+
+        if debug:
+            print('Executing: {}'.format(' '.join(cmd_list)))
 
         p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         stdout, err = p.communicate(None)
@@ -103,28 +112,18 @@ class Util(object):
         return rc, stdout.splitlines(), err.splitlines()
 
     @staticmethod
-    def print_info(info_dict, title=None, quiet=None):
-        from itertools import imap
-
-        if quiet is None:
-            quiet = Util.quiet
-
-        if title is not None:
-            Util.print(title, quiet)
-            Util.print('=' * len(title), quiet)
-        # print out what we collected
-        label_len = max(imap(len, info_dict))
-
-        for key, value in info_dict.items():
-            Util.print('  %*s: %s' % (label_len, Util.key_to_label(key), value), quiet)
-        Util.print(quiet=quiet)
-
-    @staticmethod
     def which(program):
+        """Looks for given file (usually binary, executable) in known locations, incl. PATH
+
+        Args:
+            :program
+
+        Returns full path to known location of given executable or None
+        """
         def is_exe(full_path):
             return os.path.isfile(full_path) and os.access(full_path, os.X_OK)
 
-        fpath, fname = os.path.split(program)
+        fpath, _ = os.path.split(program)
         if fpath:
             if is_exe(program):
                 return program
@@ -137,33 +136,42 @@ class Util(object):
         return None
 
     @staticmethod
-    def check_env():
-        """Checks if all external tools we need are already available and in $PATH
-        """
-        tools = ['ffmpeg', 'normalize-audio', 'espeak', 'sox']
-        for tool in tools:
-            if Util.which(tool) is None:
-                Util.abort('"{}" not found. See README.md for details.'.format(tool))
-
-    # noinspection PyMethodMayBeStatic
-    @staticmethod
     def prepare_for_speak(text):
         """ Tries to process provided text for more natural sound when spoken, i.e.
             "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
             We also replace '-' by coma, to enforce small pause in spoken text
         """
-        parts_in = re.sub(' +', ' ', text).replace('-', ',').split(' ')
-        parts_out = []
-        for part in parts_in:
-            match = re.match('[0-9]{2,}', part)
-            if match is not None:
-                part = str(int(part))
-            parts_out.append(part)
 
-        return ' '.join(parts_out)
+        def strip_leading_zeros(re_match):
+            return str(int(re_match.group(0)))
+
+        return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ',')).strip()
 
     @staticmethod
-    def string_format(fmt, placeholders):
+    def merge_dicts(dict1, dict2):
+        """Merge two dictionaries
+
+        :type dict1: dict
+        :type dict2: dict
+        """
+        res = dict2.copy()
+        res.update(dict1)
+
+        return res
+
+    @staticmethod
+    def process_placeholders(fmt, placeholders):
+        """
+
+        :param fmt:
+        :param placeholders:
+
+        :type fmt: basestring
+        :type placeholders: dict
+
+        :return:
+        """
+        # noinspection PyCompatibility
         if not isinstance(fmt, basestring):
             raise ValueError('Format must be a string, {} given'.format(type(fmt)))
         if not isinstance(placeholders, dict):
@@ -173,3 +181,10 @@ class Util(object):
             fmt = fmt.replace('{' + key + '}', str(val))
 
         return fmt
+
+    @staticmethod
+    def split_file_name(file_name):
+        base, ext = os.path.splitext(os.path.basename(file_name))
+        ext = ext[1:] if ext[0:1] == '.' else ext
+
+        return base, ext

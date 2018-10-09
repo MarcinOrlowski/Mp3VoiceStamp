@@ -4,7 +4,7 @@
 
  MP3 Voice Stamp
 
- Athletes' companion: add synthetized voice overlay with various
+ Athletes' companion: adds synthetized voice overlay with various
  info and on-going timer to your audio files
 
  Copyright ©2018 Marcin Orlowski <mail [@] MarcinOrlowski.com>
@@ -16,14 +16,18 @@
 from __future__ import print_function
 
 import re
-from util import Util
+
+from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.tools import Tools
 
 
 class Audio(object):
 
-    @staticmethod
-    def calculate_rms_amplitude(wav_file):
-        """Calls SOX to get the RMS amlitude of WAV file
+    def __init__(self, tools):
+        self.__tools = tools
+
+    def calculate_rms_amplitude(self, wav_file):
+        """Calls SOX to get the RMS amplitude of WAV file
 
         Args:
             :wav_file
@@ -31,7 +35,7 @@ class Audio(object):
         Returns:
             float
         """
-        src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
+        src_amplitude_cmd = [self.__tools.get_tool(Tools.KEY_SOX), wav_file, '-n', 'stat']
         rc, _, err = Util.execute(src_amplitude_cmd)
         if rc != 0:
             raise RuntimeError('Failed to calculate RMS amplitude of "{}"'.format(wav_file))
@@ -41,20 +45,21 @@ class Audio(object):
                        in range(0, len(err))}
         return float(sox_results['rms_amplitude'])
 
-    @staticmethod
-    def adjust_wav_amplitude(wav_file, rms_amplitude):
+    def adjust_wav_amplitude(self, wav_file, rms_amplitude):
         """Calls normalize-audio to adjust amplitude of WAV file
 
         Args:
             :wav_file
             :rms_amplitude
         """
-        voice_gain_cmd = ['normalize-audio', '-a', str(rms_amplitude), wav_file]
+        if rms_amplitude > 1.0:
+            rms_amplitude = 1.0
+
+        voice_gain_cmd = [self.__tools.get_tool(Tools.KEY_NORMALIZE), '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 
-    @staticmethod
-    def mix_wav_tracks(file_out, encoding_quality, wav_files):
+    def mix_wav_tracks(self, file_out, encoding_quality, wav_files):
         """Mixes given WAV tracks together
 
         Args:
@@ -62,7 +67,7 @@ class Audio(object):
             :encoding_quality LAME encoder quality parameter
             :wav_files list of WAV files to mix
         """
-        merge_cmd = ['ffmpeg', '-y']
+        merge_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-y']
         _ = [merge_cmd.extend(['-i', wav]) for wav in wav_files]
         merge_cmd.extend([
             '-filter_complex', 'amerge',

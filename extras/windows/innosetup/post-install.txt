@@ -1,0 +1,5 @@
+Please see USAGE section on project page https://github.com/MarcinOrlowski/Mp3VoiceStamp for usage examples and documentation.
+
+NOTE: This installers configures certain environmental variables, therefore you would need to open new CMD window to use this application
+as the changes will not be detected by currently active CMD sessions (if you have any).
+
