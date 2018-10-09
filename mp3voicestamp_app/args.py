@@ -14,6 +14,7 @@
 """
 
 import argparse
+import glob
 from argparse import RawDescriptionHelpFormatter
 
 from mp3voicestamp_app.config import Config
@@ -154,7 +155,10 @@ class Args(object):
 
         config.title_format = args.title_format
 
-        config.files_in = args.files_in
+        # we also support globing (as Windows' cmd is lame as usual)
+        config.files_in = []
+        if args.files_in is not None:
+            _ = [config.files_in.extend(glob.glob(file_in)) for file_in in args.files_in]
 
         config.file_out = args.file_out
         config.file_out_format = args.file_out_format

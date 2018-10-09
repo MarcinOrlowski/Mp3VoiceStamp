@@ -21,6 +21,7 @@ dev
  * Default title format is now `{title} {config_name}`
  * Uses temp file for MP3 encoding for safe abort even if that file is expected to overwrite existing one
  * `normalize` tools is now properly invoked on Windows
+ * Supports file name globing (useful on Windows, with lame CMD)
  
 v1.1.0 (2018-10-04)
 -------------------
