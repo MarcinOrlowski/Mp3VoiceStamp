@@ -11,22 +11,28 @@
 ;
 ; Expected source tree layout:
 ; --------------------------------
-; X:\mp3\
-;      icon.ico          
-;      tools\
-;        sox\
-;          sox.exe
-;          *.dll
-;        espeak\
-;          espeak-data\
-;          espeak.exe
-;        bin\
-;          ffmpeg.exe
-;          normalize.exe
-;      mp3voicestamp_app\
-;        dist\
-;          mp3voicestamp\
-;            (output from pyinstaller)
+; [root]
+;    icon.ico          
+;    installer-small-image.bmp
+;    installer-big-image.bmp
+;    post-install.txt
+;    pre-install.txt
+;    license.txt
+;
+;    tools\
+;      sox\
+;        sox.exe
+;        *.dll
+;      espeak\
+;        espeak-data\
+;        espeak.exe
+;      bin\
+;        ffmpeg.exe
+;        normalize.exe
+;    mp3voicestamp_app\
+;      dist\
+;        mp3voicestamp\
+;          (output from pyinstaller)
 
 
 #define MyAppName "Mp3VoiceStamp"
@@ -51,9 +57,22 @@ DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=Mp3VoiceStamp-v{#MyAppVersion}-Setup
-SetupIconFile=X:\mp3\icon.ico
+SetupIconFile=innosetup\icon.ico
 Compression=lzma
 SolidCompression=yes
+InfoBeforeFile=innosetup\pre-install.txt
+InfoAfterFile=innosetup\post-install.txt
+
+LicenseFile=innosetup\license.txt
+
+; http://www.jrsoftware.org/ishelp/index.php?topic=setup_wizardimagefile
+; 55x55 px, 8-bit (no colorspace)
+WizardSmallImageFile=innosetup\installer-small-image.bmp
+
+; 164×314 px, 8-bit (no colorspace)
+; NOTE: when saving from GIMP, enable "Do not write color space info" in 
+; "Compatibility" section of BMP exporter or it won't "work" in InnoSetup!
+WizardImageFile=innosetup\installer-big-image.bmp
 
 ; Tell Windows Explorer to reload the environment
 ChangesEnvironment=yes
@@ -73,9 +92,9 @@ Root: HKCU; Subkey: "Environment"; ValueType:string; ValueName:"ESPEAK_DATA_PATH
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-[Types]
-Name: "full"; Description: "Full installation"
-Name: "custom"; Description: "Custom installation"; Flags: iscustom
+;[Types]
+;Name: "full"; Description: "Full installation"
+;Name: "custom"; Description: "Custom installation"; Flags: iscustom
 
 ;[Components]
 ;Name: "program"; Description: "Program files"; Types: full custom; Flags: fixed
@@ -83,19 +102,19 @@ Name: "custom"; Description: "Custom installation"; Flags: iscustom
 ;Name: "espeak"; Description: "eSpeak voice synthetizer"; Types: full custom
 
 [Files]
-;Source: "X:\mp3\mp3voicestamp_app\dist\mp3voicestamp\mp3voicestamp.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: program
-Source: "X:\mp3\mp3voicestamp_app\dist\mp3voicestamp\mp3voicestamp.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "X:\mp3\mp3voicestamp_app\dist\mp3voicestamp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs 
-Source: "X:\mp3\tools\bin\*"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "mp3voicestamp_app\dist\mp3voicestamp\mp3voicestamp.exe"; DestDir: "{app}"; Flags: ignoreversion; Components: program
+Source: "mp3voicestamp_app\dist\mp3voicestamp\mp3voicestamp.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "mp3voicestamp_app\dist\mp3voicestamp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs 
+Source: "tools\bin\*"; DestDir: "{app}"; Flags: ignoreversion
 
 ; espeak 1.48.04
-;Source: "X:\mp3\tools\installers\setup_espeak-1.48.04.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion uninsremovereadonly; Components: espeak
-;Source: "X:\mp3\tools\espeak\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: espeak 
-Source: "X:\mp3\tools\espeak\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+;Source: "tools\installers\setup_espeak-1.48.04.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall ignoreversion uninsremovereadonly; Components: espeak
+;Source: "tools\espeak\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs; Components: espeak 
+Source: "tools\espeak\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 ; sox 14.4.2
-;Source: "X:\mp3\tools\sox\*"; DestDir: "{app}"; Flags: ignoreversion; Components: sox
-Source: "X:\mp3\tools\sox\*"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "tools\sox\*"; DestDir: "{app}"; Flags: ignoreversion; Components: sox
+Source: "tools\sox\*"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
