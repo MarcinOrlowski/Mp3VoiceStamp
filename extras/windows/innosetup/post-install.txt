@@ -1,5 +1,6 @@
-Please see USAGE section on project page https://github.com/MarcinOrlowski/Mp3VoiceStamp for usage examples and documentation.
+Thanks for installing Mp3VoiceStamp! You are now ready to go! 
 
-NOTE: This installers configures certain environmental variables, therefore you would need to open new CMD window to use this application
-as the changes will not be detected by currently active CMD sessions (if you have any).
+New to command line tools? No worries! I got you covered! Please see USAGE section on project page https://github.com/MarcinOrlowski/Mp3VoiceStamp for detailed usage examples and documentation. It is really easy to use tool! Enjoy!
+
+NOTE: This installer configures certain environmental variables. If you have any CMD session active during the installation, said changes will NOT be reflected and the app will not be available in opened CMD windows. To start using Mp3VoiceStamp, simply open a new CMD window and type "mp3voicestamp" + ENTER
 
