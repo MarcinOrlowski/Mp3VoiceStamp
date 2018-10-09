@@ -12,12 +12,13 @@
 ; Expected source tree layout:
 ; --------------------------------
 ; [root]
-;    icon.ico          
-;    installer-small-image.bmp
-;    installer-big-image.bmp
-;    post-install.txt
-;    pre-install.txt
-;    license.txt
+;    innosetup\
+;      icon.ico          
+;      installer-small-image.bmp
+;      installer-big-image.bmp
+;      post-install.txt
+;      pre-install.txt
+;      license.txt
 ;
 ;    tools\
 ;      sox\
