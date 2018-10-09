@@ -125,11 +125,11 @@
     mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{minutes} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
- and save it all to `new-config.ini` file which you can then reuse as usuall using said `--config` option.
+ and save it all to `new-config.ini` file which you can then reuse as usual using said `--config` option.
  
 ## Formatting spoken messages ##
 
- You can define how both track title and clock tickes should be spoken by using configuring the format, 
+ You can define how both track title and clock tickets should be spoken by using configuring the format, 
  using supported placeholders. Each placeholder uses `{name}` format and is then substituted by either
  the correct value, or if no value can be obtained (i.e. MP3 tags are not available) by empty string.
  You can combine multiple placeholders as well as enter regular text.

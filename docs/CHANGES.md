@@ -10,7 +10,7 @@ dev
  * Improved Python3 code compatibility
  * Added `--dry-run` mode
  * Added support for `{file_name}` placeholder in title format
- * Fixed speach preprocessing dropping some parts under certain conditions
+ * Fixed speech preprocessing dropping some parts under certain conditions
  * Default speech volume factor is now set to `2`
  * Copies some ID3 tags from source audio file to voices-tamped MP3 one
  * Added `{track_number}` to title format placeholders
