@@ -18,6 +18,7 @@ from __future__ import print_function
 import os
 
 from mutagen.mp3 import MP3
+# noinspection PyProtectedMember
 from mutagen.id3 import ID3, ID3NoHeaderError, TIT2, TALB, TPE1, TPE2, TCOM, TSSE, TOFN, TRCK
 
 from mp3voicestamp_app.const import *

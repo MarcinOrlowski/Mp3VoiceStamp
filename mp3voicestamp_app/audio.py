@@ -16,15 +16,17 @@
 from __future__ import print_function
 
 import re
-import sys
 
 from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.tools import Tools
 
 
 class Audio(object):
 
-    @staticmethod
-    def calculate_rms_amplitude(wav_file):
+    def __init__(self, tools):
+        self.__tools = tools
+
+    def calculate_rms_amplitude(self, wav_file):
         """Calls SOX to get the RMS amplitude of WAV file
 
         Args:
@@ -33,7 +35,7 @@ class Audio(object):
         Returns:
             float
         """
-        src_amplitude_cmd = ['sox', wav_file, '-n', 'stat']
+        src_amplitude_cmd = [self.__tools.get_tool(Tools.KEY_SOX), wav_file, '-n', 'stat']
         rc, _, err = Util.execute(src_amplitude_cmd)
         if rc != 0:
             raise RuntimeError('Failed to calculate RMS amplitude of "{}"'.format(wav_file))
@@ -43,8 +45,7 @@ class Audio(object):
                        in range(0, len(err))}
         return float(sox_results['rms_amplitude'])
 
-    @staticmethod
-    def adjust_wav_amplitude(wav_file, rms_amplitude):
+    def adjust_wav_amplitude(self, wav_file, rms_amplitude):
         """Calls normalize-audio to adjust amplitude of WAV file
 
         Args:
@@ -54,16 +55,11 @@ class Audio(object):
         if rms_amplitude > 1.0:
             rms_amplitude = 1.0
 
-        normalize_bin = 'normalize-audio'
-        if sys.platform == 'win32':
-            normalize_bin = 'normalize.exe'
-
-        voice_gain_cmd = [normalize_bin, '-a', str(rms_amplitude), wav_file]
+        voice_gain_cmd = [self.__tools.get_tool(Tools.KEY_NORMALIZE), '-a', str(rms_amplitude), wav_file]
         if Util.execute_rc(voice_gain_cmd) != 0:
             raise RuntimeError('Failed to adjust voice overlay volume')
 
-    @staticmethod
-    def mix_wav_tracks(file_out, encoding_quality, wav_files):
+    def mix_wav_tracks(self, file_out, encoding_quality, wav_files):
         """Mixes given WAV tracks together
 
         Args:
@@ -71,7 +67,7 @@ class Audio(object):
             :encoding_quality LAME encoder quality parameter
             :wav_files list of WAV files to mix
         """
-        merge_cmd = ['ffmpeg', '-y']
+        merge_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-y']
         _ = [merge_cmd.extend(['-i', wav]) for wav in wav_files]
         merge_cmd.extend([
             '-filter_complex', 'amerge',

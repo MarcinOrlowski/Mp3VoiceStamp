@@ -67,6 +67,7 @@ class Util(object):
         Args:
           cmd_list: list with command i.e. ['g4', '-option', ...]
           working_dir: if not None working directory is set to it for cmd exec
+          debug: if True, prints executed command string
 
         Returns: rc of executed command (usually 0 == success)
         """
@@ -77,7 +78,7 @@ class Util(object):
         if debug:
             print('Executing: {}'.format(' '.join(cmd_list)))
 
-        p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+        p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         stdout, err = p.communicate(None)
         rc = p.returncode
 
@@ -108,6 +109,13 @@ class Util(object):
 
     @staticmethod
     def which(program):
+        """Looks for given file (usually binary, executable) in known locations, incl. PATH
+
+        Args:
+            :program
+
+        Returns full path to known location of given executable or None
+        """
         def is_exe(full_path):
             return os.path.isfile(full_path) and os.access(full_path, os.X_OK)
 
@@ -122,25 +130,6 @@ class Util(object):
                     return exe_file
 
         return None
-
-    @staticmethod
-    def check_env():
-        """Checks if all external tools we need are already available and in $PATH
-        """
-        tools = [
-            'ffmpeg',
-            'espeak',
-            'sox',
-        ]
-
-        normalize = 'normalize' if sys.platform == 'win32' else 'normalize-audio'
-        tools.append(normalize)
-
-        for tool in tools:
-            if sys.platform == 'win32':
-                tool += '.exe'
-            if Util.which(tool) is None:
-                Util.abort('"{}" not found. See documentation for installation guidelines.'.format(tool))
 
     @staticmethod
     def prepare_for_speak(text):

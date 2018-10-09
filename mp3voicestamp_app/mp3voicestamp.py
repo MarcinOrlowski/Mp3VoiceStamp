@@ -20,6 +20,7 @@ from mp3voicestamp_app.args import Args
 from mp3voicestamp_app.util import Util
 from mp3voicestamp_app.config import Config
 from mp3voicestamp_app.job import Job
+from mp3voicestamp_app.tools import Tools
 
 from mutagen import MutagenError
 
@@ -37,7 +38,8 @@ class App(object):
             args = Args.parse_args(config)
 
             # check runtime environment
-            Util.check_env()
+            tools = Tools()
+            tools.check_env()
 
             if args.config_save_name is not None:
                 config.save(args.config_save_name)
@@ -54,7 +56,7 @@ class App(object):
 
                 for file_name in config.files_in:
                     try:
-                        Job(config).voice_stamp(file_name)
+                        Job(config, tools).voice_stamp(file_name)
                     except MutagenError as ex:
                         if not config.debug:
                             Util.print_error(ex)
