@@ -186,7 +186,7 @@ class Mp3FileInfo(object):
             # Adding ID3 header
             tags = ID3()
 
-        tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (mp3voicestamp)'.format(self.title))
+        tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (Mp3VoiceStamp)'.format(self.title))
         tags[self.TAG_ALBUM_TITLE] = TALB(encoding=3, text=self.album_title)
         tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
         tags[self.TAG_ARTIST] = TPE1(encoding=3, text=self.artist)
