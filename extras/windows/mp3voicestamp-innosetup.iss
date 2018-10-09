@@ -67,12 +67,11 @@ InfoAfterFile=innosetup\post-install.txt
 LicenseFile=innosetup\license.txt
 
 ; http://www.jrsoftware.org/ishelp/index.php?topic=setup_wizardimagefile
-; 55x55 px, 8-bit (no colorspace)
-WizardSmallImageFile=innosetup\installer-small-image.bmp
-
-; 164×314 px, 8-bit (no colorspace)
 ; NOTE: when saving from GIMP, enable "Do not write color space info" in 
 ; "Compatibility" section of BMP exporter or it won't "work" in InnoSetup!
+; 55x55 px, 8-bit (no colorspace)
+WizardSmallImageFile=innosetup\installer-small-image.bmp
+; 164×314 px, 8-bit (no colorspace)
 WizardImageFile=innosetup\installer-big-image.bmp
 
 ; Tell Windows Explorer to reload the environment
