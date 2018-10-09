@@ -23,7 +23,8 @@
 ### Windows ###
 
  Since v1.2.0, binary installer for Windows is also available for download on project's 
- [Releases](https://github.com/MarcinOrlowski/Mp3VoiceStamp/releases) page. 
+ [Releases](https://github.com/MarcinOrlowski/Mp3VoiceStamp/releases) page, courtesy of
+ JRSoftware's [InnoSetup](http://www.jrsoftware.org/isinfo.php).
  
  Please note there still is no GUI for the tool, and you will need to face Command Line to use it, but fear not - 
  that's pretty much trivial and already [covered in details](USAGE.md) in usage examples.
