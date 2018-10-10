@@ -5,7 +5,8 @@
 
 @dev
 ----
- * Track annoucement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
+ * Track announcement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
+ * Disabled file globing unless made bullet proof
 
 v1.2.0 (2018-10-09)
 -------------------

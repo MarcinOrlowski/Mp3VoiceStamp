@@ -14,7 +14,6 @@
 """
 
 import argparse
-import glob
 from argparse import RawDescriptionHelpFormatter
 
 from mp3voicestamp_app.config import Config
@@ -157,8 +156,12 @@ class Args(object):
 
         # we also support globing (as Windows' cmd is lame as usual)
         config.files_in = []
-        if args.files_in is not None:
-            _ = [config.files_in.extend(glob.glob(file_in)) for file_in in args.files_in]
+        # ./mp3vs -i mp3/Olga\ Misty\ -\ Ocean\ Planet\ 086\ Part\ 1\ \[2018-08-06\]\ on\ Proton\ Radio.mp3
+        # fails
+        # if args.files_in is not None:
+        #   import glob
+        #   _ = [config.files_in.extend(glob.glob(file_in)) for file_in in args.files_in]
+        config.files_in = args.files_in
 
         config.file_out = args.file_out
         config.file_out_format = args.file_out_format
