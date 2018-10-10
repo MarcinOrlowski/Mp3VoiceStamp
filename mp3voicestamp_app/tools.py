@@ -16,7 +16,9 @@
 from __future__ import print_function
 
 import sys
+
 from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.log import Log
 
 
 class Tools(object):
@@ -54,7 +56,7 @@ class Tools(object):
         for key, tool in self.__tools.items():
             failed = False
             if Util.which(tool) is None:
-                Util.print("1: '{}' not found.".format(tool))
+                Log.e("'{}' not found.".format(tool))
 
             if failed:
                 Util.abort('Required tools not found. See documentation for installation guidelines.')

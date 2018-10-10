@@ -23,6 +23,7 @@ from mp3voicestamp_app.audio import Audio
 from mp3voicestamp_app.mp3_file_info import Mp3FileInfo
 from mp3voicestamp_app.util import Util
 from mp3voicestamp_app.tools import Tools
+from mp3voicestamp_app.log import Log
 
 
 class Job(object):
@@ -57,8 +58,7 @@ class Job(object):
 
         self.__tmp_dir = tempfile.mkdtemp()
 
-        if self.__config.debug:
-            print('Tmp dir: {}'.format(self.__tmp_dir))
+        Log.d('Tmp dir: {}'.format(self.__tmp_dir))
 
     def __cleanup(self):
         if not self.__config.no_cleanup:
@@ -134,7 +134,7 @@ class Job(object):
         result = True
 
         try:
-            Util.print('Processing "{}"'.format(mp3_file_name))
+            Log.level_push('Processing "{}"'.format(mp3_file_name))
             music_track = Mp3FileInfo(mp3_file_name)
 
             # some sanity checks first
@@ -164,7 +164,7 @@ class Job(object):
             track_title_to_speak = Util.prepare_for_speak(
                 Util.process_placeholders(self.__config.title_format,
                                           Util.merge_dicts(music_track.get_placeholders(), extras)))
-            Util.print('  Annouced as "{}"'.format(track_title_to_speak))
+            Log.i('Announced as "{}"'.format(track_title_to_speak))
 
             segments = [track_title_to_speak]
 
@@ -176,7 +176,7 @@ class Job(object):
                     segments.append(Util.prepare_for_speak(tick_string))
 
             if self.__config.dry_run_mode:
-                Util.print('  Duration: {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
+                Log.i('Duration: {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
 
             if not self.__config.dry_run_mode:
                 speech_wav_full = os.path.join(self.__tmp_dir, 'speech.wav')
@@ -195,9 +195,9 @@ class Job(object):
 
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
-            output_file_msg = '  Output file: "{}"'.format(file_out)
+            output_file_msg = 'Output file: "{}"'.format(file_out)
             if not self.__config.dry_run_mode:
-                Util.print_no_lf(output_file_msg)
+                Log.i(output_file_msg)
 
                 # noinspection PyProtectedMember
                 self.__tmp_mp3_file = os.path.join(os.path.dirname(file_out),
@@ -215,22 +215,23 @@ class Job(object):
 
                 os.rename(self.__tmp_mp3_file, file_out)
                 self.__tmp_mp3_file = None
-
-                Util.print('OK')
             else:
                 if os.path.exists(self.get_out_file_name(music_track)):
                     output_file_msg += ' *** TARGET FILE ALREADY EXISTS ***'
-                Util.print(output_file_msg)
-                Util.print()
+                Log.i([
+                    output_file_msg,
+                    '',
+                ])
 
         except RuntimeError as ex:
             if not self.__config.debug:
-                Util.print_error(ex)
+                Log.e(ex)
             else:
                 raise
             result = False
 
         finally:
+            Log.level_pop()
             self.__cleanup()
 
         return result
