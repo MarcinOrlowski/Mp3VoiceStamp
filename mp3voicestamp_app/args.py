@@ -110,10 +110,12 @@ class Args(object):
             help='Forces overwrite of existing output file.'
         )
         group.add_argument(
-            '--version', action='version',
-            version='{app} v{v} ({rd}): Mixes synthesised speech info with your music files'.format(app=APP_NAME,
-                                                                                                    v=VERSION,
-                                                                                                    rd=RELEASE_DATE))
+            '-v', '--verbose', action='store_true', dest='verbose',
+            help='Enables verbose output.'
+        )
+        group.add_argument(
+            '--version', action='version', version='{app} v{v} ({rd})'.format(app=APP_NAME, v=VERSION, rd=RELEASE_DATE)
+        )
 
         group = parser.add_argument_group('Developer tools')
         group.add_argument(
@@ -144,6 +146,7 @@ class Args(object):
         config.dry_run_mode = args.dry_run_mode
         config.debug = args.debug
         config.no_cleanup = args.no_cleanup
+        config.verbose = args.verbose
 
         config.speech_volume_factor = args.speech_volume_factor
         config.speech_speed = args.speech_speed

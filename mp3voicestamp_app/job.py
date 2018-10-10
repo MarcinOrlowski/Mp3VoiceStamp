@@ -165,6 +165,7 @@ class Job(object):
                 Util.process_placeholders(self.__config.title_format,
                                           Util.merge_dicts(music_track.get_placeholders(), extras)))
             Log.i('Announced as "{}"'.format(track_title_to_speak))
+            Log.v('Announcement format "{}"'.format(self.__config.title_format))
 
             segments = [track_title_to_speak]
 
@@ -176,7 +177,8 @@ class Job(object):
                     segments.append(Util.prepare_for_speak(tick_string))
 
             if self.__config.dry_run_mode:
-                Log.i('Duration: {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
+                Log.i('Duration {} mins, tick count: {}'.format(music_track.duration, (len(segments) - 1)))
+                Log.v('Tick format "{}"'.format(self.__config.tick_format))
 
             if not self.__config.dry_run_mode:
                 speech_wav_full = os.path.join(self.__tmp_dir, 'speech.wav')
@@ -195,9 +197,9 @@ class Job(object):
 
             # mix all stuff together
             file_out = self.get_out_file_name(music_track)
-            output_file_msg = 'Output file: "{}"'.format(file_out)
+
             if not self.__config.dry_run_mode:
-                Log.i(output_file_msg)
+                Log.i('Writing: "{}"'.format(file_out))
 
                 # noinspection PyProtectedMember
                 self.__tmp_mp3_file = os.path.join(os.path.dirname(file_out),
@@ -216,12 +218,12 @@ class Job(object):
                 os.rename(self.__tmp_mp3_file, file_out)
                 self.__tmp_mp3_file = None
             else:
+                output_file_msg = 'Output file "{}"'.format(file_out)
                 if os.path.exists(self.get_out_file_name(music_track)):
                     output_file_msg += ' *** TARGET FILE ALREADY EXISTS ***'
-                Log.i([
-                    output_file_msg,
-                    '',
-                ])
+                Log.i(output_file_msg)
+                Log.v('Output file name format "{}"'.format(self.__config.file_out_format))
+                Log.i('')
 
         except RuntimeError as ex:
             if not self.__config.debug:

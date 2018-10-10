@@ -34,13 +34,16 @@ class App(object):
 
         config = Config()
 
-        Log.i(['{app} v{v} by Marcin Orlowski <{e}>'.format(app=APP_NAME, v=VERSION, e=APP_EMAIL),
-               APP_URL,
-               ''
-               ])
         try:
             # parse common line arguments
             args = Args.parse_args(config)
+
+            Log.i(['{app} v{v} by Marcin Orlowski <{e}>'.format(app=APP_NAME, v=VERSION, e=APP_EMAIL),
+                   APP_URL,
+                   ''
+                   ])
+
+            Log.configure(config)
 
             # check runtime environment
             tools = Tools()

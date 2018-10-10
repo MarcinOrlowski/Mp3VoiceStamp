@@ -73,25 +73,27 @@ class Log(object):
     debug = False
     no_color = False
     quiet = False
+    skip_empty_lines = False
 
     VERBOSE_NONE = 0
     VERBOSE_NORMAL = 1
     VERBOSE_VERY = 2
 
     @classmethod
-    def configure(cls, verbose_level=VERBOSE_NORMAL, debug=False, no_color=False, quiet=False):
-        # verbose_level = Log.VERBOSE_NONE
-        # if args.verbose:
-        #     verbose_level = Log.VERBOSE_NORMAL
+    def configure(cls, config):
+        verbose_level = Log.VERBOSE_NONE
+        if config.verbose:
+            verbose_level = Log.VERBOSE_NORMAL
         # if args.very_verbose:
         #     verbose_level = Log.VERBOSE_VERY
-
         cls.verbose_level = verbose_level
-        cls.debug = debug
-        cls.no_color = no_color
-        cls.quiet = quiet
 
-        if debug and os.getenv('PYTHONDONTWRITEBYTECODE') is None:
+        cls.skip_empty_lines = False
+        cls.debug = config.debug
+        cls.no_color = False
+        cls.quiet = False
+
+        if config.debug and os.getenv('PYTHONDONTWRITEBYTECODE') is None:
             Log.e([
                 'Creation of *.pyc files is enabled in your current env.',
                 'This affects debug() calls and will produce invalid',
@@ -318,7 +320,9 @@ class Log(object):
 
             postfix = Log.__get_stacktrace_string()
             for message in Log.__to_list(Log.__dict_to_list(messages, '%green%')):
-                if message:
+
+                use_message = False if Log.skip_empty_lines and message else True
+                if use_message:
                     message = Log.__format_log_line(message, color, postfix)
                     Log.__log_raw(message, ignore_quiet_switch, add_to_history)
                     postfix = ''
