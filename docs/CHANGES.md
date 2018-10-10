@@ -1,4 +1,13 @@
+
+![MP3 Voice Stamp Logo](img/banner.png)
+
 ## Changelog ##
+
+v1.2.1 (2018-10-10)
+-------------------
+ * Track announcement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
+ * Disabled file globing unless made bullet proof
+ * Added `--verbose` mode and some extra info
 
 v1.2.0 (2018-10-09)
 -------------------

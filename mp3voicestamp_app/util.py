@@ -22,39 +22,41 @@ import sys
 from subprocess import Popen, PIPE
 import re
 
+from mp3voicestamp_app.log import Log
+
 
 class Util(object):
     quiet = False
 
-    @staticmethod
-    def print_no_lf(message, quiet=None):
-        if quiet is None:
-            quiet = Util.quiet
+    # @staticmethod
+    # def print_no_lf(message, quiet=None):
+    #     if quiet is None:
+    #         quiet = Util.quiet
+    #
+    #     if not quiet:
+    #         print('{}: '.format(message), end='')
+    #         sys.stdout.flush()
+    #
+    # @staticmethod
+    # def print(message='', quiet=None):
+    #     if quiet is None:
+    #         quiet = Util.quiet
+    #
+    #     if not quiet:
+    #         if isinstance(message, list):
+    #             for entry in message:
+    #                 print(entry)
+    #         else:
+    #             print(message)
 
-        if not quiet:
-            print('{}: '.format(message), end='')
-            sys.stdout.flush()
-
-    @staticmethod
-    def print(message='', quiet=None):
-        if quiet is None:
-            quiet = Util.quiet
-
-        if not quiet:
-            if isinstance(message, list):
-                for entry in message:
-                    print(entry)
-            else:
-                print(message)
-
-    @staticmethod
-    def print_error(message='', quiet=None):
-        Util.print('*** {}'.format(str(message)), quiet)
+    # @staticmethod
+    # def print_error(message='', quiet=None):
+    #     Util.e('*** {}'.format(str(message)), quiet)
 
     @staticmethod
     def abort(message=None):
         if message is not None:
-            Util.print_error(message)
+            Log.e(message)
         if message is None:
             print('*** Aborted')
         sys.exit(1)
@@ -79,31 +81,36 @@ class Util(object):
             old_cwd = os.getcwd()
             os.chdir(working_dir)
 
-        if debug:
-            print('Executing: {}'.format(' '.join(cmd_list)))
+        Log.d('Executing: {}'.format(' '.join(cmd_list)))
 
         p = Popen(cmd_list, stdin=PIPE, stdout=PIPE, stderr=PIPE)
         stdout, err = p.communicate(None)
         rc = p.returncode
 
         if rc != 0:
-            print('Command')
-            print('=======')
-            print(' '.join(cmd_list))
+            Log.i([
+                'Command',
+                '=======',
+                ' '.join(cmd_list),
+            ])
 
             if stdout.splitlines():
-                print('Command output (stdout)')
-                print('=======================')
-                _ = [print('%r' % line) for line in stdout.splitlines()]
+                Log.i([
+                    'Command output (stdout)',
+                    '=======================',
+                ])
+                _ = [Log.i('%r' % line) for line in stdout.splitlines()]
 
             if err.splitlines():
-                print('Command output (stderr)')
-                print('=======================')
-                _ = [print('%r' % line) for line in err.splitlines()]
+                Log.i([
+                    'Command output (stderr)',
+                    '=======================',
+                ])
+                _ = [Log.i('%r' % line) for line in err.splitlines()]
 
         # if rc != 0:
         #     print('Command output (stderr)')
-        #     [print('%r' % line) for line in err.splitlines()]
+        #     [Log.i('%r' % line) for line in err.splitlines()]
 
         if working_dir:
             # noinspection PyUnboundLocalVariable
@@ -120,6 +127,7 @@ class Util(object):
 
         Returns full path to known location of given executable or None
         """
+
         def is_exe(full_path):
             return os.path.isfile(full_path) and os.access(full_path, os.X_OK)
 

@@ -62,6 +62,7 @@ class Config(object):
         self.dry_run_mode = False
         self.debug = False
         self.no_cleanup = False
+        self.verbose = False
 
         self.speech_speed = Config.DEFAULT_SPEECH_SPEED
         self.speech_volume_factor = Config.DEFAULT_SPEECH_VOLUME_FACTOR
