@@ -159,7 +159,7 @@ class Util(object):
     def separate_chars(text, sep=' '):
         result = ''
         text = str(text).strip()
-        if len(text) > 0:
+        if text:
             for i in range(0, len(text)):
                 result += text[i:i+1] + sep
 
