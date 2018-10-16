@@ -11,47 +11,45 @@
 
 ## Examples ##
 
- The simplest use case is like this:
+ The simplest use case:
 
     mp3voicestamp -i music.mp3
 
  which would produce file named `music (mp3voicestamp).mp3` with audio overlay added to it with track title
- and time stamps every 5 minute. You can also provide own name for result file using `--out`:
+ and time stamps every 5 minutes. You can also provide own name for the result file using `--out` switch:
  
     mp3voicestamp -i music.mp3 -o music_with_voice.mp3
 
- You can also process more than one file at once:
+ You can process more than one file at once:
  
     mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3
 
- When using multiple input files you can still use `--out` but in such case it must point to target folder
- (so you loose ability to manually specify target file name):
+ When using multiple input files you can still use `--out` but in such case it must point to the folder not a file:
  
     mp3voicestamp -i file1.mp3 file2.mp3 file3.mp3 -o my_folder
 
  You can change certain parameters, incl. frequency of tick announcer, or i.e. boost (or decrease) volume of voice
- overlay (relative to auto calculated volume level), change template for spoken track title or time announcements. 
+ overlay (relative to auto calculated volume level), change template for spoken track title or time announcements.
+ and so on. 
   
- Sample MP3 include with project was created with:
+ Sample MP3 included with this project was created with the following settings:
  
     mp3voicestamp --in music.mp3 --tick-offset 1 --tick-interval 1 --speech-volume 2
 
- or in short notation
+ All available options can be shown at any time using `--help` (or `-h`):
  
-     mp3voicestamp -i music.mp3 -to 1 -ti 1 -sv 2
- 
- See all available options with `--help` (or `-h`).
+    mp3voicestamp --help
 
 ## Dry-run mode ##
 
- For testing purposes, there's dry-run mode available as well, which is extremely useful with batch processing.
- By adding `--dry-run` to your command line arguments, you make the app process all the files, but instead
- of speaking, normalizing, mixing etc, it will just simulate this and print all the info you may be interested
- seeing as what will be the spoken title or how many ticks will be added to each file:
+ There's dry-run mode implemented, which is extremely useful esp. when doing batch processing of multiple files.
+ By adding `--dry-run` to your command line arguments, you tells it to process all the input files files as it
+ should, but no voice, normalizing, mixing steps would be executed nor the result files will be written. So you 
+ can see what would happen in regular mode, before starting:
  
     mp3voicestamp -i *.mp3 --dry-run
 
- would produce no result files, but the following output only:
+ would show you:
     
     Files to process: 2
     Title format: "{title}"
@@ -71,11 +69,10 @@
 
 ## Configuration files ##
 
- `Mp3VoiceStamp` supports configuration files, so you can easily create one with settings of your choice and
- then use your file instead of passing all custom values via command line switches. It can also save current
- configuration to a file so you can easily preserve your settings with no hassle.
+ `Mp3VoiceStamp` supports configuration files aka profiles. Each file can configures all or some runtime parameters,
+ then instead of using command line switches to tune up the tool, you tell it to read your config file.
  
- Configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
+ Said configuration file is plain text file following [INI file format](https://en.wikipedia.org/wiki/INI_file):
  
     [mp3voicestamp]
     file_out_format = "{name} (mp3voicestamp).{ext}"
@@ -90,17 +87,17 @@
     tick_offset = 5
     tick_interval = 5
 
- All keys are optional, so you can put just these you want to be custom. All other values will then fall back
- to defaults:
+ All entries are optional, and you can just put only those settings you want to be custom, using defaults for
+ all the others:
 
     [mp3voicestamp]
     tick_format = "{minutes} long minutes passed"
 
- To use config file specify path to the file with `--config` (or `-c`):
+ To use config file, just point to int with `--config` (or `-c`):
  
     mp3voicestamp -i music.mp3 -c my-settings.ini
 
- Additionally, command line arguments overshadow config file parameters. For example if you save the following 
+ Note that command line arguments always shadow config file parameters. For example, if you save the following 
  config file as your `config.ini`:
  
     [mp3voicestamp]
@@ -112,28 +109,37 @@
  
     mp3voicestamp -i music.mp3 -c config.ini --tick-offset 10
 
- then `tick offset` will be set to `10`, shadowing config file entry.
+ then `tick offset` will be set to `10`.
  
- Finally `[mp3voicestamp]` is a section header and must always be present in the file. You also add comments
- with use of `#` at beginning of comment line. See [example config file](../config/example.ini).
+ Finally keep in mind that `[mp3voicestamp]` is a section header and that thing **must always** be present in the file,
+ otherwise it won't be read. If you need to keeps some notes in your config file, use of `#` at beginning of 
+ the line to mark it as comment. See [example config file](../config/example.ini).
+ 
+    [mp3voicestamp]
+
+    # I want it to speak faster 
+    speech_speed = 200
+
  
  ### Saving configuration files ###
  
- You can use `--config-save` (`-cs`) option to dump current configuration state to a file for further reuse:
+ Instead of creating config file manually, you can use `--config-save` (`-cs`) option to dump current configuration
+ state of the app to a file:
  
     mp3voicestamp -cs new-config.ini
- 
+   
  More over you can combine saving with config loading and manual tweaks as well:
  
     mp3voicestamp -c old-config.ini --tick-offset 10 --tick-format "{minutes} passed" -cs new-config.ini
 
  Which would load `old-config.ini` file, apply `tick-offset` and `tick-template` from your command line arguments
- and save it all to `new-config.ini` file which you can then reuse as usual using said `--config` option.
+ and save it all to `new-config.ini` file which you can then tweak additionally or reuse as-is using `--config` option.
  
 ## Formatting spoken messages ##
 
- You can define how both track title and clock tickets should be spoken by using configuring the format, 
- using supported placeholders. Each placeholder uses `{name}` format and is then substituted by either
+ You can specify what should be said on your voice overlay for track announcement and time ticks. Dedicated options
+ allow you to both used plain text but also, obviously, provide bunch of placeholders that are replaced prior
+ speaking with the final value. Each placeholder uses `{key}` format and is then substituted by either
  the correct value, or if no value can be obtained (i.e. MP3 tags are not available) by empty string.
  You can combine multiple placeholders as well as enter regular text.
  
@@ -167,6 +173,6 @@
  
  If you want, you can also use any of the track title placeholders in tick format too!
  
- > ![Tip](img/tip-small.png) If you don't want to have ticks said, tick format to empty 
+ > ![Tip](img/tip-small.png) If you don't want to have ticks said, set tick format to empty 
  > string either in config or via command line argument `--tick-format ""`.
  

@@ -36,15 +36,16 @@
  or ID3 tags of your choice), then can keep speaking time passed at given intervals (each 5 minutes by default).
 
  > ![Tip!](docs/img/tip-small.png)
- > _while swimming is that while title announcement feature is just "useful thing" and nothing more, then the 
- > "time ticks" works more like your personal trainer and for me it adds some motivational bits to my swimming which 
- > is completely unexpected. It seems like it puts kind of subtle pressure so I actually swim more, trying to hear
- > next time "milestone" announced.  It's like some sort of gamification in swimming in practice... Interesting :)_
+ > _while the track title announcement feature is just "useful thing", the "time ticks" adds unexpected value
+ > and works more like your personal trainer For me it adds some motivational bits to my swimming which was
+ > not completely unexpected. It seems like it puts kind of subtle pressure so you actually swim more, trying to
+ > reach your next time "milestone" and hear it announced. It's like some sort of gamification in swimming in 
+ > practice... Interesting :)_
 
 ## Sample ##
 
- ![Sample MP3](docs/img/music.png) One audio file tells more that thousands words, so why not try the example MP3 file now?
- Hear for yourself what this tool does in practice!
+ ![Sample MP3](docs/img/music.png) One audio file tells more that thousands words, so why not try the example MP3 
+ file now? Hear for yourself what this tool does in practice!
 
  * [Listen on SoundCloud](https://soundcloud.com/marcinorlowski/mp3voicestamp-tool-demo)
  * [Download sample MP3 file](sample/mp3voicestamp-demo.mp3) (6 MiB size)
