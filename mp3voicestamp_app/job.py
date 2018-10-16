@@ -54,8 +54,6 @@ class Job(object):
         return out_file_name
 
     def __make_temp_dir(self):
-        import tempfile
-
         self.__tmp_dir = tempfile.mkdtemp()
 
         Log.d('Tmp dir: {}'.format(self.__tmp_dir))
