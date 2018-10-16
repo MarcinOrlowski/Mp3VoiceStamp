@@ -85,6 +85,7 @@
 
     title_format = "{title}"
 
+    tick_add = 0
     tick_format = "{minutes} minutes"
     tick_offset = 5
     tick_interval = 5

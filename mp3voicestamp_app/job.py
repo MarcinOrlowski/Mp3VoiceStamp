@@ -171,8 +171,9 @@ class Job(object):
 
             if self.__config.tick_format != '':
                 for time_marker in ticks:
-                    extras = {'minutes': time_marker,
-                              'minutes_digits': Util.separate_chars(time_marker),
+                    minutes = time_marker + self.__config.tick_add
+                    extras = {'minutes': minutes,
+                              'minutes_digits': Util.separate_chars(minutes),
                               }
                     tick_string = Util.process_placeholders(self.__config.tick_format,
                                                             Util.merge_dicts(music_track.get_placeholders(), extras))

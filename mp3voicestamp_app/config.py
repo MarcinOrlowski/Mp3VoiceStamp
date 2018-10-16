@@ -19,7 +19,6 @@ from backports import configparser
 
 import os
 
-from mp3voicestamp_app.util import Util
 from mp3voicestamp_app.const import *
 
 
@@ -32,6 +31,7 @@ class Config(object):
     DEFAULT_TICK_FORMAT = '{minutes} minutes'
     DEFAULT_TICK_INTERVAL = 5
     DEFAULT_TICK_OFFSET = 5
+    DEFAULT_TICK_ADD = 0
 
     DEFAULT_FILE_OUT_FORMAT = '{name} (mp3voicestamp).{ext}'
 
@@ -54,6 +54,7 @@ class Config(object):
     INI_KEY_TICK_FORMAT = 'tick_format'
     INI_KEY_TICK_OFFSET = 'tick_offset'
     INI_KEY_TICK_INTERVAL = 'tick_interval'
+    INI_KEY_TICK_ADD = 'tick_add'
 
     # *****************************************************************************************************************
 
@@ -72,6 +73,7 @@ class Config(object):
         self.tick_format = Config.DEFAULT_TICK_FORMAT
         self.tick_interval = Config.DEFAULT_TICK_INTERVAL
         self.tick_offset = Config.DEFAULT_TICK_OFFSET
+        self.tick_add = Config.DEFAULT_TICK_ADD
 
         self.title_format = Config.DEFAULT_TITLE_FORMAT
 
@@ -156,7 +158,7 @@ class Config(object):
         value = Config.__get_as_int(value)
         if value is not None:
             if value < 1:
-                raise ValueError('Tick offset value cannot be shorter than 1 minute')
+                raise ValueError('Tick offset value cannot be lower than 1 minute')
 
             self.__tick_offset = value
 
@@ -172,6 +174,19 @@ class Config(object):
                 raise ValueError('Tick interval value cannot be shorter than 1 minute')
 
             self.__tick_interval = value
+
+    @property
+    def tick_add(self):
+        return self.__tick_value_offset
+
+    @tick_add.setter
+    def tick_add(self, value):
+        value = Config.__get_as_int(value)
+        if value is not None:
+            if value < 0:
+                raise ValueError('Tick add value cannot be lower than 0')
+
+            self.__tick_value_offset = value
 
     # *****************************************************************************************************************
 
@@ -312,6 +327,8 @@ class Config(object):
                 self.tick_offset = config.getint(section, self.INI_KEY_TICK_OFFSET)
             if config.has_option(section, self.INI_KEY_TICK_OFFSET):
                 self.tick_interval = config.getint(section, self.INI_KEY_TICK_INTERVAL)
+            if config.has_option(section, self.INI_KEY_TICK_ADD):
+                self.tick_add = config.getint(section, self.INI_KEY_TICK_ADD)
 
             result = True
 
@@ -368,6 +385,8 @@ class Config(object):
             Config.__format_ini_entry(self.INI_KEY_TICK_FORMAT, self.tick_format),
             Config.__format_ini_entry(self.INI_KEY_TICK_OFFSET, self.tick_offset),
             Config.__format_ini_entry(self.INI_KEY_TICK_INTERVAL, self.tick_interval),
+            Config.__format_ini_entry(self.INI_KEY_TICK_ADD, self.tick_add),
+
         ]
 
         with open(file_name_full, 'w+') as fh:
