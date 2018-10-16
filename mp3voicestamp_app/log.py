@@ -167,8 +167,8 @@ class Log(object):
     @staticmethod
     def w(message=None):
         if message is not None:
-            message = Log.__to_list(message)
-            for message in message:
+            messages = Log.__to_list(message)
+            for message in messages:
                 Log.__log('**WARN** ' + Log.strip_ansi(message), Log.COLOR_WARN, True)
 
     # error
