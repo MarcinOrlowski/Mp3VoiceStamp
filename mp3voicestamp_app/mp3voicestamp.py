@@ -100,4 +100,9 @@ class App(object):
 # ---------------------------------------------------------------------------------
 
 if __name__ == '__main__':
+    # setting default encoding to utf-8
+    # as sys.setdefaultencoding() does not exist, this does the trick
+    reload(sys)
+    sys.setdefaultencoding('UTF8')
+
     App.main()
