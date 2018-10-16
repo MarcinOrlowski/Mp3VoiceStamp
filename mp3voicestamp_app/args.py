@@ -41,14 +41,12 @@ class Args(object):
         group.add_argument(
             '-i', '--in',
             metavar="MP3_FILE", action='store', dest="files_in", nargs='+',
-            help="On or more source MP3 files"
-        )
+            help="On or more source MP3 files.")
         group.add_argument(
             '-o', '--out',
             metavar="DIR/MP3_FILE", action='store', dest="file_out", nargs=1,
             help='Optional output file name or target directory if "-in" option used with multiple files. ' +
-                 'If not specified, file name will be generated.'
-        )
+                 'If not specified, file name will be generated.')
         group.add_argument(
             '-of', '--out-format', action='store', dest='file_out_format', nargs=1, metavar='FORMAT',
             help='Format string used to generate name of output files. ' +
@@ -71,6 +69,10 @@ class Args(object):
         group.add_argument(
             '-to', '--tick-offset', action='store', type=int, dest='tick_offset', nargs=1, metavar='MINUTES',
             help='Offset (in minutes) for first spoken tick. Default is {}.'.format(Config.DEFAULT_TICK_OFFSET))
+        group.add_argument(
+            '-ta', '--tick-add', action='store', type=int, dest='tick_add', nargs=1, metavar='MINUTES',
+            help='Value (in minutes) to be added to each for spoken tick. Default is {}.'.format(
+                Config.DEFAULT_TICK_ADD))
         group.add_argument(
             '-tf', '--tick-format', action='store', dest='tick_format', nargs=1, metavar='FORMAT',
             help='Format string for spoken time ticks.' +
@@ -103,29 +105,23 @@ class Args(object):
         group = parser.add_argument_group('Misc')
         group.add_argument(
             '--dry-run', action='store_true', dest='dry_run_mode',
-            help='Simulates processing of the files, printing information on how real files would be processed.'
-        )
+            help='Simulates processing of the files, printing information on how real files would be processed.')
         group.add_argument(
             '-f', '--force', action='store_true', dest='force',
-            help='Forces overwrite of existing output file.'
-        )
+            help='Forces overwrite of existing output file.')
         group.add_argument(
             '-v', '--verbose', action='store_true', dest='verbose',
-            help='Enables verbose output.'
-        )
+            help='Enables verbose output.')
         group.add_argument(
-            '--version', action='version', version='{app} v{v} ({rd})'.format(app=APP_NAME, v=VERSION, rd=RELEASE_DATE)
-        )
+            '--version', action='version', version='{app} v{v} ({rd})'.format(app=APP_NAME, v=VERSION, rd=RELEASE_DATE))
 
         group = parser.add_argument_group('Developer tools')
         group.add_argument(
             '-d', '--debug', action='store_true', dest='debug',
-            help='Enables debug mode.'
-        )
+            help='Enables debug mode.')
         group.add_argument(
             '-nc', '--no-cleanup', action='store_true', dest='no_cleanup',
-            help='Do not remove working files and folders on exit.'
-        )
+            help='Do not remove working files and folders on exit.')
 
         # this trick is to enforce stacktrace in case parse_args() fail (which should normally not happen)
         old_config_debug = config.debug
@@ -154,6 +150,7 @@ class Args(object):
         config.tick_interval = args.tick_interval
         config.tick_offset = args.tick_offset
         config.tick_format = args.tick_format
+        config.tick_add = args.tick_add
 
         config.title_format = args.title_format
 

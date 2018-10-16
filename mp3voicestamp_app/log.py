@@ -167,17 +167,15 @@ class Log(object):
     @staticmethod
     def w(message=None):
         if message is not None:
-            message = Log.__to_list(message)
-            for message in message:
-                Log.__log('**WARN** ' + Log.strip_ansi(message), Log.COLOR_WARN, True)
+            messages = Log.__to_list(message)
+            _ = [Log.__log('**WARN** ' + Log.strip_ansi(msg), Log.COLOR_WARN, True) for msg in messages]
 
     # error
     @staticmethod
     def e(messages=None):
         if messages is not None:
             messages = Log.__to_list(messages)
-            for message in messages:
-                Log.__log('*** ' + Log.strip_ansi(message), Log.COLOR_ERROR, True)
+            _ = [Log.__log('*** ' + Log.strip_ansi(message), Log.COLOR_ERROR, True) for message in messages]
 
     # debug
     # NOTE: debug entries are not stored in action log
@@ -320,7 +318,6 @@ class Log(object):
 
             postfix = Log.__get_stacktrace_string()
             for message in Log.__to_list(Log.__dict_to_list(messages, '%green%')):
-
                 use_message = False if Log.skip_empty_lines and message else True
                 if use_message:
                     message = Log.__format_log_line(message, color, postfix)

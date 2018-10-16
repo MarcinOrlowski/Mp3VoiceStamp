@@ -156,6 +156,16 @@ class Util(object):
         return re.sub('\d{2,}', strip_leading_zeros, re.sub(' +', ' ', text).replace('-', ',')).strip()
 
     @staticmethod
+    def separate_chars(text, sep=' '):
+        result = ''
+        text = str(text).strip()
+        if text:
+            for i in range(0, len(text)):
+                result += text[i:i+1] + sep
+
+        return result
+
+    @staticmethod
     def merge_dicts(dict1, dict2):
         """Merge two dictionaries
 

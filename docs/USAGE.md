@@ -85,6 +85,7 @@
 
     title_format = "{title}"
 
+    tick_add = 0
     tick_format = "{minutes} minutes"
     tick_offset = 5
     tick_interval = 5
@@ -149,7 +150,7 @@
  | {album_title}  | Album title or empty string                                                      |
  | {composer}     | Track composer or empty string                                                   |
  | {comment}      | Content of track comment field or empty string                                   |
- | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+ | {config_name}  | Name of loaded config file as specified with `config_name` key or empty string   |
  | {file_name}    | Name of the audio file without name extension                                    |
 
  > ![Tip](img/tip-small.png) If you don't want to have track title announced, set title format to empty 
@@ -159,9 +160,10 @@
 
  Default tick title format string is `{minutes} minutes`.
 
- | Key       | Description                      |
- | --------- | -------------------------------- |
- | {minutes} | Minutes since start of the track | 
+ | Key              | Description                                                                   |
+ | ---------------- | ----------------------------------------------------------------------------- |
+ | {minutes}        | Minutes since start of the track                                              | 
+ | {minutes_digits} | Minutes but spoken as separate digits (i.e. "32" will be said as "three two") | 
  
  If you want, you can also use any of the track title placeholders in tick format too!
  

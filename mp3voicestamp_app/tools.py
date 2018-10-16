@@ -53,7 +53,7 @@ class Tools(object):
                 self.KEY_ESPEAK: 'espeak',
             }
 
-        for key, tool in self.__tools.items():
+        for _, tool in self.__tools.items():
             failed = False
             if Util.which(tool) is None:
                 Log.e("'{}' not found.".format(tool))
