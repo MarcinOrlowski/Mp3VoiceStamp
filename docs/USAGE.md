@@ -149,7 +149,7 @@
  | {album_title}  | Album title or empty string                                                      |
  | {composer}     | Track composer or empty string                                                   |
  | {comment}      | Content of track comment field or empty string                                   |
- | {config_name}  | Name of loaded config file (with `.ini` name extension stripped) or empty string |
+ | {config_name}  | Name of loaded config file as specified with `config_name` key or empty string   |
  | {file_name}    | Name of the audio file without name extension                                    |
 
  > ![Tip](img/tip-small.png) If you don't want to have track title announced, set title format to empty 

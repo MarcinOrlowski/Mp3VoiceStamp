@@ -3,12 +3,17 @@
 
 ## Changelog ##
 
+@dev
+----
+ * Fixed Unicode support so names or formats with unicode shall now work correctly
+ * Added `config_name` key support to configuration file
+ * Value of `{config_name}` is no longer generated if not specified in config file
+
 v1.2.1 (2018-10-10)
 -------------------
  * Track announcement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
  * Disabled file globing unless made bullet proof
  * Added `--verbose` mode and some extra info
- * Fixed Unicode support so names or formats with unicode shall now work correctly
 
 v1.2.0 (2018-10-09)
 -------------------

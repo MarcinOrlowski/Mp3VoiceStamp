@@ -42,6 +42,8 @@ class Config(object):
 
     INI_SECTION_NAME = 'mp3voicestamp'
 
+    INI_KEY_CONFIG_NAME = 'config_name'
+
     INI_KEY_FILE_OUT_FORMAT = 'file_out_format'
 
     INI_KEY_SPEECH_SPEED = 'speech_speed'
@@ -287,6 +289,10 @@ class Config(object):
             config.read(config_file_full)
 
             section = self.INI_SECTION_NAME
+            if config.has_option(section, self.INI_KEY_CONFIG_NAME):
+                self.name = Config.__strip_quotes_from_ini_string(
+                    config.get(section, self.INI_KEY_CONFIG_NAME))
+
             if config.has_option(section, self.INI_KEY_FILE_OUT_FORMAT):
                 self.file_out_format = Config.__strip_quotes_from_ini_string(
                     config.get(section, self.INI_KEY_FILE_OUT_FORMAT))
@@ -306,10 +312,6 @@ class Config(object):
                 self.tick_offset = config.getint(section, self.INI_KEY_TICK_OFFSET)
             if config.has_option(section, self.INI_KEY_TICK_OFFSET):
                 self.tick_interval = config.getint(section, self.INI_KEY_TICK_INTERVAL)
-
-            name = os.path.basename(file_name)
-            name = name[:-4] if name[-4:] == '.ini' else name
-            self.name = Util.prepare_for_speak(name)
 
             result = True
 
@@ -354,6 +356,8 @@ class Config(object):
             '# {}'.format(APP_URL),
             '',
             '[{}]'.format(self.INI_SECTION_NAME),
+            '# {}=""'.format(self.INI_KEY_CONFIG_NAME),
+            '',
             Config.__format_ini_entry(self.INI_KEY_FILE_OUT_FORMAT, self.file_out_format),
             '',
             Config.__format_ini_entry(self.INI_KEY_SPEECH_SPEED, self.speech_speed),
