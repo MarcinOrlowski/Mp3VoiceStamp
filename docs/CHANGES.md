@@ -8,6 +8,7 @@
  * Fixed Unicode support so names or formats with unicode shall now work correctly
  * Added `config_name` key support to configuration file
  * Value of `{config_name}` is no longer generated if not specified in config file
+ * Added `{minutes_digits}` to supported tick format that speaks each tick digit separately
 
 v1.2.1 (2018-10-10)
 -------------------

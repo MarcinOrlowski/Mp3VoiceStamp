@@ -159,9 +159,10 @@
 
  Default tick title format string is `{minutes} minutes`.
 
- | Key       | Description                      |
- | --------- | -------------------------------- |
- | {minutes} | Minutes since start of the track | 
+ | Key              | Description                                                                   |
+ | ---------------- | ----------------------------------------------------------------------------- |
+ | {minutes}        | Minutes since start of the track                                              | 
+ | {minutes_digits} | Minutes but spoken as separate digits (i.e. "32" will be said as "three two") | 
  
  If you want, you can also use any of the track title placeholders in tick format too!
  
