@@ -3,8 +3,8 @@
 
 ## Changelog ##
 
-@dev
-----
+v1.3.0 (2018-10-16)
+-------------------
  * Fixed Unicode support so names or formats with unicode shall now work correctly
  * Added `config_name` key support to configuration file
  * Value of `{config_name}` is no longer generated if not specified in config file
