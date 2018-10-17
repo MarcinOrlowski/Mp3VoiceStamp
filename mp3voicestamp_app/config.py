@@ -20,6 +20,7 @@ from backports import configparser
 import os
 
 from mp3voicestamp_app.const import *
+from mp3voicestamp_app.log import Log
 
 
 class Config(object):
@@ -284,55 +285,50 @@ class Config(object):
 
         Args:
           file_name: path to config file to load or None
-
-        Returns:
-          True if loading was successful, False if config file is missing. Raises exception on parse failure
         """
-        result = False
 
-        if file_name is None:
-            return result
+        assert file_name is not None
 
         config_file_full = os.path.expanduser(file_name)
+        Log.v('Using config file: "{}"'.format(config_file_full))
 
-        if os.path.isfile(config_file_full):
-            config = configparser.ConfigParser()
-            # custom optionxform prevents keys from being lower-cased (default implementation) as CaSe matters for us
-            config.optionxform = str
+        if not os.path.isfile(config_file_full):
+            Log.abort('Config file not found: "{}"'.format(config_file_full))
 
-            # noinspection PyBroadException
-            config.read(config_file_full)
+        config = configparser.ConfigParser()
+        # custom optionxform prevents keys from being lower-cased (default implementation) as CaSe matters for us
+        config.optionxform = str
 
-            section = self.INI_SECTION_NAME
-            if config.has_option(section, self.INI_KEY_CONFIG_NAME):
-                self.name = Config.__strip_quotes_from_ini_string(
-                    config.get(section, self.INI_KEY_CONFIG_NAME))
+        # noinspection PyBroadException
+        config.read(config_file_full)
 
-            if config.has_option(section, self.INI_KEY_FILE_OUT_FORMAT):
-                self.file_out_format = Config.__strip_quotes_from_ini_string(
-                    config.get(section, self.INI_KEY_FILE_OUT_FORMAT))
+        section = self.INI_SECTION_NAME
+        if config.has_option(section, self.INI_KEY_CONFIG_NAME):
+            self.name = Config.__strip_quotes_from_ini_string(
+                config.get(section, self.INI_KEY_CONFIG_NAME))
 
-            if config.has_option(section, self.INI_KEY_SPEECH_SPEED):
-                self.speech_speed = config.getint(section, self.INI_KEY_SPEECH_SPEED)
-            if config.has_option(section, self.INI_KEY_SPEECH_VOLUME_FACTOR):
-                self.speech_volume_factor = config.get(section, self.INI_KEY_SPEECH_VOLUME_FACTOR).replace(',', '.')
+        if config.has_option(section, self.INI_KEY_FILE_OUT_FORMAT):
+            self.file_out_format = Config.__strip_quotes_from_ini_string(
+                config.get(section, self.INI_KEY_FILE_OUT_FORMAT))
 
-            if config.has_option(section, self.INI_KEY_TITLE_FORMAT):
-                self.title_format = Config.__strip_quotes_from_ini_string(
-                    config.get(section, self.INI_KEY_TITLE_FORMAT))
+        if config.has_option(section, self.INI_KEY_SPEECH_SPEED):
+            self.speech_speed = config.getint(section, self.INI_KEY_SPEECH_SPEED)
+        if config.has_option(section, self.INI_KEY_SPEECH_VOLUME_FACTOR):
+            self.speech_volume_factor = config.get(section, self.INI_KEY_SPEECH_VOLUME_FACTOR).replace(',', '.')
 
-            if config.has_option(section, self.INI_KEY_TICK_FORMAT):
-                self.tick_format = Config.__strip_quotes_from_ini_string(config.get(section, self.INI_KEY_TICK_FORMAT))
-            if config.has_option(section, self.INI_KEY_TICK_OFFSET):
-                self.tick_offset = config.getint(section, self.INI_KEY_TICK_OFFSET)
-            if config.has_option(section, self.INI_KEY_TICK_OFFSET):
-                self.tick_interval = config.getint(section, self.INI_KEY_TICK_INTERVAL)
-            if config.has_option(section, self.INI_KEY_TICK_ADD):
-                self.tick_add = config.getint(section, self.INI_KEY_TICK_ADD)
+        if config.has_option(section, self.INI_KEY_TITLE_FORMAT):
+            self.title_format = Config.__strip_quotes_from_ini_string(
+                config.get(section, self.INI_KEY_TITLE_FORMAT))
 
-            result = True
+        if config.has_option(section, self.INI_KEY_TICK_FORMAT):
+            self.tick_format = Config.__strip_quotes_from_ini_string(config.get(section, self.INI_KEY_TICK_FORMAT))
+        if config.has_option(section, self.INI_KEY_TICK_OFFSET):
+            self.tick_offset = config.getint(section, self.INI_KEY_TICK_OFFSET)
+        if config.has_option(section, self.INI_KEY_TICK_OFFSET):
+            self.tick_interval = config.getint(section, self.INI_KEY_TICK_INTERVAL)
+        if config.has_option(section, self.INI_KEY_TICK_ADD):
+            self.tick_add = config.getint(section, self.INI_KEY_TICK_ADD)
 
-        return result
 
     @staticmethod
     def __strip_quotes_from_ini_string(string):
@@ -365,8 +361,9 @@ class Config(object):
           file_name: name of destination config file
         """
         file_name_full = os.path.expanduser(file_name)
+        Log.v('Saving config state as "{}"'.format(file_name_full))
         if os.path.exists(file_name_full) and not self.force_overwrite:
-            raise IOError('File already exists. Use -f to force overwrite: {}.'.format(file_name))
+            raise IOError('File "{}" already exists. Use -f to force overwrite.'.format(file_name))
 
         out_buffer = [
             '# {} configuration file'.format(APP_NAME),
@@ -386,7 +383,6 @@ class Config(object):
             Config.__format_ini_entry(self.INI_KEY_TICK_OFFSET, self.tick_offset),
             Config.__format_ini_entry(self.INI_KEY_TICK_INTERVAL, self.tick_interval),
             Config.__format_ini_entry(self.INI_KEY_TICK_ADD, self.tick_add),
-
         ]
 
         with open(file_name_full, 'w+') as fh:

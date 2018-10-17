@@ -4,6 +4,7 @@
 *~
 /.idea/
 /venv/
+/windows-setup/
 
 /*.exe
 /*.mp3
