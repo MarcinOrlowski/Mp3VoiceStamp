@@ -3,6 +3,10 @@
 
 ## Changelog ##
 
+@dev
+----
+ * Improved config file related errors and malformed structure handling  
+
 v1.3.0 (2018-10-16)
 -------------------
  * Fixed Unicode support so names or formats with unicode shall now work correctly

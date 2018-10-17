@@ -302,6 +302,9 @@ class Config(object):
         # noinspection PyBroadException
         config.read(config_file_full)
 
+        if not config.has_section(self.INI_SECTION_NAME):
+            Log.abort('Malformed config file. Missing "[{}]" section.'.format(self.INI_SECTION_NAME))
+
         section = self.INI_SECTION_NAME
         if config.has_option(section, self.INI_KEY_CONFIG_NAME):
             self.name = Config.__strip_quotes_from_ini_string(
