@@ -287,13 +287,15 @@ class Config(object):
           file_name: path to config file to load or None
         """
 
-        assert file_name is not None
+        if not isinstance(file_name, basestring):
+            Log.abort('No valid config file name not given.')
 
         config_file_full = os.path.expanduser(file_name)
-        Log.v('Using config file: "{}"'.format(config_file_full))
 
         if not os.path.isfile(config_file_full):
             Log.abort('Config file not found: "{}"'.format(config_file_full))
+
+        Log.v('Using config file: "{}"'.format(config_file_full))
 
         config = configparser.ConfigParser()
         # custom optionxform prevents keys from being lower-cased (default implementation) as CaSe matters for us
