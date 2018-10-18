@@ -28,31 +28,6 @@ from mp3voicestamp_app.log import Log
 class Util(object):
     quiet = False
 
-    # @staticmethod
-    # def print_no_lf(message, quiet=None):
-    #     if quiet is None:
-    #         quiet = Util.quiet
-    #
-    #     if not quiet:
-    #         print('{}: '.format(message), end='')
-    #         sys.stdout.flush()
-    #
-    # @staticmethod
-    # def print(message='', quiet=None):
-    #     if quiet is None:
-    #         quiet = Util.quiet
-    #
-    #     if not quiet:
-    #         if isinstance(message, list):
-    #             for entry in message:
-    #                 print(entry)
-    #         else:
-    #             print(message)
-
-    # @staticmethod
-    # def print_error(message='', quiet=None):
-    #     Util.e('*** {}'.format(str(message)), quiet)
-
     @staticmethod
     def abort(message=None):
         if message is not None:
@@ -161,7 +136,7 @@ class Util(object):
         text = str(text).strip()
         if text:
             for i in range(0, len(text)):
-                result += text[i:i+1] + sep
+                result += text[i:i + 1] + sep
 
         return result
 
