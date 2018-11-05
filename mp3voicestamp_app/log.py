@@ -111,8 +111,7 @@ class Log(object):
         Log.level_push(message, color, ignore_quiet_switch)
 
     @staticmethod
-    def level_push(message=None, color=None, ignore_quiet_switch=False,
-                   deferred=False):
+    def level_push(message=None, color=None, ignore_quiet_switch=False, deferred=False):
         if Log.verbose_level == 0 and deferred:
             Log.__flush_deferred_entry()
 

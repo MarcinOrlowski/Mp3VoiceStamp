@@ -53,12 +53,20 @@ class Args(object):
                  'Default is "{}". '.format(Config.DEFAULT_FILE_OUT_FORMAT) +
                  'See docs for available placeholders.')
 
-        group = parser.add_argument_group('Spoken track title')
+        group = parser.add_argument_group('Audio track')
         group.add_argument(
             '-tp', '--title-format', action='store', dest='title_format', nargs=1, metavar='FORMAT',
             help='Format string used to generate track title to be spoken. ' +
                  'Default is "{}". '.format(Config.DEFAULT_TITLE_FORMAT) +
                  'See docs for available placeholders.')
+
+        group = parser.add_argument_group('Audio track splitting')
+        # noinspection PyTypeChecker
+        group.add_argument(
+            '-ssd', '--split-segment-duration', action='store', type=int, dest='split_segment_duration', nargs=1,
+            metavar='MINUTES',
+            help='Splits audio track into segments of given duration. 0 means no splitting. Default is {}.'.format(
+                Config.DEFAULT_SPLIT_SEGMENT_DURATION))
 
         group = parser.add_argument_group('Spoken time ticks')
         # noinspection PyTypeChecker
@@ -153,6 +161,8 @@ class Args(object):
         config.tick_add = args.tick_add
 
         config.title_format = args.title_format
+
+        config.split_segment_duration = args.split_segment_duration
 
         # we also support globing (as Windows' cmd is lame as usual)
         config.files_in = []

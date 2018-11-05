@@ -153,17 +153,22 @@ class Util(object):
         return res
 
     @staticmethod
-    def process_placeholders(fmt, placeholders):
+    def process_placeholders(fmt, placeholders, error_return_value=''):
         """
 
         :param fmt:
         :param placeholders:
+        :param error_return_value:
 
         :type fmt: basestring
         :type placeholders: dict
+        :type error_return_value: basestring
 
         :return:
         """
+        if fmt is None:
+            return error_return_value
+
         # noinspection PyCompatibility
         if not isinstance(fmt, basestring):
             raise ValueError('Format must be a string, {} given'.format(type(fmt)))

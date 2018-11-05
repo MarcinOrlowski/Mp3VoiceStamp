@@ -23,6 +23,7 @@ from mutagen.id3 import ID3, ID3NoHeaderError, TIT2, TALB, TPE1, TPE2, TCOM, TSS
 
 from mp3voicestamp_app.const import *
 from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.tools import Tools
 
 
 class Mp3FileInfo(object):
@@ -41,8 +42,8 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def __init__(self, file_name):
-        if not os.path.isfile(file_name):
+    def __init__(self, file_name, tools):
+        if not os.path.exists(file_name):
             raise OSError('File not found: "{}"'.format(file_name))
 
         mp3 = MP3(file_name)
@@ -64,6 +65,8 @@ class Mp3FileInfo(object):
         self.performer = self.__get_tag(mp3, self.TAG_PERFORMER)
         self.comment = self.__get_tag(mp3, self.TAG_COMMENT)
         self.track_number = self.__get_tag(mp3, self.TAG_TRACK_NUMBER)
+
+        self.__tools = tools
 
     # *****************************************************************************************************************
 
@@ -141,8 +144,8 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def to_wav(self, output_file_name):
-        """ Converts source audio track to WAV format
+    def to_wav_segments(self, output_file_name, split_segment_minutes=0):
+        """ Converts source audio track to WAV format splitting into segments
 
         convert source mp3 to wav. this is required for many reasons:
         * we need to adjust voice overlay amplitude to match MP3 file level and to do that we use "sox" too
@@ -152,13 +155,28 @@ class Mp3FileInfo(object):
           image) and speech segments being just plain WAV. Most likely this can be solved better way but we
           need WAV anyway so no point wasting time at the moment for further research.
         """
-        wav_cmd = ['ffmpeg', '-i', self.file_name, output_file_name]
+        wav_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-i', self.file_name]
+
+        if split_segment_minutes > 0:
+            # https://www.ffmpeg.org/ffmpeg-formats.html#segment_002c-stream_005fsegment_002c-ssegment
+
+            dir_name = os.path.dirname(output_file_name)
+            name, ext = Util.split_file_name(output_file_name)
+            file_name_format = os.path.join(dir_name, name + '.%d.' + ext)
+
+            wav_cmd.extend([
+                '-f', 'segment', '-segment_time', str(split_segment_minutes * 60),
+                '-c', 'copy', file_name_format,
+            ])
+        else:
+            wav_cmd.append(output_file_name)
+
         if Util.execute_rc(wav_cmd) != 0:
             raise RuntimeError('Failed to convert to WAV file')
 
     # *****************************************************************************************************************
 
-    def get_encoding_quality_for_lame_encoder(self):
+    def get_encoding_quality_for_lame(self):
         """Selects LAME quality switch based on source file bitrate
 
            Based on https://trac.ffmpeg.org/wiki/Encode/MP3
@@ -174,7 +192,7 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def write_id3_tags(self, file_name):
+    def write_id3_tags(self, file_name, track_title):
         """Writes ID3 tags from out music file into given MP3 file
 
         Args:
@@ -186,7 +204,8 @@ class Mp3FileInfo(object):
             # Adding ID3 header
             tags = ID3()
 
-        tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (Mp3VoiceStamp)'.format(self.title))
+        # tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (Mp3VoiceStamp)'.format(self.title))
+        tags[self.TAG_TITLE] = TIT2(encoding=3, text=track_title)
         tags[self.TAG_ALBUM_TITLE] = TALB(encoding=3, text=self.album_title)
         tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
         tags[self.TAG_ARTIST] = TPE1(encoding=3, text=self.artist)

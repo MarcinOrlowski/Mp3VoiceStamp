@@ -13,18 +13,18 @@
 
 """
 
+import os
+
+from backports import configparser
 # noinspection PyCompatibility
 from past.builtins import basestring
-from backports import configparser
-
-import os
 
 from mp3voicestamp_app.const import *
 from mp3voicestamp_app.log import Log
 
 
 class Config(object):
-    DEFAULT_TITLE_FORMAT = '{title} {config_name}'
+    DEFAULT_TITLE_FORMAT = '{title} {config_name} {segment_name}'
 
     DEFAULT_SPEECH_SPEED = 150
     DEFAULT_SPEECH_VOLUME_FACTOR = 2
@@ -34,7 +34,9 @@ class Config(object):
     DEFAULT_TICK_OFFSET = 5
     DEFAULT_TICK_ADD = 0
 
-    DEFAULT_FILE_OUT_FORMAT = '{name} (mp3voicestamp).{ext}'
+    DEFAULT_SPLIT_SEGMENT_DURATION = 0
+
+    DEFAULT_FILE_OUT_FORMAT = '{name}{segment_label}(mp3voicestamp).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -51,6 +53,8 @@ class Config(object):
     INI_KEY_SPEECH_VOLUME_FACTOR = 'speech_volume_factor'
 
     INI_KEY_TITLE_FORMAT = 'title_format'
+
+    INI_KEY_SPLIT_DURATION = 'split_segment_duration'
 
     INI_KEY_TICK_FORMAT = 'tick_format'
     INI_KEY_TICK_OFFSET = 'tick_offset'
@@ -77,6 +81,8 @@ class Config(object):
         self.tick_add = Config.DEFAULT_TICK_ADD
 
         self.title_format = Config.DEFAULT_TITLE_FORMAT
+
+        self.split_segment_duration = Config.DEFAULT_SPLIT_SEGMENT_DURATION
 
         self.files_in = []
         self.file_out = None
@@ -192,6 +198,21 @@ class Config(object):
     # *****************************************************************************************************************
 
     @property
+    def split_segment_duration(self):
+        return self.__split_duration
+
+    @split_segment_duration.setter
+    def split_segment_duration(self, value):
+        value = Config.__get_as_int(value)
+        if value is not None:
+            if value < 0:
+                raise ValueError('Split duration cannot be lower than 0')
+
+            self.__split_duration = value
+
+    # *****************************************************************************************************************
+
+    @property
     def speech_volume_factor(self):
         return self.__speech_volume_factor
 
@@ -280,6 +301,12 @@ class Config(object):
 
     # *****************************************************************************************************************
 
+    def validate(self):
+        if self.tick_offset > self.split_segment_duration:
+            raise ValueError('Tick offset is higher than split duration')
+
+    # *****************************************************************************************************************
+
     def load(self, file_name):
         """Load patch config file (if exists).
 
@@ -287,8 +314,11 @@ class Config(object):
           file_name: path to config file to load or None
         """
 
+        if file_name is None:
+            return
+
         if not isinstance(file_name, basestring):
-            Log.abort('No valid config file name not given.')
+            Log.abort('No valid config file name given.')
 
         config_file_full = os.path.expanduser(file_name)
 
@@ -334,6 +364,8 @@ class Config(object):
         if config.has_option(section, self.INI_KEY_TICK_ADD):
             self.tick_add = config.getint(section, self.INI_KEY_TICK_ADD)
 
+        if config.has_option(section, self.INI_KEY_SPLIT_DURATION):
+            self.split_segment_duration = config.getint(section, self.INI_KEY_SPLIT_DURATION)
 
     @staticmethod
     def __strip_quotes_from_ini_string(string):
@@ -383,6 +415,9 @@ class Config(object):
             Config.__format_ini_entry(self.INI_KEY_SPEECH_VOLUME_FACTOR, self.speech_volume_factor),
             '',
             Config.__format_ini_entry(self.INI_KEY_TITLE_FORMAT, self.title_format),
+            '',
+            '# 0 (zero) means no file splitting',
+            Config.__format_ini_entry(self.INI_KEY_SPLIT_DURATION, self.split_segment_duration),
             '',
             Config.__format_ini_entry(self.INI_KEY_TICK_FORMAT, self.tick_format),
             Config.__format_ini_entry(self.INI_KEY_TICK_OFFSET, self.tick_offset),
