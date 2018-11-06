@@ -27,10 +27,10 @@ class Tools(object):
     KEY_SOX = 'sox'
     KEY_ESPEAK = 'espeak'
 
-    __tools = {}
+    __tools_map = {}
 
     def __init__(self):
-        self.__tools = {}
+        self.__tools_map = {}
         self.__check_env_called = False
 
     def ensure_check_env_called(self):
@@ -41,19 +41,19 @@ class Tools(object):
         """Checks if all external tools we need are already available and in $PATH
         """
         if sys.platform == 'win32':
-            self.__tools = {
+            self.__tools_map = {
                 self.KEY_FFMPEG: 'ffmpeg.exe',
                 self.KEY_SOX: 'sox.exe',
                 self.KEY_ESPEAK: 'espeak.exe',
             }
         else:
-            self.__tools = {
+            self.__tools_map = {
                 self.KEY_FFMPEG: 'ffmpeg',
                 self.KEY_SOX: 'sox',
                 self.KEY_ESPEAK: 'espeak',
             }
 
-        for _, tool in self.__tools.items():
+        for _, tool in self.__tools_map.items():
             failed = False
             if Util.which(tool) is None:
                 Log.e("'{}' not found.".format(tool))
@@ -67,17 +67,17 @@ class Tools(object):
         if sys.platform == 'win32':
             normalize = 'normalize.exe'
             if Util.which(normalize) is not None:
-                self.__tools[self.KEY_NORMALIZE] = normalize
+                self.__tools_map[self.KEY_NORMALIZE] = normalize
                 normalize_check_result = True
         else:
             normalize = 'normalize'
             if Util.which(normalize) is not None:
-                self.__tools[self.KEY_NORMALIZE] = normalize
+                self.__tools_map[self.KEY_NORMALIZE] = normalize
                 normalize_check_result = True
             else:
                 normalize = 'normalize-audio'
                 if Util.which(normalize) is not None:
-                    self.__tools[self.KEY_NORMALIZE] = normalize
+                    self.__tools_map[self.KEY_NORMALIZE] = normalize
                     normalize_check_result = True
 
         if not normalize_check_result:
@@ -87,4 +87,4 @@ class Tools(object):
 
     def get_tool(self, key):
         self.ensure_check_env_called()
-        return self.__tools.get(key)
+        return self.__tools_map.get(key)
