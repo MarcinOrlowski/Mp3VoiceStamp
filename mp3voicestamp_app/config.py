@@ -14,6 +14,7 @@
 """
 
 import os
+import re
 
 from backports import configparser
 # noinspection PyCompatibility
@@ -36,7 +37,7 @@ class Config(object):
 
     DEFAULT_SPLIT_SEGMENT_DURATION = 0
 
-    DEFAULT_FILE_OUT_FORMAT = '{name}{segment_label}(mp3voicestamp).{ext}'
+    DEFAULT_FILE_OUT_FORMAT = '{name} {segment_name} (mp3voicestamp).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -102,6 +103,12 @@ class Config(object):
     # *****************************************************************************************************************
 
     @staticmethod
+    def __normalize_spaces(text):
+        return re.sub(' +', ' ', text).strip()
+
+    # *****************************************************************************************************************
+
+    @staticmethod
     def __get_as_int(value):
         if value is not None:
             if isinstance(value, list):
@@ -148,7 +155,7 @@ class Config(object):
 
     @property
     def tick_format(self):
-        return self.__tick_format
+        return self.__normalize_spaces(self.__tick_format)
 
     @tick_format.setter
     def tick_format(self, value):
@@ -242,7 +249,7 @@ class Config(object):
 
     @property
     def title_format(self):
-        return self.__title_format
+        return self.__normalize_spaces(self.__title_format)
 
     @title_format.setter
     def title_format(self, value):
@@ -289,7 +296,7 @@ class Config(object):
 
     @property
     def file_out_format(self):
-        return self.__file_out_format
+        return self.__normalize_spaces(self.__file_out_format)
 
     @file_out_format.setter
     def file_out_format(self, value):
@@ -302,7 +309,7 @@ class Config(object):
     # *****************************************************************************************************************
 
     def validate(self):
-        if self.tick_offset > self.split_segment_duration:
+        if 0 < self.split_segment_duration < self.tick_offset:
             raise ValueError('Tick offset is higher than split duration')
 
     # *****************************************************************************************************************
