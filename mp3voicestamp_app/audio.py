@@ -71,21 +71,13 @@ class Audio(object):
             :wav_files list of WAV files to mix
         """
         merge_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-y']
-        _ = [merge_cmd.extend(['-i', wav]) for wav in wav_files]
-        # merge_cmd.extend([
-        #     '-filter_complex', 'amerge',
-        #     '-ac', '2',
-        #     '-c:a', 'libmp3lame',
-        #     '-q:a', str(encoding_quality),
-        #     file_out])
-
+        _ = [merge_cmd.extend(['-i', file_name]) for file_name in source_wav_files]
         merge_cmd.extend([
-            '-filter_complex', 'amix=inputs={input_cnt}:duration=longest:dropout_transition=0'.format(
-                input_cnt=len(wav_files)),
+            '-filter_complex', 'amix=inputs={cnt}:duration=longest:dropout_transition=0'.format(cnt=len(source_wav_files)),
             '-ac', '2',
             '-c:a', 'libmp3lame',
             '-q:a', str(encoding_quality),
-            file_out])
+            result_file_name])
 
         if Util.execute_rc(merge_cmd) != 0:
             raise RuntimeError('Failed to create final MP3 file')
