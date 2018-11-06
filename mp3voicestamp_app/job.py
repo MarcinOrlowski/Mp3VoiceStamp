@@ -38,13 +38,13 @@ class Job(object):
         self.__tools = tools
         self.__audio = Audio(tools)
 
-    def get_save_file_name_full_path(self, music_track, segment_number=None, ext=None, dest_dir=None):
+    def get_save_file_name_full_path(self, music_track, segment_number=None, ext=None):
         """Build out file name based on provided template and music_track data
         """
-        segment_label = ''
+        segment_name = ''
         if segment_number is not None:
             # generate segment target file name
-            segment_label = ' (segment {segment_number_zeros}) '.format(
+            segment_name = ' (segment {segment_number_zeros}) '.format(
                 segment_number=segment_number,
                 segment_number_zeros='%03d' % segment_number
             )
@@ -53,7 +53,7 @@ class Job(object):
 
         formatted_file_name = self.__config.file_out_format.format(
             name=out_base_name,
-            segment_label=segment_label,
+            segment_name=segment_name,
             ext=out_base_ext if ext is None else ext
         )
 
@@ -93,7 +93,7 @@ class Job(object):
             fh.close()
 
             rc = Util.execute_rc([self.__tools.get_tool(Tools.KEY_ESPEAK),
-                                  '-s', str(self.__config.speech_speed),q
+                                  '-s', str(self.__config.speech_speed),
                                   '-z',
                                   '-w', out_file_name,
                                   '-f', text_tmp_file],
@@ -172,8 +172,6 @@ class Job(object):
         concat_cmd.extend(['-filter_complex', filter_complex + filter_complex_concat])
         concat_cmd.append(speech_wav_file_name)
 
-        Log.i(' '.join(concat_cmd))
-
         if Util.execute_rc(concat_cmd) != 0:
             raise RuntimeError('Failed to merge voice segments')
 
@@ -226,7 +224,7 @@ class Job(object):
 
                 # calculate RMS amplitude of music track as reference to gain voice to match
                 audio_wav_segments_file_names = []
-                for idx in range(0, number_of_track_segments-1):
+                for idx in range(0, number_of_track_segments):
                     audio_wav_segments_file_names.append(segment_file_name_pattern % idx)
 
                 rms_amplitude = self.__audio.calculate_rms_amplitude(audio_wav_segments_file_names)
@@ -270,7 +268,8 @@ class Job(object):
             for segment_number in range(0, number_of_track_segments):
                 segment_number_for_users = segment_number + 1
 
-                segment_wav_file_name = self.get_save_file_name_full_path(music_track, segment_number_for_users)
+                segment_wav_file_name = self.get_save_file_name_full_path(music_track,
+                                                                          segment_number_for_users if number_of_track_segments > 1 else None)
 
                 Log.d('Doing segment {idx} as {file_name}'.format(
                     idx=segment_number, file_name=segment_wav_file_name))
@@ -293,7 +292,11 @@ class Job(object):
                     'segment_count': number_of_track_segments,
                 }
 
-                extras['segment_name'] = Util.process_placeholders(track_segment_name_format, extras)
+                __segment_name = ''
+                if number_of_track_segments > 1:
+                    __segment_name = Util.process_placeholders(track_segment_name_format, extras)
+                extras['segment_name'] = __segment_name
+
                 track_title_to_speak = Util.prepare_for_speak(
                     Util.process_placeholders(self.__config.title_format,
                                               Util.merge_dicts(music_track.get_placeholders(), extras)))
