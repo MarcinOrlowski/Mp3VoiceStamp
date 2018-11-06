@@ -43,8 +43,15 @@ class Mp3FileInfo(object):
     # *****************************************************************************************************************
 
     def __init__(self, file_name, tools):
+        """
+        :param file_name:
+        :type file_name basestring
+
+        :param tools:
+        :type tools Tools
+        """
         if not os.path.exists(file_name):
-            raise OSError('File not found: "{}"'.format(file_name))
+            raise OSError('File not found: "{name}"'.format(name=file_name))
 
         mp3 = MP3(file_name)
 
@@ -144,35 +151,38 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def to_wav_segments(self, output_file_name, split_segment_minutes=0):
-        """ Converts source audio track to WAV format splitting into segments
+    def get_wav_segment_file_name(self, segment_number):
+        pass
 
-        convert source mp3 to wav. this is required for many reasons:
+    def to_wav_segments(self, segment_file_name_pattern, split_segment_minutes=0):
+        """Converts source audio track to WAV format splitting into segments. This is required for many reasons:
         * we need to adjust voice overlay amplitude to match MP3 file level and to do that we use "sox" too
           which cannot deal with MP3 directly.
         * there are some odd issues with "ffmpeg" failing during mixing phase when source is mp3 file.
           blind guess for now is that it's due to some structure mismatch between MP3 file (i.e. having cover
           image) and speech segments being just plain WAV. Most likely this can be solved better way but we
           need WAV anyway so no point wasting time at the moment for further research.
+
+        :param segment_file_name_pattern
+        :type segment_file_name_pattern basestring
+
+        :param split_segment_minutes
+        :type split_segment_minutes int
         """
         wav_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-i', self.file_name]
 
         if split_segment_minutes > 0:
             # https://www.ffmpeg.org/ffmpeg-formats.html#segment_002c-stream_005fsegment_002c-ssegment
-
-            dir_name = os.path.dirname(output_file_name)
-            name, ext = Util.split_file_name(output_file_name)
-            file_name_format = os.path.join(dir_name, name + '.%d.' + ext)
-
             wav_cmd.extend([
                 '-f', 'segment', '-segment_time', str(split_segment_minutes * 60),
-                '-c', 'copy', file_name_format,
+                segment_file_name_pattern,
             ])
         else:
-            wav_cmd.append(output_file_name)
+            # we need to ensure possible %d element in pattern is replaced by sanev alue
+            wav_cmd.append(segment_file_name_pattern % 0)
 
         if Util.execute_rc(wav_cmd) != 0:
-            raise RuntimeError('Failed to convert to WAV file')
+            raise RuntimeError('Failed to convert audio track to WAV file')
 
     # *****************************************************************************************************************
 
@@ -195,8 +205,11 @@ class Mp3FileInfo(object):
     def write_id3_tags(self, file_name, track_title):
         """Writes ID3 tags from out music file into given MP3 file
 
-        Args:
-            :file_name
+        :param file_name
+        :type file_name basestring
+
+        :param track_title
+        :type track_title basestring
         """
         try:
             tags = ID3(file_name)
@@ -204,7 +217,6 @@ class Mp3FileInfo(object):
             # Adding ID3 header
             tags = ID3()
 
-        # tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (Mp3VoiceStamp)'.format(self.title))
         tags[self.TAG_TITLE] = TIT2(encoding=3, text=track_title)
         tags[self.TAG_ALBUM_TITLE] = TALB(encoding=3, text=self.album_title)
         tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
