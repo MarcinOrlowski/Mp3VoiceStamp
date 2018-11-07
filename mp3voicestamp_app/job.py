@@ -29,6 +29,11 @@ from mp3voicestamp_app.util import Util
 
 class Job(object):
     def __init__(self, config, tools):
+        """
+
+        :param Config config:
+        :param Tools tools:
+        """
         # ensure config params make sense
         config.validate()
 
@@ -38,8 +43,15 @@ class Job(object):
         self.__tools = tools
         self.__audio = Audio(tools)
 
-    def get_save_file_name_full_path(self, music_track, segment_number=None, ext=None):
-        """Build out file name based on provided template and music_track data
+    def get_save_full_path(self, music_track, segment_number=None, ext=None):
+        """Builds out file name based on provided template and music_track data
+
+        :param Mp3FileInfo music_track:
+        :param int|None segment_number:
+        :param str|None ext:
+
+        :return:
+        :rtype:str
         """
         segment_name = ''
         if segment_number is not None:
@@ -86,18 +98,27 @@ class Job(object):
             print('Temp folder "{name}" not cleared.'.format(name=self.__tmp_dir))
 
     def speak_to_wav(self, text, out_file_name):
+        """
+
+        :param str text:
+        :param str out_file_name:
+
+        :return:
+        :rtype:bool
+        """
         # noinspection PyProtectedMember
         text_tmp_file = os.path.join(self.__tmp_dir, next(tempfile._get_candidate_names()) + '.txt')
         with open(text_tmp_file, "wb+") as fh:
             fh.write(text)
             fh.close()
 
-            rc = Util.execute_rc([self.__tools.get_tool(Tools.KEY_ESPEAK),
-                                  '-s', str(self.__config.speech_speed),
-                                  '-z',
-                                  '-w', out_file_name,
-                                  '-f', text_tmp_file],
-                                 debug=self.__config.debug)
+            rc = Util.execute_rc([
+                self.__tools.get_tool(Tools.KEY_ESPEAK),
+                '-s', str(self.__config.speech_speed),
+                '-z',
+                '-w', out_file_name,
+                '-f', text_tmp_file,
+            ])
 
             if rc == 0 and not self.__config.no_cleanup:
                 os.remove(text_tmp_file)
@@ -105,7 +126,13 @@ class Job(object):
             return rc == 0
 
     def __blend_wavs(self, speak_wav_file_name, title_wav_file_name, result_file_name):
-        """Merges title_wav into speak_wav (does not concatenate streams, but merges title into speak one!)
+        """Merges title_wav into speak_wav (does not concatenate streams, but merges title into speak one!).
+
+        :param str speak_wav_file_name:
+        :param str title_wav_file_name:
+        :param str result_file_name:
+
+        :raises RuntimeError
         """
         # ffmpeg -i input1.mp3 -i input2.mp3 -filter_complex amerge -ac 2 -c:a libmp3lame -q:a 4 output.mp3
         blend_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-y',
@@ -118,6 +145,13 @@ class Job(object):
             raise RuntimeError('Failed to blend WAVs')
 
     def __create_ticks_wav(self, speak_segments, speech_wav_file_name):
+        """
+
+        :param list speak_segments:
+        :param str speech_wav_file_name:
+
+        :raises:RuntimeError
+        """
         segment_file_names = []
 
         for idx, segment_text in enumerate(speak_segments):
@@ -180,6 +214,12 @@ class Job(object):
             os.unlink(os.path.join(self.__tmp_dir, '{idx}.wav'.format(idx=idx)))
 
     def voice_stamp(self, mp3_file_name):
+        """
+
+        :param str mp3_file_name:
+        :return:
+        :rtype:bool
+        """
         result = True
 
         try:
@@ -193,11 +233,11 @@ class Job(object):
                 Log.level_pop()
 
             # let's see if we need to split the audio track into smaller segments
-            number_of_track_segments = 1
+            segments_count = 1
             track_segment_duration = music_track.duration
             if self.__config.split_segment_duration > 0:
                 # we do, so we need to adjust certain checks too
-                number_of_track_segments = int(
+                segments_count = int(
                     ((float(music_track.duration) / float(self.__config.split_segment_duration)) + 0.5))
                 track_segment_duration = self.__config.split_segment_duration
 
@@ -224,11 +264,13 @@ class Job(object):
 
                 # calculate RMS amplitude of music track as reference to gain voice to match
                 audio_wav_segments_file_names = []
-                for idx in range(0, number_of_track_segments):
+                for idx in range(0, segments_count):
                     audio_wav_segments_file_names.append(segment_file_name_pattern % idx)
 
                 rms_amplitude = self.__audio.calculate_rms_amplitude(audio_wav_segments_file_names)
                 target_speech_rms_amplitude = rms_amplitude * self.__config.speech_volume_factor
+            else:
+                target_speech_rms_amplitude = 25
 
             # --------------------------------------------------------------------------------------------
 
@@ -239,7 +281,7 @@ class Job(object):
             # if user sets tick format to empty string, we'd skip generating ticks completely
             if self.__config.tick_format != '':
                 for time_marker in ticks_per_segment:
-                    minutes = time_marker + self.__config.tick_add
+                    minutes = str(time_marker + self.__config.tick_add)
                     extras = {'minutes': minutes,
                               'minutes_digits': Util.separate_chars(minutes),
                               }
@@ -265,11 +307,9 @@ class Job(object):
 
             track_segment_name_format = 'segment {segment_number}'
 
-            for segment_number in range(0, number_of_track_segments):
-                segment_number_for_users = segment_number + 1
-
-                segment_wav_file_name = self.get_save_file_name_full_path(music_track,
-                                                                          segment_number_for_users if number_of_track_segments > 1 else None)
+            for segment_number in range(0, segments_count):
+                segment_wav_file_name = self.get_save_full_path(music_track,
+                                                                (segment_number + 1) if segments_count > 1 else None)
 
                 Log.d('Doing segment {idx} as {file_name}'.format(
                     idx=segment_number, file_name=segment_wav_file_name))
@@ -288,12 +328,12 @@ class Job(object):
                 # let's now create WAVs with our segment title part.
                 extras = {
                     'config_name': self.__config.name,
-                    'segment_number': '' if self.__config.split_segment_duration == 0 else segment_number_for_users,
-                    'segment_count': number_of_track_segments,
+                    'segment_number': '' if self.__config.split_segment_duration == 0 else (segment_number + 1),
+                    'segment_count': segments_count,
                 }
 
                 __segment_name = ''
-                if number_of_track_segments > 1:
+                if segments_count > 1:
                     __segment_name = Util.process_placeholders(track_segment_name_format, extras)
                 extras['segment_name'] = __segment_name
 

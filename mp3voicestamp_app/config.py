@@ -94,6 +94,10 @@ class Config(object):
 
     @property
     def name(self):
+        """
+
+        :rtype: str
+        """
         return self.__name
 
     @name.setter
@@ -123,6 +127,11 @@ class Config(object):
 
     @staticmethod
     def __get_as_float(value):
+        """
+
+        :param value: Anything you want to be returned as float
+        :rtype: float
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -136,6 +145,12 @@ class Config(object):
 
     @staticmethod
     def __get_as_string(value, strip=True):
+        """
+
+        :param value: Anything you want to be returned as string
+        :param bool strip: If True (default), calls strip() prior returning the results
+        :rtype: str
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -155,6 +170,10 @@ class Config(object):
 
     @property
     def tick_format(self):
+        """
+
+        :rtype: str
+        """
         return self.__normalize_spaces(self.__tick_format)
 
     @tick_format.setter
@@ -165,6 +184,10 @@ class Config(object):
 
     @property
     def tick_offset(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_offset
 
     @tick_offset.setter
@@ -178,6 +201,10 @@ class Config(object):
 
     @property
     def tick_interval(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_interval
 
     @tick_interval.setter
@@ -191,6 +218,10 @@ class Config(object):
 
     @property
     def tick_add(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_value_offset
 
     @tick_add.setter
@@ -206,6 +237,10 @@ class Config(object):
 
     @property
     def split_segment_duration(self):
+        """
+
+        :rtype: int
+        """
         return self.__split_duration
 
     @split_segment_duration.setter
@@ -234,6 +269,10 @@ class Config(object):
 
     @property
     def speech_speed(self):
+        """
+
+        :rtype: int
+        """
         return self.__speech_speed
 
     @speech_speed.setter
@@ -249,6 +288,10 @@ class Config(object):
 
     @property
     def title_format(self):
+        """
+
+        :rtype: str
+        """
         return self.__normalize_spaces(self.__title_format)
 
     @title_format.setter
@@ -261,6 +304,10 @@ class Config(object):
 
     @property
     def force_overwrite(self):
+        """
+
+        :rtype: bool
+        """
         return self.__force_overwrite
 
     @force_overwrite.setter
@@ -272,17 +319,25 @@ class Config(object):
 
     @property
     def files_in(self):
+        """
+
+        :rtype: list
+        """
         return self.__files_in
 
     @files_in.setter
     def files_in(self, value):
-        if value is not None:
+        if value is not None and isinstance(value, list):
             self.__files_in = value
 
     # *****************************************************************************************************************
 
     @property
     def file_out(self):
+        """
+
+        :rtype: str
+        """
         return self.__file_out
 
     @file_out.setter
@@ -296,6 +351,10 @@ class Config(object):
 
     @property
     def file_out_format(self):
+        """
+
+        :rtype: str
+        """
         return self.__normalize_spaces(self.__file_out_format)
 
     @file_out_format.setter
@@ -309,6 +368,10 @@ class Config(object):
     # *****************************************************************************************************************
 
     def validate(self):
+        """
+
+        :raises ValueError
+        """
         if 0 < self.split_segment_duration < self.tick_offset:
             raise ValueError('Tick offset is higher than split duration')
 
@@ -376,6 +439,12 @@ class Config(object):
 
     @staticmethod
     def __strip_quotes_from_ini_string(string):
+        """
+
+        :param string:
+        :return:
+        :rtype: str
+        """
         if string[0:1] == '"':
             string = string[1:]
         if string[-1:] == '"':

@@ -37,20 +37,25 @@ class Util(object):
         sys.exit(1)
 
     @staticmethod
-    def execute_rc(cmd_list, working_dir=None, debug=False):
-        rc, _, _ = Util.execute(cmd_list, working_dir, debug)
+    def execute_rc(cmd_list, working_dir=None):
+        """
+
+        :param list cmd_list:
+        :param str|None working_dir:
+        :return:
+        """
+        rc, _, _ = Util.execute(cmd_list, working_dir)
         return rc
 
     @staticmethod
-    def execute(cmd_list, working_dir=None, debug=False):
+    def execute(cmd_list, working_dir=None):
         """Executes commands from cmd_list changing CWD to working_dir.
 
-        Args:
-          cmd_list: list with command i.e. ['g4', '-option', ...]
-          working_dir: if not None working directory is set to it for cmd exec
-          debug: if True, prints executed command string
+        :param list cmd_list: list with command i.e. ['g4', '-option', ...]
+        :param str|None working_dir: if not None working directory is set to it for cmd exec
 
-        Returns: rc of executed command (usually 0 == success)
+        :return:
+        :rtype:(int, list, list)
         """
         if working_dir:
             old_cwd = os.getcwd()
@@ -97,10 +102,10 @@ class Util(object):
     def which(program):
         """Looks for given file (usually binary, executable) in known locations, incl. PATH
 
-        Args:
-            :program
+        :param str program:
 
-        Returns full path to known location of given executable or None
+        :return:Returns full path to known location of given executable or None
+        :rtype:str:
         """
 
         def is_exe(full_path):
@@ -120,9 +125,13 @@ class Util(object):
 
     @staticmethod
     def prepare_for_speak(text):
-        """ Tries to process provided text for more natural sound when spoken, i.e.
-            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
-            We also replace '-' by coma, to enforce small pause in spoken text
+        """Tries to process provided text for more natural sound when spoken, i.e.
+        "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
+        We also replace '-' by coma, to enforce small pause in spoken text
+
+        :param str text:
+        :return:
+        :rtype:str
         """
 
         def strip_leading_zeros(re_match):
@@ -132,6 +141,13 @@ class Util(object):
 
     @staticmethod
     def separate_chars(text, sep=' '):
+        """
+
+        :param str text:
+        :param str sep:
+        :return:
+        :rtype:str
+        """
         result = ''
         text = str(text).strip()
         if text:
@@ -143,9 +159,11 @@ class Util(object):
     @staticmethod
     def merge_dicts(dict1, dict2):
         """Merge two dictionaries
-
-        :type dict1: dict
-        :type dict2: dict
+        
+        :param dict dict1: 
+        :param dict dict2: 
+        :return: 
+        :rtype:dict
         """
         res = dict2.copy()
         res.update(dict1)
@@ -156,15 +174,12 @@ class Util(object):
     def process_placeholders(fmt, placeholders, error_return_value=''):
         """
 
-        :param fmt:
-        :param placeholders:
-        :param error_return_value:
-
-        :type fmt: basestring
-        :type placeholders: dict
-        :type error_return_value: basestring
+        :param str fmt:
+        :param dict placeholders:
+        :param str error_return_value:
 
         :return:
+        :rtype:str
         """
         if fmt is None:
             return error_return_value
@@ -182,6 +197,12 @@ class Util(object):
 
     @staticmethod
     def split_file_name(file_name):
+        """
+
+        :param str file_name:
+        :return:
+        :rtype:(str, str)
+        """
         base, ext = os.path.splitext(os.path.basename(file_name))
         ext = ext[1:] if ext[0:1] == '.' else ext
 

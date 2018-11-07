@@ -34,6 +34,12 @@ class Tools(object):
         self.__check_env_called = False
 
     def ensure_check_env_called(self):
+        """
+
+        :return:
+
+        :raises:RuntimeError
+        """
         if not self.__check_env_called:
             raise RuntimeError('check_env() must be called prior using other methods!')
 
@@ -86,5 +92,12 @@ class Tools(object):
         self.__check_env_called = True
 
     def get_tool(self, key):
+        """Returns tool executable file name based om provided tool internal ID
+
+        :param str key: Any Tools.KEY_* values
+
+        :return:
+        :rtype:str
+        """
         self.ensure_check_env_called()
         return self.__tools_map.get(key)

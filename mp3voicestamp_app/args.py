@@ -27,7 +27,8 @@ class Args(object):
     def parse_args(config):
         """Parses command line arguments
 
-        :returns argsparse
+        :param Config config:
+        :return: argparse
         """
         parser = argparse.ArgumentParser(
             prog=APP_NAME.lower(),
