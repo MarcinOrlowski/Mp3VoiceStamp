@@ -40,9 +40,10 @@ class Util(object):
     def execute_rc(cmd_list, working_dir=None):
         """
 
-        :param list cmd_list:
-        :param str|None working_dir:
-        :return:
+        :param list[basestring] cmd_list:
+        :param basestring|None working_dir:
+
+        :rtype: int
         """
         rc, _, _ = Util.execute(cmd_list, working_dir)
         return rc
@@ -51,11 +52,10 @@ class Util(object):
     def execute(cmd_list, working_dir=None):
         """Executes commands from cmd_list changing CWD to working_dir.
 
-        :param list cmd_list: list with command i.e. ['g4', '-option', ...]
-        :param str|None working_dir: if not None working directory is set to it for cmd exec
+        :param list[basestring] cmd_list: list with command i.e. ['g4', '-option', ...]
+        :param basestring|None working_dir: if not None working directory is set to it for cmd exec
 
-        :return:
-        :rtype:(int, list, list)
+        :rtype: (int, list, list)
         """
         if working_dir:
             old_cwd = os.getcwd()
@@ -102,10 +102,10 @@ class Util(object):
     def which(program):
         """Looks for given file (usually binary, executable) in known locations, incl. PATH
 
-        :param str program:
+        :param basestring program:
 
-        :return:Returns full path to known location of given executable or None
-        :rtype:str:
+        :return: Returns full path to known location of given executable or None
+        :rtype: basestring
         """
 
         def is_exe(full_path):
@@ -129,9 +129,9 @@ class Util(object):
         "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
         We also replace '-' by coma, to enforce small pause in spoken text
 
-        :param str text:
+        :param basestring text:
         :return:
-        :rtype:str
+        :rtype: basestring
         """
 
         def strip_leading_zeros(re_match):
@@ -143,10 +143,10 @@ class Util(object):
     def separate_chars(text, sep=' '):
         """
 
-        :param str text:
-        :param str sep:
+        :param basestring text:
+        :param basestring sep:
         :return:
-        :rtype:str
+        :rtype: basestring
         """
         result = ''
         text = str(text).strip()
@@ -159,7 +159,7 @@ class Util(object):
     @staticmethod
     def merge_dicts(dict1, dict2):
         """Merge two dictionaries
-        
+
         :param dict dict1: base merge dictionary
         :param dict dict2: this dict is merged into dict1
 
@@ -175,12 +175,11 @@ class Util(object):
     def process_placeholders(fmt, placeholders, error_return_value=''):
         """
 
-        :param str fmt:
+        :param basestring fmt:
         :param dict placeholders:
-        :param str error_return_value:
+        :param basestring error_return_value:
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         if fmt is None:
             return error_return_value
@@ -200,9 +199,9 @@ class Util(object):
     def split_file_name(file_name):
         """
 
-        :param str file_name:
+        :param basestring file_name:
         :return:
-        :rtype:(str, str)
+        :rtype:(basestring, basestring)
         """
         base, ext = os.path.splitext(os.path.basename(file_name))
         ext = ext[1:] if ext[0:1] == '.' else ext

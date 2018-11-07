@@ -94,9 +94,9 @@ class Config(object):
 
     @property
     def name(self):
-        """
+        """Returns config name (label) or empty string
 
-        :rtype: str
+        :rtype: basestring
         """
         return self.__name
 
@@ -108,12 +108,24 @@ class Config(object):
 
     @staticmethod
     def __normalize_spaces(text):
+        """Replaces any sequence of two or more spaces with single one.
+
+        :param basestring text: text to process
+
+        :rtype: basestring
+        """
         return re.sub(' +', ' ', text).strip()
 
     # *****************************************************************************************************************
 
     @staticmethod
     def __get_as_int(value):
+        """Ensures the value is int by converting data when needed
+
+        :param value:
+
+        :rtype: int
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -127,9 +139,10 @@ class Config(object):
 
     @staticmethod
     def __get_as_float(value):
-        """
+        """Ensures provided value is float by converting data if needed
 
         :param value: Anything you want to be returned as float
+
         :rtype: float
         """
         if value is not None:
@@ -145,11 +158,12 @@ class Config(object):
 
     @staticmethod
     def __get_as_string(value, strip=True):
-        """
+        """Ensures provided value is string by converting data if needed
 
         :param value: Anything you want to be returned as string
         :param bool strip: If True (default), calls strip() prior returning the results
-        :rtype: str
+
+        :rtype: basestring
         """
         if value is not None:
             if isinstance(value, list):
@@ -172,7 +186,7 @@ class Config(object):
     def tick_format(self):
         """
 
-        :rtype: str
+        :rtype: basestring
         """
         return self.__normalize_spaces(self.__tick_format)
 
@@ -290,7 +304,7 @@ class Config(object):
     def title_format(self):
         """
 
-        :rtype: str
+        :rtype: basestring
         """
         return self.__normalize_spaces(self.__title_format)
 
@@ -321,12 +335,17 @@ class Config(object):
     def files_in(self):
         """
 
-        :rtype: list
+        :rtype: list[basestring]
         """
         return self.__files_in
 
     @files_in.setter
     def files_in(self, value):
+        """
+
+        :param list[basestring] value:
+        :return:
+        """
         if value is not None and isinstance(value, list):
             self.__files_in = value
 
@@ -336,7 +355,7 @@ class Config(object):
     def file_out(self):
         """
 
-        :rtype: str
+        :rtype: basestring
         """
         return self.__file_out
 
@@ -353,7 +372,7 @@ class Config(object):
     def file_out_format(self):
         """
 
-        :rtype: str
+        :rtype: basestring
         """
         return self.__normalize_spaces(self.__file_out_format)
 
@@ -380,8 +399,7 @@ class Config(object):
     def load(self, file_name):
         """Load patch config file (if exists).
 
-        Args:
-          file_name: path to config file to load or None
+        :param basestring|None file_name: path to config file to load or None
         """
 
         if file_name is None:
@@ -441,9 +459,9 @@ class Config(object):
     def __strip_quotes_from_ini_string(string):
         """
 
-        :param string:
-        :return:
-        :rtype: str
+        :param basestring string:
+
+        :rtype: basestring
         """
         if string[0:1] == '"':
             string = string[1:]
@@ -455,6 +473,13 @@ class Config(object):
 
     @staticmethod
     def __format_ini_entry(ini_key, val):
+        """
+
+        :param basestring ini_key:
+        :param val:
+
+        :rtype: basestring
+        """
         result = None
 
         if isinstance(val, (str, unicode)):
@@ -470,9 +495,9 @@ class Config(object):
     def save(self, file_name):
         """Dumps current configuration as INI file.
 
-        Args:
-          file_name: name of destination config file
+        :param basestring file_name: name of destination config file
         """
+
         file_name_full = os.path.expanduser(file_name)
         Log.v('Saving config state as "{}"'.format(file_name_full))
         if os.path.exists(file_name_full) and not self.force_overwrite:

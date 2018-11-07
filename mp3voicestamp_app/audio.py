@@ -51,7 +51,7 @@ class Audio(object):
     def adjust_wav_amplitude(self, wav_file, rms_amplitude):
         """Calls normalize tool to adjust amplitude of audio file
 
-        :param str wav_file:
+        :param basestring wav_file:
         :param float rms_amplitude:
         :raises RuntimeError
         """
@@ -65,9 +65,9 @@ class Audio(object):
     def mix_wav_tracks(self, result_file_name, encoding_quality, src_wav_files):
         """Mixes given WAV tracks together
 
-        :param str result_file_name: result file name
+        :param basestring result_file_name: result file name
         :param int encoding_quality: LAME encoder quality parameter
-        :param list[str] src_wav_files: list of source WAV files to mix
+        :param list[basestring] src_wav_files: list of source WAV files to mix
 
         :raises RuntimeError
         """

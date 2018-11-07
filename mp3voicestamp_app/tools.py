@@ -36,8 +36,6 @@ class Tools(object):
     def ensure_check_env_called(self):
         """
 
-        :return:
-
         :raises:RuntimeError
         """
         if not self.__check_env_called:
@@ -94,10 +92,9 @@ class Tools(object):
     def get_tool(self, key):
         """Returns tool executable file name based om provided tool internal ID
 
-        :param str key: Any Tools.KEY_* values
+        :param basestring key: Any Tools.KEY_* values
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         self.ensure_check_env_called()
         return self.__tools_map.get(key)

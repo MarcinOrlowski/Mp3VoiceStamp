@@ -79,8 +79,7 @@ class Mp3FileInfo(object):
     def duration(self):
         """
 
-        :return:
-        :rtype:int
+        :rtype: int
         """
         return int(round(self.__duration / 60 + 0.5))
 
@@ -92,8 +91,7 @@ class Mp3FileInfo(object):
     def bitrate(self):
         """
 
-        :return:
-        :rtype:int
+        :rtype: int
         """
         return self.__bitrate
 
@@ -102,7 +100,6 @@ class Mp3FileInfo(object):
         """
 
         :param value:
-        :return:
         """
         self.__bitrate = int(value)
 
@@ -110,8 +107,7 @@ class Mp3FileInfo(object):
     def title(self):
         """
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         result = self.__title
         if self.__title == '':
@@ -122,8 +118,7 @@ class Mp3FileInfo(object):
     def title(self, value):
         """
 
-        :param str value:
-        :return:
+        :param basestring value:
         """
         self.__title = str(value).strip()
 
@@ -131,8 +126,7 @@ class Mp3FileInfo(object):
     def artist(self):
         """
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         return self.__artist if self.__artist != '' else self.album_artist
 
@@ -140,8 +134,7 @@ class Mp3FileInfo(object):
     def artist(self, value):
         """
 
-        :param str value:
-        :return:
+        :param basestring value:
         """
         self.__artist = str(value).strip()
 
@@ -149,8 +142,7 @@ class Mp3FileInfo(object):
     def track_number(self):
         """
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         return self.__track_number
 
@@ -158,8 +150,7 @@ class Mp3FileInfo(object):
     def track_number(self, value):
         """
 
-        :param str value:
-        :return:
+        :param basestring value:
         """
         if value == '-1':
             value = ''
@@ -170,6 +161,14 @@ class Mp3FileInfo(object):
 
     @staticmethod
     def __get_tag(mp3, tag, default=''):
+        """
+
+        :param MP3 mp3:
+        :param basestring tag:
+        :param basestring default:
+
+        :rtype: basestring
+        """
         return default if tag not in mp3 else str(mp3[tag])
 
     # *****************************************************************************************************************
@@ -177,8 +176,7 @@ class Mp3FileInfo(object):
     def get_placeholders(self):
         """Returns track related placeholders, populated from ID3 tags.
 
-        :return:
-        :rtype:dict
+        :rtype: dict
         """
         return {
             'file_name': self.base_name,
@@ -206,10 +204,8 @@ class Mp3FileInfo(object):
           image) and speech segments being just plain WAV. Most likely this can be solved better way but we
           need WAV anyway so no point wasting time at the moment for further research.
 
-        :param str segment_file_name_pattern:
+        :param basestring segment_file_name_pattern:
         :param int split_segment_minutes:
-
-        :return:
 
         :raises RuntimeError
         """
@@ -234,7 +230,8 @@ class Mp3FileInfo(object):
         """Selects LAME quality switch based on source file bitrate
 
         Based on https://trac.ffmpeg.org/wiki/Encode/MP3
-        :return: int
+
+        :rtype: int
         """
         quality = 0
         for avg in [245, 225, 190, 175, 165, 130, 115, 100, 85, 65]:
@@ -252,7 +249,6 @@ class Mp3FileInfo(object):
 
         :param str file_name:
         :param str track_title:
-        :return:
         """
         try:
             tags = ID3(file_name)

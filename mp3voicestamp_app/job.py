@@ -48,7 +48,7 @@ class Job(object):
 
         :param Mp3FileInfo music_track:
         :param int|None segment_number:
-        :param str|None ext:
+        :param basestring|None ext:
 
         :return:
         :rtype:str
@@ -100,11 +100,10 @@ class Job(object):
     def speak_to_wav(self, text, out_file_name):
         """
 
-        :param str text:
-        :param str out_file_name:
+        :param basestring text:
+        :param basestring out_file_name:
 
-        :return:
-        :rtype:bool
+        :rtype: bool
         """
         # noinspection PyProtectedMember
         text_tmp_file = os.path.join(self.__tmp_dir, next(tempfile._get_candidate_names()) + '.txt')
@@ -128,9 +127,9 @@ class Job(object):
     def __blend_wavs(self, speak_wav_file_name, title_wav_file_name, result_file_name):
         """Merges title_wav into speak_wav (does not concatenate streams, but merges title into speak one!).
 
-        :param str speak_wav_file_name:
-        :param str title_wav_file_name:
-        :param str result_file_name:
+        :param basestring speak_wav_file_name:
+        :param basestring title_wav_file_name:
+        :param basestring result_file_name:
 
         :raises RuntimeError
         """
@@ -148,7 +147,7 @@ class Job(object):
         """
 
         :param list speak_segments:
-        :param str speech_wav_file_name:
+        :param basestring speech_wav_file_name:
 
         :raises:RuntimeError
         """
@@ -216,9 +215,9 @@ class Job(object):
     def voice_stamp(self, mp3_file_name):
         """
 
-        :param str mp3_file_name:
-        :return:
-        :rtype:bool
+        :param basestring mp3_file_name:
+
+        :rtype: bool
         """
         result = True
 

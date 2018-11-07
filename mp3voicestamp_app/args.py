@@ -28,7 +28,8 @@ class Args(object):
         """Parses command line arguments
 
         :param Config config:
-        :return: argparse
+
+        :rtype: ArgumentParser
         """
         parser = argparse.ArgumentParser(
             prog=APP_NAME.lower(),

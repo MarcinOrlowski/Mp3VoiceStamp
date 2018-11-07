@@ -113,7 +113,7 @@ class Log(object):
     def level_init(message=None, color=None, ignore_quiet_switch=False):
         """
 
-        :param str|None message: Message or messages to process
+        :param basestring|None message: Message or messages to process
         :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
         :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
         """
@@ -279,8 +279,7 @@ class Log(object):
     def __get_stacktrace_string():
         """Returns call stacktrace as string
 
-        :return:
-        :rtype:str
+        :rtype: basestring
         """
         msg = ''
         if Log.debug:
@@ -300,10 +299,10 @@ class Log(object):
     def strip_ansi(message):
         """Removes all ANSI control codes from given message string
 
-        :param str message: message to process
+        :param basestring message: message to process
 
         :return: message string witn ANSI codes striped or None
-        :rtype:str|None
+        :rtype: basestring|None
         """
         if message is not None:
             pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
@@ -315,10 +314,10 @@ class Log(object):
     def substitute_ansi(message):
         """Substitute color keys (i.e. %red%) with proper ANSI codes
 
-        :param str message: message to process
+        :param basestring message: message to process
 
         :return: Replaces color code placeholder with ANSI values.
-        :rtype:str
+        :rtype: basestring
         """
         color_map = {
             'reset': Log.ANSI_RESET,
@@ -437,8 +436,9 @@ class Log(object):
         """Converts certain data types (str, unicode) into list.
 
         :param data: data to be converted to list
+
         :return: list with converted data
-        :rtype:list
+        :rtype: list
         """
         # variable types to be converted
         # noinspection PyCompatibility
@@ -458,7 +458,7 @@ class Log(object):
         :param basestring|None color: color code (i.e. '%red%' for each row) or COLOR_xxx
 
         :return: list with converted data.
-        :rtype:list
+        :rtype: list[basestring]
         """
         if not isinstance(data_to_convert, dict):
             return data_to_convert
