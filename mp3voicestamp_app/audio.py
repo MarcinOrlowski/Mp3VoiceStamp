@@ -63,20 +63,13 @@ class Audio(object):
             raise RuntimeError('Failed to adjust amplitude of "{name}"'.format(name=wav_file))
 
     def mix_wav_tracks(self, result_file_name, encoding_quality, src_wav_files):
-        """Calls normalize tool to adjust amplitude of audio file
+        """Mixes given WAV tracks together
 
         :param str result_file_name: result file name
         :param int encoding_quality: LAME encoder quality parameter
         :param list[str] src_wav_files: list of source WAV files to mix
 
         :raises RuntimeError
-        """
-        """Mixes given WAV tracks together
-
-        Args:
-            :file_out
-            :encoding_quality 
-            :wav_files list of WAV files to mix
         """
         merge_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-y']
         _ = [merge_cmd.extend(['-i', file_name]) for file_name in src_wav_files]

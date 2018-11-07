@@ -160,13 +160,14 @@ class Util(object):
     def merge_dicts(dict1, dict2):
         """Merge two dictionaries
         
-        :param dict dict1: 
-        :param dict dict2: 
-        :return: 
+        :param dict dict1: base merge dictionary
+        :param dict dict2: this dict is merged into dict1
+
+        :return: dictionary with merged values. In case of key conflict, dictionary dict2 overwrites dict1 entry
         :rtype:dict
         """
-        res = dict2.copy()
-        res.update(dict1)
+        res = dict1.copy()
+        res.update(dict2)
 
         return res
 
