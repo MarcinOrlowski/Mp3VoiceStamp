@@ -13,18 +13,19 @@
 
 """
 
+import os
+import re
+
+from backports import configparser
 # noinspection PyCompatibility
 from past.builtins import basestring
-from backports import configparser
-
-import os
 
 from mp3voicestamp_app.const import *
 from mp3voicestamp_app.log import Log
 
 
 class Config(object):
-    DEFAULT_TITLE_FORMAT = '{title} {config_name}'
+    DEFAULT_TITLE_FORMAT = '{title} {config_name} {segment_name}'
 
     DEFAULT_SPEECH_SPEED = 150
     DEFAULT_SPEECH_VOLUME_FACTOR = 2
@@ -34,7 +35,9 @@ class Config(object):
     DEFAULT_TICK_OFFSET = 5
     DEFAULT_TICK_ADD = 0
 
-    DEFAULT_FILE_OUT_FORMAT = '{name} (mp3voicestamp).{ext}'
+    DEFAULT_SPLIT_SEGMENT_DURATION = 0
+
+    DEFAULT_FILE_OUT_FORMAT = '{name} {segment_name} (mp3voicestamp).{ext}'
 
     SPEECH_SPEED_MIN = 80
     SPEECH_SPEED_MAX = 450
@@ -51,6 +54,8 @@ class Config(object):
     INI_KEY_SPEECH_VOLUME_FACTOR = 'speech_volume_factor'
 
     INI_KEY_TITLE_FORMAT = 'title_format'
+
+    INI_KEY_SPLIT_DURATION = 'split_segment_duration'
 
     INI_KEY_TICK_FORMAT = 'tick_format'
     INI_KEY_TICK_OFFSET = 'tick_offset'
@@ -78,6 +83,8 @@ class Config(object):
 
         self.title_format = Config.DEFAULT_TITLE_FORMAT
 
+        self.split_segment_duration = Config.DEFAULT_SPLIT_SEGMENT_DURATION
+
         self.files_in = []
         self.file_out = None
 
@@ -87,6 +94,10 @@ class Config(object):
 
     @property
     def name(self):
+        """Returns config name (label) or empty string
+
+        :rtype: basestring
+        """
         return self.__name
 
     @name.setter
@@ -96,7 +107,25 @@ class Config(object):
     # *****************************************************************************************************************
 
     @staticmethod
+    def __normalize_spaces(text):
+        """Replaces any sequence of two or more spaces with single one.
+
+        :param basestring text: text to process
+
+        :rtype: basestring
+        """
+        return re.sub(' +', ' ', text).strip()
+
+    # *****************************************************************************************************************
+
+    @staticmethod
     def __get_as_int(value):
+        """Ensures the value is int by converting data when needed
+
+        :param value:
+
+        :rtype: int
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -110,6 +139,12 @@ class Config(object):
 
     @staticmethod
     def __get_as_float(value):
+        """Ensures provided value is float by converting data if needed
+
+        :param value: Anything you want to be returned as float
+
+        :rtype: float
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -123,6 +158,13 @@ class Config(object):
 
     @staticmethod
     def __get_as_string(value, strip=True):
+        """Ensures provided value is string by converting data if needed
+
+        :param value: Anything you want to be returned as string
+        :param bool strip: If True (default), calls strip() prior returning the results
+
+        :rtype: basestring
+        """
         if value is not None:
             if isinstance(value, list):
                 if not value:
@@ -142,7 +184,11 @@ class Config(object):
 
     @property
     def tick_format(self):
-        return self.__tick_format
+        """
+
+        :rtype: basestring
+        """
+        return self.__normalize_spaces(self.__tick_format)
 
     @tick_format.setter
     def tick_format(self, value):
@@ -152,6 +198,10 @@ class Config(object):
 
     @property
     def tick_offset(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_offset
 
     @tick_offset.setter
@@ -165,6 +215,10 @@ class Config(object):
 
     @property
     def tick_interval(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_interval
 
     @tick_interval.setter
@@ -178,6 +232,10 @@ class Config(object):
 
     @property
     def tick_add(self):
+        """
+
+        :rtype: int
+        """
         return self.__tick_value_offset
 
     @tick_add.setter
@@ -188,6 +246,25 @@ class Config(object):
                 raise ValueError('Tick add value cannot be lower than 0')
 
             self.__tick_value_offset = value
+
+    # *****************************************************************************************************************
+
+    @property
+    def split_segment_duration(self):
+        """
+
+        :rtype: int
+        """
+        return self.__split_duration
+
+    @split_segment_duration.setter
+    def split_segment_duration(self, value):
+        value = Config.__get_as_int(value)
+        if value is not None:
+            if value < 0:
+                raise ValueError('Split duration cannot be lower than 0')
+
+            self.__split_duration = value
 
     # *****************************************************************************************************************
 
@@ -206,6 +283,10 @@ class Config(object):
 
     @property
     def speech_speed(self):
+        """
+
+        :rtype: int
+        """
         return self.__speech_speed
 
     @speech_speed.setter
@@ -221,7 +302,11 @@ class Config(object):
 
     @property
     def title_format(self):
-        return self.__title_format
+        """
+
+        :rtype: basestring
+        """
+        return self.__normalize_spaces(self.__title_format)
 
     @title_format.setter
     def title_format(self, value):
@@ -233,6 +318,10 @@ class Config(object):
 
     @property
     def force_overwrite(self):
+        """
+
+        :rtype: bool
+        """
         return self.__force_overwrite
 
     @force_overwrite.setter
@@ -244,17 +333,30 @@ class Config(object):
 
     @property
     def files_in(self):
+        """
+
+        :rtype: list[basestring]
+        """
         return self.__files_in
 
     @files_in.setter
     def files_in(self, value):
-        if value is not None:
+        """
+
+        :param list[basestring] value:
+        :return:
+        """
+        if value is not None and isinstance(value, list):
             self.__files_in = value
 
     # *****************************************************************************************************************
 
     @property
     def file_out(self):
+        """
+
+        :rtype: basestring
+        """
         return self.__file_out
 
     @file_out.setter
@@ -268,7 +370,11 @@ class Config(object):
 
     @property
     def file_out_format(self):
-        return self.__file_out_format
+        """
+
+        :rtype: basestring
+        """
+        return self.__normalize_spaces(self.__file_out_format)
 
     @file_out_format.setter
     def file_out_format(self, value):
@@ -280,15 +386,27 @@ class Config(object):
 
     # *****************************************************************************************************************
 
+    def validate(self):
+        """
+
+        :raises ValueError
+        """
+        if 0 < self.split_segment_duration < self.tick_offset:
+            raise ValueError('Tick offset is higher than split duration')
+
+    # *****************************************************************************************************************
+
     def load(self, file_name):
         """Load patch config file (if exists).
 
-        Args:
-          file_name: path to config file to load or None
+        :param basestring|None file_name: path to config file to load or None
         """
 
+        if file_name is None:
+            return
+
         if not isinstance(file_name, basestring):
-            Log.abort('No valid config file name not given.')
+            Log.abort('No valid config file name given.')
 
         config_file_full = os.path.expanduser(file_name)
 
@@ -334,9 +452,17 @@ class Config(object):
         if config.has_option(section, self.INI_KEY_TICK_ADD):
             self.tick_add = config.getint(section, self.INI_KEY_TICK_ADD)
 
+        if config.has_option(section, self.INI_KEY_SPLIT_DURATION):
+            self.split_segment_duration = config.getint(section, self.INI_KEY_SPLIT_DURATION)
 
     @staticmethod
     def __strip_quotes_from_ini_string(string):
+        """
+
+        :param basestring string:
+
+        :rtype: basestring
+        """
         if string[0:1] == '"':
             string = string[1:]
         if string[-1:] == '"':
@@ -347,6 +473,13 @@ class Config(object):
 
     @staticmethod
     def __format_ini_entry(ini_key, val):
+        """
+
+        :param basestring ini_key:
+        :param val:
+
+        :rtype: basestring
+        """
         result = None
 
         if isinstance(val, (str, unicode)):
@@ -362,9 +495,9 @@ class Config(object):
     def save(self, file_name):
         """Dumps current configuration as INI file.
 
-        Args:
-          file_name: name of destination config file
+        :param basestring file_name: name of destination config file
         """
+
         file_name_full = os.path.expanduser(file_name)
         Log.v('Saving config state as "{}"'.format(file_name_full))
         if os.path.exists(file_name_full) and not self.force_overwrite:
@@ -383,6 +516,9 @@ class Config(object):
             Config.__format_ini_entry(self.INI_KEY_SPEECH_VOLUME_FACTOR, self.speech_volume_factor),
             '',
             Config.__format_ini_entry(self.INI_KEY_TITLE_FORMAT, self.title_format),
+            '',
+            '# 0 (zero) means no file splitting',
+            Config.__format_ini_entry(self.INI_KEY_SPLIT_DURATION, self.split_segment_duration),
             '',
             Config.__format_ini_entry(self.INI_KEY_TICK_FORMAT, self.tick_format),
             Config.__format_ini_entry(self.INI_KEY_TICK_OFFSET, self.tick_offset),

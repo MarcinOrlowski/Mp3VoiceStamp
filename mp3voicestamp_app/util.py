@@ -37,20 +37,25 @@ class Util(object):
         sys.exit(1)
 
     @staticmethod
-    def execute_rc(cmd_list, working_dir=None, debug=False):
-        rc, _, _ = Util.execute(cmd_list, working_dir, debug)
+    def execute_rc(cmd_list, working_dir=None):
+        """
+
+        :param list[basestring] cmd_list:
+        :param basestring|None working_dir:
+
+        :rtype: int
+        """
+        rc, _, _ = Util.execute(cmd_list, working_dir)
         return rc
 
     @staticmethod
-    def execute(cmd_list, working_dir=None, debug=False):
+    def execute(cmd_list, working_dir=None):
         """Executes commands from cmd_list changing CWD to working_dir.
 
-        Args:
-          cmd_list: list with command i.e. ['g4', '-option', ...]
-          working_dir: if not None working directory is set to it for cmd exec
-          debug: if True, prints executed command string
+        :param list[basestring] cmd_list: list with command i.e. ['g4', '-option', ...]
+        :param basestring|None working_dir: if not None working directory is set to it for cmd exec
 
-        Returns: rc of executed command (usually 0 == success)
+        :rtype: (int, list, list)
         """
         if working_dir:
             old_cwd = os.getcwd()
@@ -97,10 +102,10 @@ class Util(object):
     def which(program):
         """Looks for given file (usually binary, executable) in known locations, incl. PATH
 
-        Args:
-            :program
+        :param basestring program:
 
-        Returns full path to known location of given executable or None
+        :return: Returns full path to known location of given executable or None
+        :rtype: basestring
         """
 
         def is_exe(full_path):
@@ -120,9 +125,13 @@ class Util(object):
 
     @staticmethod
     def prepare_for_speak(text):
-        """ Tries to process provided text for more natural sound when spoken, i.e.
-            "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
-            We also replace '-' by coma, to enforce small pause in spoken text
+        """Tries to process provided text for more natural sound when spoken, i.e.
+        "Track 013" => "Track 13" so no leading zero will be spoken (sorry James...).
+        We also replace '-' by coma, to enforce small pause in spoken text
+
+        :param basestring text:
+        :return:
+        :rtype: basestring
         """
 
         def strip_leading_zeros(re_match):
@@ -132,6 +141,13 @@ class Util(object):
 
     @staticmethod
     def separate_chars(text, sep=' '):
+        """
+
+        :param basestring text:
+        :param basestring sep:
+        :return:
+        :rtype: basestring
+        """
         result = ''
         text = str(text).strip()
         if text:
@@ -144,26 +160,30 @@ class Util(object):
     def merge_dicts(dict1, dict2):
         """Merge two dictionaries
 
-        :type dict1: dict
-        :type dict2: dict
+        :param dict dict1: base merge dictionary
+        :param dict dict2: this dict is merged into dict1
+
+        :return: dictionary with merged values. In case of key conflict, dictionary dict2 overwrites dict1 entry
+        :rtype:dict
         """
-        res = dict2.copy()
-        res.update(dict1)
+        res = dict1.copy()
+        res.update(dict2)
 
         return res
 
     @staticmethod
-    def process_placeholders(fmt, placeholders):
+    def process_placeholders(fmt, placeholders, error_return_value=''):
         """
 
-        :param fmt:
-        :param placeholders:
+        :param basestring fmt:
+        :param dict placeholders:
+        :param basestring error_return_value:
 
-        :type fmt: basestring
-        :type placeholders: dict
-
-        :return:
+        :rtype: basestring
         """
+        if fmt is None:
+            return error_return_value
+
         # noinspection PyCompatibility
         if not isinstance(fmt, basestring):
             raise ValueError('Format must be a string, {} given'.format(type(fmt)))
@@ -177,6 +197,12 @@ class Util(object):
 
     @staticmethod
     def split_file_name(file_name):
+        """
+
+        :param basestring file_name:
+        :return:
+        :rtype:(basestring, basestring)
+        """
         base, ext = os.path.splitext(os.path.basename(file_name))
         ext = ext[1:] if ext[0:1] == '.' else ext
 

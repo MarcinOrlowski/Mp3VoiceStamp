@@ -23,6 +23,7 @@ from mutagen.id3 import ID3, ID3NoHeaderError, TIT2, TALB, TPE1, TPE2, TCOM, TSS
 
 from mp3voicestamp_app.const import *
 from mp3voicestamp_app.util import Util
+from mp3voicestamp_app.tools import Tools
 
 
 class Mp3FileInfo(object):
@@ -41,9 +42,14 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def __init__(self, file_name):
-        if not os.path.isfile(file_name):
-            raise OSError('File not found: "{}"'.format(file_name))
+    def __init__(self, file_name, tools):
+        """
+
+        :param str file_name:
+        :param Tools tools:
+        """
+        if not os.path.exists(file_name):
+            raise OSError('File not found: "{name}"'.format(name=file_name))
 
         mp3 = MP3(file_name)
 
@@ -65,10 +71,16 @@ class Mp3FileInfo(object):
         self.comment = self.__get_tag(mp3, self.TAG_COMMENT)
         self.track_number = self.__get_tag(mp3, self.TAG_TRACK_NUMBER)
 
+        self.__tools = tools
+
     # *****************************************************************************************************************
 
     @property
     def duration(self):
+        """
+
+        :rtype: int
+        """
         return int(round(self.__duration / 60 + 0.5))
 
     @duration.setter
@@ -77,14 +89,26 @@ class Mp3FileInfo(object):
 
     @property
     def bitrate(self):
+        """
+
+        :rtype: int
+        """
         return self.__bitrate
 
     @bitrate.setter
     def bitrate(self, value):
+        """
+
+        :param value:
+        """
         self.__bitrate = int(value)
 
     @property
     def title(self):
+        """
+
+        :rtype: basestring
+        """
         result = self.__title
         if self.__title == '':
             result = self.base_name
@@ -92,22 +116,42 @@ class Mp3FileInfo(object):
 
     @title.setter
     def title(self, value):
+        """
+
+        :param basestring value:
+        """
         self.__title = str(value).strip()
 
     @property
     def artist(self):
+        """
+
+        :rtype: basestring
+        """
         return self.__artist if self.__artist != '' else self.album_artist
 
     @artist.setter
     def artist(self, value):
+        """
+
+        :param basestring value:
+        """
         self.__artist = str(value).strip()
 
     @property
     def track_number(self):
+        """
+
+        :rtype: basestring
+        """
         return self.__track_number
 
     @track_number.setter
     def track_number(self, value):
+        """
+
+        :param basestring value:
+        """
         if value == '-1':
             value = ''
 
@@ -117,6 +161,14 @@ class Mp3FileInfo(object):
 
     @staticmethod
     def __get_tag(mp3, tag, default=''):
+        """
+
+        :param MP3 mp3:
+        :param basestring tag:
+        :param basestring default:
+
+        :rtype: basestring
+        """
         return default if tag not in mp3 else str(mp3[tag])
 
     # *****************************************************************************************************************
@@ -124,8 +176,7 @@ class Mp3FileInfo(object):
     def get_placeholders(self):
         """Returns track related placeholders, populated from ID3 tags.
 
-        Returns:
-            dict
+        :rtype: dict
         """
         return {
             'file_name': self.base_name,
@@ -141,27 +192,46 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def to_wav(self, output_file_name):
-        """ Converts source audio track to WAV format
+    def get_wav_segment_file_name(self, segment_number):
+        pass
 
-        convert source mp3 to wav. this is required for many reasons:
+    def to_wav_segments(self, segment_file_name_pattern, split_segment_minutes=0):
+        """Converts source audio track to WAV format splitting into segments. This is required for many reasons:
         * we need to adjust voice overlay amplitude to match MP3 file level and to do that we use "sox" too
           which cannot deal with MP3 directly.
         * there are some odd issues with "ffmpeg" failing during mixing phase when source is mp3 file.
           blind guess for now is that it's due to some structure mismatch between MP3 file (i.e. having cover
           image) and speech segments being just plain WAV. Most likely this can be solved better way but we
           need WAV anyway so no point wasting time at the moment for further research.
+
+        :param basestring segment_file_name_pattern:
+        :param int split_segment_minutes:
+
+        :raises RuntimeError
         """
-        wav_cmd = ['ffmpeg', '-i', self.file_name, output_file_name]
+        wav_cmd = [self.__tools.get_tool(Tools.KEY_FFMPEG), '-i', self.file_name]
+
+        if split_segment_minutes > 0:
+            # https://www.ffmpeg.org/ffmpeg-formats.html#segment_002c-stream_005fsegment_002c-ssegment
+            wav_cmd.extend([
+                '-f', 'segment', '-segment_time', str(split_segment_minutes * 60),
+                segment_file_name_pattern,
+            ])
+        else:
+            # we need to ensure possible %d element in pattern is replaced by sanev alue
+            wav_cmd.append(segment_file_name_pattern % 0)
+
         if Util.execute_rc(wav_cmd) != 0:
-            raise RuntimeError('Failed to convert to WAV file')
+            raise RuntimeError('Failed to convert audio track to WAV file')
 
     # *****************************************************************************************************************
 
-    def get_encoding_quality_for_lame_encoder(self):
+    def get_encoding_quality_for_lame(self):
         """Selects LAME quality switch based on source file bitrate
 
-           Based on https://trac.ffmpeg.org/wiki/Encode/MP3
+        Based on https://trac.ffmpeg.org/wiki/Encode/MP3
+
+        :rtype: int
         """
         quality = 0
         for avg in [245, 225, 190, 175, 165, 130, 115, 100, 85, 65]:
@@ -174,11 +244,11 @@ class Mp3FileInfo(object):
 
     # *****************************************************************************************************************
 
-    def write_id3_tags(self, file_name):
+    def write_id3_tags(self, file_name, track_title):
         """Writes ID3 tags from out music file into given MP3 file
 
-        Args:
-            :file_name
+        :param str file_name:
+        :param str track_title:
         """
         try:
             tags = ID3(file_name)
@@ -186,7 +256,7 @@ class Mp3FileInfo(object):
             # Adding ID3 header
             tags = ID3()
 
-        tags[self.TAG_TITLE] = TIT2(encoding=3, text='{} (Mp3VoiceStamp)'.format(self.title))
+        tags[self.TAG_TITLE] = TIT2(encoding=3, text=track_title)
         tags[self.TAG_ALBUM_TITLE] = TALB(encoding=3, text=self.album_title)
         tags[self.TAG_ALBUM_ARTIST] = TPE2(encoding=3, text=self.album_artist)
         tags[self.TAG_ARTIST] = TPE1(encoding=3, text=self.artist)

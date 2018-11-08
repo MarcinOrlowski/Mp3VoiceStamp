@@ -5,7 +5,9 @@
 
 @dev
 ----
- * Improved config file related errors and malformed structure handling  
+ * Improved config file related errors and malformed structure handling
+ * Added file splitting feature
+ * Improved inline code documentation
 
 v1.3.0 (2018-10-16)
 -------------------
@@ -17,7 +19,7 @@ v1.3.0 (2018-10-16)
 
 v1.2.1 (2018-10-10)
 -------------------
- * Track announcement is now shown while processig to let you easily spot the problems with i.e. ID3 tags
+ * Track announcement is now shown while processing to let you easily spot the problems with i.e. ID3 tags
  * Disabled file globing unless made bullet proof
  * Added `--verbose` mode and some extra info
 

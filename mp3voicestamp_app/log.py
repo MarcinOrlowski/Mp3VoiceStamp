@@ -81,6 +81,10 @@ class Log(object):
 
     @classmethod
     def configure(cls, config):
+        """
+
+        :param Config config: instance of Config class used to configure Log behavior
+        """
         verbose_level = Log.VERBOSE_NONE
         if config.verbose:
             verbose_level = Log.VERBOSE_NORMAL
@@ -107,12 +111,24 @@ class Log(object):
 
     @staticmethod
     def level_init(message=None, color=None, ignore_quiet_switch=False):
+        """
+
+        :param basestring|None message: Message or messages to process
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        """
         Log.log_level = 0
         Log.level_push(message, color, ignore_quiet_switch)
 
     @staticmethod
-    def level_push(message=None, color=None, ignore_quiet_switch=False,
-                   deferred=False):
+    def level_push(message=None, color=None, ignore_quiet_switch=False, deferred=False):
+        """
+
+        :param basestring|None message: Message or messages to process
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool deferred: if True, log entry leaf will only be show if there'd be any entry to show in it
+        """
         if Log.verbose_level == 0 and deferred:
             Log.__flush_deferred_entry()
 
@@ -125,6 +141,12 @@ class Log(object):
 
     @staticmethod
     def level_pop(messages=None, color=None, ignore_quiet_switch=False):
+        """
+
+        :param basestring|list|BaseException|None messages: Optional message(s) (or object to get message from) to log
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        """
         if messages is not None:
             Log.i(messages=messages, color=color, ignore_quiet_switch=ignore_quiet_switch)
 
@@ -138,41 +160,76 @@ class Log(object):
 
     @staticmethod
     def banner(messages, ignore_quiet_switch=False, add_to_history=False):
-        Log.__log(messages, Log.COLOR_BANNER,
-                  ignore_quiet_switch, add_to_history)
+        """Framed text banner
+
+        :param basestring|list messages: Message(s) to be shown in banner form
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool add_to_history: if True, lines will be added to log buffer
+        """
+        Log.__log(messages, Log.COLOR_BANNER, ignore_quiet_switch, add_to_history)
 
     # info
     @staticmethod
     def i(messages=None, color=COLOR_INFO, ignore_quiet_switch=False, add_to_history=True):
+        """Info log entry
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool add_to_history: if True, lines will be added to log buffer
+        """
         Log.__log(messages, color, ignore_quiet_switch, add_to_history)
 
     # notice
     @staticmethod
     def n(messages=None, color=COLOR_NOTICE, ignore_quiet_switch=False, add_to_history=True):
+        """Notice log entry
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool add_to_history: if True, lines will be added to log buffer
+        """
         Log.__log(messages, color, ignore_quiet_switch, add_to_history)
 
     # verbose
     @staticmethod
     def v(messages=None):
+        """Verbose log entry (need to be enabled in config otherwise call will be ignored)
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
         if Log.verbose_level >= 1:
             Log.__log(messages)
 
     # very verbose
     @staticmethod
     def vv(messages=None):
+        """Very verbose (needs to be enabled in config otherwise calls will be ignored)
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
         if Log.verbose_level >= 2:
             Log.__log(messages)
 
     # warning
     @staticmethod
-    def w(message=None):
-        if message is not None:
-            messages = Log.__to_list(message)
+    def w(messages=None):
+        """Warning
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
+        if messages is not None:
+            messages = Log.__to_list(messages)
             _ = [Log.__log('**WARN** ' + Log.strip_ansi(msg), Log.COLOR_WARN, True) for msg in messages]
 
     # error
     @staticmethod
     def e(messages=None):
+        """Error entry
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
         if messages is not None:
             messages = Log.__to_list(messages)
             _ = [Log.__log('*** ' + Log.strip_ansi(message), Log.COLOR_ERROR, True) for message in messages]
@@ -181,6 +238,10 @@ class Log(object):
     # NOTE: debug entries are not stored in action log
     @staticmethod
     def d(messages=None):
+        """Debug entry (will not show up unless debug is enabled during config
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
         if messages is not None and Log.debug:
             postfix = Log.__get_stacktrace_string()
             for message in Log.__to_list(messages):
@@ -191,10 +252,19 @@ class Log(object):
 
     @staticmethod
     def get_entries():
+        """Returns log buffer content
+
+        :return: Returns log buffer content
+        :rtype:list[basestring]
+        """
         return Log.log_entries
 
     @staticmethod
     def abort(messages=None):
+        """Aborts code execution with (optional) error log entry
+
+        :param basestring|list|BaseException|None messages: Message, messages or (object to get message from) to log
+        """
         Log.e(messages)
         Log.level_init('*** Aborted', Log.COLOR_ERROR, True)
 
@@ -207,6 +277,10 @@ class Log(object):
 
     @staticmethod
     def __get_stacktrace_string():
+        """Returns call stacktrace as string
+
+        :rtype: basestring
+        """
         msg = ''
         if Log.debug:
             frames = inspect.stack()
@@ -225,11 +299,10 @@ class Log(object):
     def strip_ansi(message):
         """Removes all ANSI control codes from given message string
 
-        Args:
-          message: string to be processed
+        :param basestring message: message to process
 
-        Returns:
-          message string witn ANSI codes striped or None
+        :return: message string witn ANSI codes striped or None
+        :rtype: basestring|None
         """
         if message is not None:
             pattern = re.compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
@@ -239,13 +312,12 @@ class Log(object):
 
     @staticmethod
     def substitute_ansi(message):
-        """Replaces color code placeholder with ANSI values.
+        """Substitute color keys (i.e. %red%) with proper ANSI codes
 
-        Args:
-          message: message to process
+        :param basestring message: message to process
 
-        Returns:
-          message with placeholders replaced with ANSI codes
+        :return: Replaces color code placeholder with ANSI values.
+        :rtype: basestring
         """
         color_map = {
             'reset': Log.ANSI_RESET,
@@ -283,13 +355,12 @@ class Log(object):
     def __format_log_line(message=None, color=None, stacktrace_postfix=None):
         """Formats log message, adding required indentation and stuff.
 
-        Args:
-          message: message to format
-          color: COLOR_xxx or ANSI_xxx color code to use if line should be colored
-          stacktrace_postfix:
+        :param basestring|None message: Message to log
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line should be colored
+        :param basestring|None stacktrace_postfix:
 
-        Returns:
-          Formatted log line
+        :return: Formatted log line
+        :rtype:str
         """
         if message is not None:
             message = ' ' * (Log.log_level * 2) + Log.substitute_ansi(message)
@@ -312,6 +383,13 @@ class Log(object):
 
     @staticmethod
     def __log(messages=None, color=None, ignore_quiet_switch=False, add_to_history=True):
+        """
+
+        :param basestring|list|dict|None messages: Message or messages to process
+        :param basestring|None color: COLOR_xxx or ANSI_xxx color code to use if line(s) should be colored
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool add_to_history: if True, lines will be added to log buffer
+        """
         if messages is not None:
             Log.last_log_entry_level = Log.log_level
             Log.__flush_deferred_entry()
@@ -326,6 +404,12 @@ class Log(object):
 
     @staticmethod
     def __log_raw(message=None, ignore_quiet_switch=False, add_to_history=True):
+        """
+
+        :param basestring|None message: Message to process
+        :param bool ignore_quiet_switch: it True, entry will be logged despite quite mode is set
+        :param bool add_to_history: if True, lines will be added to log buffer
+        """
         if message is not None:
             if add_to_history:
                 Log.log_entries.append(message)
@@ -351,11 +435,10 @@ class Log(object):
     def __to_list(data):
         """Converts certain data types (str, unicode) into list.
 
-        Args:
-          data: data to convert
+        :param data: data to be converted to list
 
-        Returns:
-          list with converted data
+        :return: list with converted data
+        :rtype: list
         """
         # variable types to be converted
         # noinspection PyCompatibility
@@ -371,13 +454,11 @@ class Log(object):
     def __dict_to_list(data_to_convert, color=None):
         """Converts dictionary elements into list.
 
-        Args:
-          data_to_convert: dictionary to convert
-          color: color code (i.e. '%red%' for each row)
+        :param dict data_to_convert:
+        :param basestring|None color: color code (i.e. '%red%' for each row) or COLOR_xxx
 
-        Returns:
-          list with converted data.
-
+        :return: list with converted data.
+        :rtype: list[basestring]
         """
         if not isinstance(data_to_convert, dict):
             return data_to_convert
