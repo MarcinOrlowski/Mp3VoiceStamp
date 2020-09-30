@@ -3,6 +3,11 @@
 
 ## Changelog ##
 
+v1.3.1 (2020-09-30)
+-------------------
+ * Added `wheel` to requirements
+ * Shell wrapper uses Python 2 expicitely
+
 v1.3.0 (2018-10-16)
 -------------------
  * Fixed Unicode support so names or formats with unicode shall now work correctly
